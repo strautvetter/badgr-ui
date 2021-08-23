@@ -36,7 +36,7 @@
 		"@concentricsky/badgr-style": "^20.1.2",
 		"@types/fontfaceobserver": "0.0.6",
 		"@types/marked": "^0.6.5",
-		"@types/validator": "^10.11.0",
+		"@types/validator": "10.11.0",
 		"angulartics2": "^7.5.2",
 		"clipboard": "2.0.4",
 		"core-js": "^2.6.5",
