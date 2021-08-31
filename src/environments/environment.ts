@@ -16,7 +16,9 @@ export const environment: BadgrEnvironment = {
 						label: 'Auth0',
 						slug: 'auth0'
 					}
-				]
+				],
+				socialAccountProviders: ['auth0'],
+				disableIssuers: true
 			},
 			theme: {
 				welcomeMessage: "Willkommen auf myBadges",
