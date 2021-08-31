@@ -74,7 +74,7 @@ export interface SocialAccountProviderInfo {
 	name: string;
 }
 
-export type SocialAccountProviderSlug = "facebook" | "kony" | "linkedin_oauth2" | "google" | "azure" | "twitter";
+export type SocialAccountProviderSlug = "facebook" | "kony" | "linkedin_oauth2" | "google" | "azure" | "twitter" | "auth0";
 
 export const socialAccountProviderInfos: SocialAccountProviderInfo[] = [
 	{
@@ -101,6 +101,10 @@ export const socialAccountProviderInfos: SocialAccountProviderInfo[] = [
 		slug: "twitter",
 		name: "Twitter"
 	},
+	{
+		slug: "auth0",
+		name: "Auth0"
+	}
 ];
 
 export function socialAccountProviderInfoForSlug(slug: string) {

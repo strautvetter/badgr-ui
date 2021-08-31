@@ -1,5 +1,5 @@
-import {IssuerUrl} from './issuer-api.model';
-import {ApiEntityRef} from '../../common/model/entity-ref';
+import { IssuerUrl } from "./issuer-api.model";
+import { ApiEntityRef } from "../../common/model/entity-ref";
 
 export type BadgeClassSlug = string;
 export type BadgeClassUrl = string;
@@ -9,7 +9,7 @@ export interface BadgeClassRef extends ApiEntityRef {}
 export type BadgeClassExpiresDuration = "days" | "weeks" | "months" | "years";
 
 export interface ApiBadgeClassJsonld {
-	'@context': string;
+	"@context": string;
 	type: string;
 	id: BadgeClassUrl;
 
@@ -28,6 +28,8 @@ export interface ApiBadgeClassForCreation {
 	criteria_url: string;
 	criteria_text: string;
 
+	extensions?: object;
+
 	tags?: string[];
 	alignment?: ApiBadgeClassAlignment[];
 	expires?: ApiBadgeClassExpiration;
@@ -45,7 +47,6 @@ export interface ApiBadgeClassExpiration {
 	amount: number;
 	duration: BadgeClassExpiresDuration;
 }
-
 
 export interface ApiBadgeClass extends ApiBadgeClassForCreation {
 	id: BadgeClassSqlId;
