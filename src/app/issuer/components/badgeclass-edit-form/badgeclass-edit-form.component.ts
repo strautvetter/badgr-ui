@@ -74,6 +74,7 @@ export class BadgeClassEditFormComponent
 			this.positiveInteger,
 			Validators.max(1000),
 		])
+		.addControl("badge_category", "", Validators.required)
 		.addArray(
 			"alignments",
 			typedFormGroup()
@@ -175,6 +176,7 @@ export class BadgeClassEditFormComponent
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
 				badge_study_load: badgeClass.extension['StudyLoad'],
+				badge_category: badgeClass.extension['Category'],
 				alignments: this.badgeClass.alignments.map((alignment) => ({
 					target_name: alignment.target_name,
 					target_url: alignment.target_url,
@@ -378,6 +380,14 @@ export class BadgeClassEditFormComponent
 					StudyLoad: Number(formState.badge_study_load),
 				},
 			};
+			this.existingBadgeClass.extension = {
+				"extensions:CategoryExtension": {
+					"@context":
+						"http://localhost:8000/static/extensions/CategoryExtension/context.json",
+					type: ["Extension", "extensions:CategoryExtension"],
+					Category: String(formState.badge_category),
+				},
+			};
 			if (this.expirationEnabled) {
 				this.existingBadgeClass.expiresDuration =
 					expirationState.expires_duration as BadgeClassExpiresDuration;
@@ -393,6 +403,9 @@ export class BadgeClassEditFormComponent
 		} else {
 			const studyLoadExtensionContextUrl =
 				"http://localhost:8000/static/extensions/StudyLoadExtension/context.json";
+			const categoryExtensionContextUrl =
+				"http://localhost:8000/static/extensions/CategoryExtension/context.json";
+
 
 			const badgeClassData = {
 				name: formState.badge_name,
@@ -407,6 +420,11 @@ export class BadgeClassEditFormComponent
 						"@context": studyLoadExtensionContextUrl,
 						type: ["Extension", "extensions:StudyLoadExtension"],
 						StudyLoad: Number(formState.badge_study_load),
+					},
+					"extensions:CategoryExtension": {
+						"@context": categoryExtensionContextUrl,
+						type: ["Extension", "extensions:CategoryExtension"],
+						StudyLoad: Number(formState.badge_category),
 					},
 				},
 			} as ApiBadgeClassForCreation;

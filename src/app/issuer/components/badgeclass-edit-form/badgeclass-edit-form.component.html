@@ -144,6 +144,34 @@
 		</div>
 	</div>
 
+	<!-- Criteria Panel -->
+	<div class="formsection">
+		<div class="formsection-x-title">
+			<h2 class="u-text-dark2">Category</h2>
+		</div>
+
+		<div class="formsection-x-help">
+			<h3 class="u-text-body-bold">What is the category?</h3>
+			<p class="u-text u-margin-top1x u-margin-bottom2x">
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus
+				illum explicabo molestias dolore! A deleniti error cum laborum nam vel
+				ullam debitis delectus optio officiis, deserunt nihil aliquam modi
+				quasi?
+			</p>
+		</div>
+		<div class="formsection-x-body">
+			<div class="forminput u-margin-bottom2x">
+				<bg-formfield-text
+					[control]="badgeClassForm.rawControlMap.badge_category"
+					label="Category Name"
+					[errorMessage]="{
+						required: 'Please enter a category for the badge'
+					}"
+				></bg-formfield-text>
+			</div>
+		</div>
+	</div>
+
 	<!-- alignments -->
 	<div *ngIf="alignmentsEnabled" class="formsection">
 		<div class="formsection-x-title">

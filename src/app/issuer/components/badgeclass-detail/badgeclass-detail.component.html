@@ -80,6 +80,11 @@
 							<dt class="u-text-small-bold u-padding-top2x u-margin-top2x border border-top border-light3 u-text-dark2">Study load:</dt>
 							<dd class="u-text">{{badgeClass.extension.StudyLoad}} minutes</dd>
 						</div>
+						<!-- Category -->
+						<div *ngIf="badgeClass.extension.Category">
+							<dt class="u-text-small-bold u-padding-top2x u-margin-top2x border border-top border-light3 u-text-dark2">Category:</dt>
+							<dd class="u-text">{{badgeClass.extension.Category}} minutes</dd>
+						</div>
 					</dl>
 				</div>
 			</div>
