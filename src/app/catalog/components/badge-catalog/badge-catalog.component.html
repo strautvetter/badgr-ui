@@ -1,3 +1,33 @@
-<p>
-  badge-catalog works!
-</p>
+<form-message></form-message>
+
+<header class="topbar">
+	<div class="l-containerxaxis topbar-x-wrap">
+		<h2 class="topbar-x-heading">
+			Badges
+			<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="false">
+				<span class="topbar-x-internalheading">
+					{{ badges.length | i18nPlural: plural['badges'] }}
+				</span>
+			</ng-template>
+		</h2>
+	</div>
+</header>
+
+<div>
+	<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="true">
+		<section class="l-containerxaxis l-containeryaxis l-responsivelist">
+			<div class="l-grid l-grid-large">
+				<!-- TODO: Fix the badgecard link for sharing and routing -->
+				<bg-badgecard
+					*ngFor="let badge of badges"
+					[badgeTitle]="badge.name"
+					[badgeImage]="badge.image"
+					[badgeDescription]="badge.description"
+					[badgeSlug]="badge.slug"
+					public="true"
+					[publicUrl]="badge.url"
+				></bg-badgecard>
+			</div>
+		</section>
+	</ng-template>
+</div>

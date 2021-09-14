@@ -1,15 +1,96 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SessionService } from '../../../common/services/session.service';
+import { BaseAuthenticatedRoutableComponent } from '../../../common/pages/base-authenticated-routable.component';
+import { MessageService } from '../../../common/services/message.service';
+import { IssuerManager } from '../../../issuer/services/issuer-manager.service';
+//import {BadgeClassManager} from '../../services/badgeclass-manager.service';
+import { Issuer } from '../../../issuer/models/issuer.model';
+//import {BadgeClass} from '../../models/badgeclass.model';
+import { Title } from '@angular/platform-browser';
+import { preloadImageURL } from '../../../common/util/file-util';
+import { AppConfigService } from '../../../common/app-config.service';
+import { BaseRoutableComponent } from '../../../common/pages/base-routable.component';
+import { BadgeClass } from '../../../issuer/models/badgeclass.model';
+import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.service';
 
 @Component({
-  selector: 'app-badge-catalog',
-  templateUrl: './badge-catalog.component.html',
-  styleUrls: ['./badge-catalog.component.css']
+	selector: 'app-badge-catalog',
+	templateUrl: './badge-catalog.component.html',
+	styleUrls: ['./badge-catalog.component.css'],
 })
-export class BadgeCatalogComponent implements OnInit {
+export class BadgeCatalogComponent extends BaseRoutableComponent implements OnInit {
+	readonly issuerPlaceholderSrc = preloadImageURL(require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string);
+	readonly noIssuersPlaceholderSrc = require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg') as string;
 
-  constructor() { }
+	Array = Array;
 
-  ngOnInit() {
-  }
+	// issuers: Issuer[] = null;
+	badges: BadgeClass[] = null;
+	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
+	// issuersLoaded: Promise<unknown>;
+	badgesLoaded: Promise<unknown>;
+
+	get theme() {
+		return this.configService.theme;
+	}
+	get features() {
+		return this.configService.featuresConfig;
+	}
+
+	plural = {
+		issuer: {
+			'=0': 'No Issuers',
+			'=1': '1 Issuer',
+			other: '# Issuers',
+		},
+		badges: {
+			'=0': 'No Badges',
+			'=1': '1 Badge',
+			other: '# Badges',
+		},
+		recipient: {
+			'=0': 'No Recipients',
+			'=1': '1 Recipient',
+			other: '# Recipients',
+		},
+	};
+
+	constructor(
+		protected title: Title,
+		protected messageService: MessageService,
+		// protected issuerManager: IssuerManager,
+		protected configService: AppConfigService,
+		protected badgeClassService: BadgeClassManager,
+		// loginService: SessionService,
+		router: Router,
+		route: ActivatedRoute
+	) {
+		super(router, route);
+		title.setTitle(`Badges - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+
+		// subscribe to issuer and badge class changes
+		this.badgesLoaded = this.loadBadges();
+	}
+
+	async loadBadges() {
+		return new Promise(async (resolve, reject) => {
+			this.badgeClassService.allPublicBadges$.subscribe(
+				(badges) => {
+					console.log(badges);
+
+					this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+					resolve(badges);
+				},
+				(error) => {
+					this.messageService.reportAndThrowError('Failed to load badges', error);
+				}
+			);
+		});
+	}
+
+	ngOnInit() {
+		super.ngOnInit();
+	}
 }

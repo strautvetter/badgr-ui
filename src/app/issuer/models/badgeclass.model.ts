@@ -5,11 +5,11 @@ import {
 	BadgeClassExpiresDuration,
 	BadgeClassRef,
 	BadgeClassUrl,
-} from "./badgeclass-api.model";
-import { IssuerUrl } from "./issuer-api.model";
-import { ManagedEntity } from "../../common/model/managed-entity";
-import { ApiEntityRef } from "../../common/model/entity-ref";
-import { CommonEntityManager } from "../../entity-manager/services/common-entity-manager.service";
+} from './badgeclass-api.model';
+import { IssuerUrl } from './issuer-api.model';
+import { ManagedEntity } from '../../common/model/managed-entity';
+import { ApiEntityRef } from '../../common/model/entity-ref';
+import { CommonEntityManager } from '../../entity-manager/services/common-entity-manager.service';
 
 export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	get badgeUrl(): BadgeClassUrl {
@@ -78,10 +78,7 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	}
 
 	get extension() {
-		return (
-			this.hasExtension("extensions:StudyLoadExtension") &&
-			this.apiModel.extensions["extensions:StudyLoadExtension"]
-		);
+		return this.apiModel.extensions;
 	}
 
 	set extension(extensions: object) {
@@ -89,9 +86,7 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	}
 
 	hasExtension(extensionName: string) {
-		return (
-			this.apiModel.extensions && extensionName in this.apiModel.extensions
-		);
+		return this.apiModel.extensions && extensionName in this.apiModel.extensions;
 	}
 
 	get expiresDuration(): BadgeClassExpiresDuration | undefined {
@@ -132,11 +127,7 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	private static issuerSlugFromUrl(issuerUrl: string) {
 		return (issuerUrl.match(/\/public\/issuers\/([^\/]+)/) || [])[1] || null;
 	}
-	constructor(
-		commonManager: CommonEntityManager,
-		initialEntity: ApiBadgeClass = null,
-		onUpdateSubscribed: () => void = undefined
-	) {
+	constructor(commonManager: CommonEntityManager, initialEntity: ApiBadgeClass = null, onUpdateSubscribed: () => void = undefined) {
 		super(commonManager, onUpdateSubscribed);
 
 		if (initialEntity != null) {
@@ -146,7 +137,7 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 
 	protected buildApiRef(): ApiEntityRef {
 		return {
-			"@id": this.badgeUrl,
+			'@id': this.badgeUrl,
 			slug: this.apiModel.slug,
 		};
 	}
@@ -158,16 +149,16 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 		if (this.expiresAmount) {
 			const ret = issuedOn || new Date();
 			switch (this.expiresDuration) {
-				case "days":
+				case 'days':
 					ret.setDate(ret.getDate() + this.expiresAmount);
 					break;
-				case "months":
+				case 'months':
 					ret.setMonth(ret.getMonth() + this.expiresAmount);
 					break;
-				case "weeks":
+				case 'weeks':
 					ret.setDate(ret.getDate() + this.expiresAmount * 7);
 					break;
-				case "years":
+				case 'years':
 					ret.setFullYear(ret.getFullYear() + this.expiresAmount);
 					break;
 				default:
@@ -178,9 +169,7 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	}
 
 	update(): Promise<this> {
-		return this.badgeManager.badgeClassApi
-			.getBadgeForIssuerSlugAndBadgeSlug(this.issuerSlug, this.slug)
-			.then((apiBadge) => this.applyApiModel(apiBadge));
+		return this.badgeManager.badgeClassApi.getBadgeForIssuerSlugAndBadgeSlug(this.issuerSlug, this.slug).then((apiBadge) => this.applyApiModel(apiBadge));
 	}
 
 	save(): Promise<this> {
