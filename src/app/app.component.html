@@ -47,6 +47,14 @@
 						[routerLink]="['/signup']"
 						>Create Account</a
 					>
+					<a
+						*ngIf="!features.disableRegistration"
+						[class.navitem-light]="!theme.useColorNavbar"
+						class="navitem"
+						routerLinkActive="navitem-is-active"
+						[routerLink]="['/public/about']"
+						>About</a
+					>
 				</div>
 			</nav>
 		</ng-template>
@@ -214,7 +222,9 @@
 			<div>
 				<h1 *ngIf="fatalMessage" class="u-text-h2-bold u-text-center">{{ fatalMessage }}</h1>
 				<h1 *ngIf="fatalMessageDetail" class="u-text-h3 u-text-center">{{ fatalMessageDetail }}</h1>
-				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">Whoops! The server has failed to respond.</h1>
+				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">
+					Whoops! The server has failed to respond.
+				</h1>
 				<h1 *ngIf="!fatalMessageDetail" class="u-text-body u-text-center">Please refresh and try again.</h1>
 				<img class="u-width-form" [src]="unavailableImageSrc" />
 			</div>
@@ -243,7 +253,9 @@
 
 			<ul class="footer-x-links">
 				<li>
-					<a [href]="theme.termsOfServiceLink || 'https://badgr.org/missing-terms'" target="_blank">Terms of Service</a>
+					<a [href]="theme.termsOfServiceLink || 'https://badgr.org/missing-terms'" target="_blank"
+						>Terms of Service</a
+					>
 				</li>
 				<li>
 					<a [href]="theme.privacyPolicyLink || 'https://badgr.org/missing-privacy-policy'" target="_blank"

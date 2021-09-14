@@ -1,16 +1,18 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {BadgrCommonModule, COMMON_IMPORTS} from '../common/badgr-common.module';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { BadgrCommonModule, COMMON_IMPORTS } from '../common/badgr-common.module';
 
-import {PublicComponent} from './components/public/public.component';
-import {CommonEntityManagerModule} from '../entity-manager/entity-manager.module';
-import {PublicBadgeAssertionComponent} from './components/badge-assertion/badge-assertion.component';
-import {PublicApiService} from './services/public-api.service';
-import {PublicBadgeClassComponent} from './components/badgeclass/badgeclass.component';
-import {PublicIssuerComponent} from './components/issuer/issuer.component';
-import {PublicBadgeCollectionComponent} from './components/badge-collection/badge-collection.component';
-import {BadgrRouteData} from '../common/services/navigation.service';
+import { PublicComponent } from './components/public/public.component';
+import { CommonEntityManagerModule } from '../entity-manager/entity-manager.module';
+import { PublicBadgeAssertionComponent } from './components/badge-assertion/badge-assertion.component';
+import { PublicApiService } from './services/public-api.service';
+import { PublicBadgeClassComponent } from './components/badgeclass/badgeclass.component';
+import { PublicIssuerComponent } from './components/issuer/issuer.component';
+import { PublicBadgeCollectionComponent } from './components/badge-collection/badge-collection.component';
+import { BadgrRouteData } from '../common/services/navigation.service';
 import { VerifyBadgeDialog } from './components/verify-badge-dialog/verify-badge-dialog.component';
+import { AboutComponent } from './components/about/about.component';
+import { StartComponent } from './components/start/start.component';
 
 export const routes: Routes = [
 	{
@@ -18,7 +20,23 @@ export const routes: Routes = [
 		component: PublicComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
+	},
+
+	{
+		path: 'about',
+		component: AboutComponent,
+		data: {
+			publiclyAccessible: true,
+		} as BadgrRouteData,
+	},
+
+	{
+		path: 'start',
+		component: StartComponent,
+		data: {
+			publiclyAccessible: true,
+		} as BadgrRouteData,
 	},
 
 	{
@@ -26,7 +44,7 @@ export const routes: Routes = [
 		component: PublicBadgeAssertionComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
 	},
 
 	{
@@ -34,7 +52,7 @@ export const routes: Routes = [
 		component: PublicBadgeClassComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
 	},
 
 	{
@@ -42,7 +60,7 @@ export const routes: Routes = [
 		component: PublicIssuerComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
 	},
 
 	{
@@ -50,7 +68,7 @@ export const routes: Routes = [
 		component: PublicBadgeCollectionComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
 	},
 
 	{
@@ -58,29 +76,23 @@ export const routes: Routes = [
 		component: PublicComponent,
 		data: {
 			publiclyAccessible: true,
-		} as BadgrRouteData
+		} as BadgrRouteData,
 	},
 ];
 
 @NgModule({
-	imports: [
-		...COMMON_IMPORTS,
-		BadgrCommonModule,
-		CommonEntityManagerModule,
-		RouterModule.forChild(routes)
-	],
+	imports: [...COMMON_IMPORTS, BadgrCommonModule, CommonEntityManagerModule, RouterModule.forChild(routes)],
 	declarations: [
+		AboutComponent,
+		StartComponent,
 		PublicComponent,
 		PublicBadgeAssertionComponent,
 		PublicBadgeClassComponent,
 		PublicIssuerComponent,
 		PublicBadgeCollectionComponent,
-		VerifyBadgeDialog
+		VerifyBadgeDialog,
 	],
 	exports: [],
-	providers: [
-		PublicApiService
-	]
+	providers: [PublicApiService],
 })
-export class PublicModule {
-}
+export class PublicModule {}
