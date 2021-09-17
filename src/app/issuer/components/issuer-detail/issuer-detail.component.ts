@@ -68,7 +68,9 @@ export class IssuerDetailComponent extends BaseAuthenticatedRoutableComponent im
 		this.issuerLoaded = this.issuerManager.issuerBySlug(this.issuerSlug).then(
 			(issuer) => {
 				this.issuer = issuer;
-				this.title.setTitle(`Issuer - ${this.issuer.name} - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+				this.title.setTitle(
+					`Issuer - ${this.issuer.name} - ${this.configService.theme['serviceName'] || 'Badgr'}`
+				);
 				this.crumbs = [
 					{ title: 'Issuers', routerLink: ['/issuer/issuers'] },
 					{ title: this.issuer.name, routerLink: ['/issuer/issuers/' + this.issuer.slug] },
@@ -78,7 +80,9 @@ export class IssuerDetailComponent extends BaseAuthenticatedRoutableComponent im
 					this.badgeClassService.badgesByIssuerUrl$.subscribe(
 						(badgesByIssuer) => {
 							const cmp = (a, b) => (a === b ? 0 : a < b ? -1 : 1);
-							this.badges = (badgesByIssuer[this.issuer.issuerUrl] || []).sort((a, b) => cmp(b.createdAt, a.createdAt));
+							this.badges = (badgesByIssuer[this.issuer.issuerUrl] || []).sort((a, b) =>
+								cmp(b.createdAt, a.createdAt)
+							);
 							resolve();
 						},
 						(error) => {
@@ -92,7 +96,10 @@ export class IssuerDetailComponent extends BaseAuthenticatedRoutableComponent im
 				});
 			},
 			(error) => {
-				this.messageService.reportLoadingError(`Issuer '${this.issuerSlug}' does not exist.`, error);
+				this.messageService.reportLoadingError(
+					`Issuer '${this.issuerSlug}' does not exist or you are not allowed to view the issuer`,
+					error
+				);
 			}
 		);
 
