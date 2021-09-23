@@ -24,6 +24,7 @@ import { badgeShareDialogOptions } from '../../../recipient/components/recipient
 import { ShareSocialDialogOptions } from '../../../common/dialogs/share-social-dialog/share-social-dialog.component';
 import { AppConfigService } from '../../../common/app-config.service';
 import { LinkEntry } from '../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component';
+import { BadgeClassCategory, BadgeClassLevel } from '../../models/badgeclass-api.model';
 
 @Component({
 	selector: 'badgeclass-detail',
@@ -58,7 +59,9 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 	}
 
 	get activeRecipientCount() {
-		const badges = this.allBadgeInstances.entities.filter((thisEntity) => !thisEntity.isExpired && !thisEntity.isRevoked);
+		const badges = this.allBadgeInstances.entities.filter(
+			(thisEntity) => !thisEntity.isExpired && !thisEntity.isRevoked
+		);
 		return badges && badges.length;
 	}
 
@@ -69,7 +72,9 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 		const badges = this.badgeManager.badgesByIssuerUrl.lookup(this.issuer.issuerUrl);
 		return badges && badges.length;
 	}
-	readonly issuerImagePlacholderUrl = preloadImageURL(require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string);
+	readonly issuerImagePlacholderUrl = preloadImageURL(
+		require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string
+	);
 	launchpoints: ApiExternalToolLaunchpoint[];
 
 	badgeClassLoaded: Promise<unknown>;
@@ -84,6 +89,22 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 	resultsPerPage = 100;
 	issuer: Issuer;
 	crumbs: LinkEntry[];
+
+	categoryOptions: { [key in BadgeClassCategory]: string } = {
+		membership: 'Mitgliedschaft',
+		ability: 'Fähigkeit',
+		participation: 'Teilnahme',
+		skill: 'Können',
+	};
+
+	levelOptions: { [key in BadgeClassLevel]: string } = {
+		a1: 'A1 Einsteiger*in',
+		a2: 'A2 Entdecker*in',
+		b1: 'B1 Insider*in',
+		b2: 'B2 Expert*in',
+		c1: 'C1 Leader*in',
+		c2: 'C2 Vorreiter*in',
+	};
 
 	private _searchQuery = '';
 
@@ -106,10 +127,16 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 		this.badgeClassLoaded = badgeManager.badgeByIssuerSlugAndSlug(this.issuerSlug, this.badgeSlug).then(
 			(badge) => {
 				this.badgeClass = badge;
-				this.title.setTitle(`Badge Class - ${this.badgeClass.name} - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+				this.title.setTitle(
+					`Badge Class - ${this.badgeClass.name} - ${this.configService.theme['serviceName'] || 'Badgr'}`
+				);
 				this.loadInstances();
 			},
-			(error) => this.messageService.reportLoadingError(`Cannot find badge ${this.issuerSlug} / ${this.badgeSlug}`, error)
+			(error) =>
+				this.messageService.reportLoadingError(
+					`Cannot find badge ${this.issuerSlug} / ${this.badgeSlug}`,
+					error
+				)
 		);
 
 		this.issuerLoaded = issuerManager.issuerBySlug(this.issuerSlug).then(
@@ -123,19 +150,29 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 	}
 
 	loadInstances(recipientQuery?: string) {
-		const instances = new BadgeClassInstances(this.badgeInstanceManager, this.issuerSlug, this.badgeSlug, recipientQuery);
+		const instances = new BadgeClassInstances(
+			this.badgeInstanceManager,
+			this.issuerSlug,
+			this.badgeSlug,
+			recipientQuery
+		);
 		this.badgeInstancesLoaded = instances.loadedPromise.then(
 			(retInstances) => {
 				this.crumbs = [
 					{ title: 'Issuers', routerLink: ['/issuer/issuers'] },
 					{ title: this.issuer.name, routerLink: ['/issuer/issuers/' + this.issuerSlug] },
-					{ title: this.badgeClass.name, routerLink: ['/issuer/issuers/' + this.issuerSlug + '/badges/' + this.badgeSlug] },
+					{
+						title: this.badgeClass.name,
+						routerLink: ['/issuer/issuers/' + this.issuerSlug + '/badges/' + this.badgeSlug],
+					},
 				];
 				this.allBadgeInstances = retInstances;
 				this.updateResults();
 			},
 			(error) => {
-				this.messageService.reportLoadingError(`Could not load recipients ${this.issuerSlug} / ${this.badgeSlug}`);
+				this.messageService.reportLoadingError(
+					`Could not load recipients ${this.issuerSlug} / ${this.badgeSlug}`
+				);
 				return error;
 			}
 		);
@@ -161,7 +198,10 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 							this.badgeClass.update();
 							this.updateResults();
 						},
-						(error) => this.messageService.reportAndThrowError(`Failed to revoke badge to ${instance.recipientIdentifier}`)
+						(error) =>
+							this.messageService.reportAndThrowError(
+								`Failed to revoke badge to ${instance.recipientIdentifier}`
+							)
 					);
 				},
 				() => void 0 // Cancel
@@ -185,7 +225,9 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 								this.router.navigate(['issuer/issuers', this.issuerSlug]);
 							},
 							(error) => {
-								this.messageService.reportAndThrowError(`Failed to delete badge class: ${BadgrApiFailure.from(error).firstMessage}`);
+								this.messageService.reportAndThrowError(
+									`Failed to delete badge class: ${BadgrApiFailure.from(error).firstMessage}`
+								);
 							}
 						);
 					},
