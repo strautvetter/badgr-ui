@@ -18,7 +18,8 @@
 						"polyfills": "src/polyfills.ts",
 						"showCircularDependencies": false,
 						"assets": [
-							"src/assets"
+							"src/assets",
+							"src/_redirects"
 						],
 						"styles": [
 							"node_modules/@concentricsky/badgr-style/dist/css/screen.css",

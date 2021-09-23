@@ -1,0 +1,39 @@
+.logo {
+	max-width: 200px;
+	max-height: 200px;
+	margin-top: 5rem;
+	margin-bottom: 5rem;
+	margin-left: 2rem;
+	margin-right: 2rem;
+}
+
+.center {
+	text-align: center;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	gap: 1rem;
+}
+
+.video-container {
+	height: 500px;
+	width: 100%;
+	padding-bottom: 5rem;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+	width: 100%;
+	height: 100%;
+}
+
+.panel {
+	background-color: #ffebce;
+	padding: 5rem;
+	text-align: center;
+	position: relative;
+}
