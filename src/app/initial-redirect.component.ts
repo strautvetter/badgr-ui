@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {SessionService} from './common/services/session.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { SessionService } from './common/services/session.service';
 
 import '../thirdparty/scopedQuerySelectorShim';
 
@@ -9,18 +9,15 @@ import '../thirdparty/scopedQuerySelectorShim';
 // https://stackoverflow.com/questions/3680876/using-queryselectorall-to-retrieve-direct-children/21126966#21126966
 
 @Component({
-	selector: "initial-redirect",
-	template: ``
+	selector: 'initial-redirect',
+	template: ``,
 })
 export class InitialRedirectComponent {
-	constructor(
-		private sessionService: SessionService,
-		private router: Router
-	) {
+	constructor(private sessionService: SessionService, private router: Router) {
 		if (sessionService.isLoggedIn) {
 			router.navigate(['/recipient/badges'], { replaceUrl: true });
 		} else {
-			router.navigate(['/auth/login'], { replaceUrl: true });
+			router.navigate(['/public/start'], { replaceUrl: true });
 		}
 	}
 }

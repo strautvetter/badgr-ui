@@ -1,10 +1,10 @@
-import {ApiEntityRef} from '../../common/model/entity-ref';
+import { ApiEntityRef } from '../../common/model/entity-ref';
 
 export type IssuerSlug = string;
 export type IssuerUrl = string;
 
 export interface IssuerRef {
-	"@id": IssuerUrl;
+	'@id': IssuerUrl;
 	slug: IssuerSlug;
 }
 
@@ -33,24 +33,26 @@ export interface ApiIssuer {
 	badgeClassCount: number;
 
 	json: ApiIssuerJsonld;
+
+	verified: boolean;
 }
 
-export type IssuerStaffRoleSlug = "owner" | "editor" | "staff";
+export type IssuerStaffRoleSlug = 'owner' | 'editor' | 'staff';
 export interface ApiIssuerStaff {
 	role: IssuerStaffRoleSlug;
 	user: {
-		first_name: string
-		last_name: string
-		email?: string
-		telephone?: string | string[]
-		url?: string | string[]
+		first_name: string;
+		last_name: string;
+		email?: string;
+		telephone?: string | string[];
+		url?: string | string[];
 	};
 }
 
 export interface IssuerStaffRef extends ApiEntityRef {}
 
 export interface ApiIssuerStaffOperation {
-	action: "add" | "modify" | "remove";
+	action: 'add' | 'modify' | 'remove';
 	username?: string;
 	email?: string;
 	role?: IssuerStaffRoleSlug;
@@ -71,4 +73,3 @@ export interface ApiIssuerForEditing {
 	email: string;
 	url: string;
 }
-

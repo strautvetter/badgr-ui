@@ -1,30 +1,35 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
-import {Title} from '@angular/platform-browser';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
-import {BaseAuthenticatedRoutableComponent} from '../../../common/pages/base-authenticated-routable.component';
+import { BaseAuthenticatedRoutableComponent } from '../../../common/pages/base-authenticated-routable.component';
 
-import {SessionService} from '../../../common/services/session.service';
-import {MessageService} from '../../../common/services/message.service';
+import { SessionService } from '../../../common/services/session.service';
+import { MessageService } from '../../../common/services/message.service';
 
-import {ApiBadgeClassForCreation, BadgeClassExpiresDuration} from '../../models/badgeclass-api.model';
-import {BadgeClassManager} from '../../services/badgeclass-manager.service';
-import {IssuerManager} from '../../services/issuer-manager.service';
-import {BadgeStudioComponent} from '../badge-studio/badge-studio.component';
-import {BgFormFieldImageComponent} from '../../../common/components/formfield-image';
-import {UrlValidator} from '../../../common/validators/url.validator';
-import {CommonDialogsService} from '../../../common/services/common-dialogs.service';
-import {BadgeClass} from '../../models/badgeclass.model';
-import {AppConfigService} from '../../../common/app-config.service';
-import {typedFormGroup} from '../../../common/util/typed-forms';
+import {
+	ApiBadgeClassForCreation,
+	BadgeClassCategory,
+	BadgeClassExpiresDuration,
+	BadgeClassLevel,
+} from '../../models/badgeclass-api.model';
+import { BadgeClassManager } from '../../services/badgeclass-manager.service';
+import { IssuerManager } from '../../services/issuer-manager.service';
+import { BadgeStudioComponent } from '../badge-studio/badge-studio.component';
+import { BgFormFieldImageComponent } from '../../../common/components/formfield-image';
+import { UrlValidator } from '../../../common/validators/url.validator';
+import { CommonDialogsService } from '../../../common/services/common-dialogs.service';
+import { BadgeClass } from '../../models/badgeclass.model';
+import { AppConfigService } from '../../../common/app-config.service';
+import { typedFormGroup } from '../../../common/util/typed-forms';
 
 @Component({
 	selector: 'badgeclass-edit-form',
-	templateUrl: './badgeclass-edit-form.component.html'
+	templateUrl: './badgeclass-edit-form.component.html',
 })
 export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableComponent implements OnInit {
-
+	baseUrl: string;
 	@Input()
 	set badgeClass(badgeClass: BadgeClass) {
 		if (this.existingBadgeClass !== badgeClass) {
@@ -38,7 +43,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	get alignmentFieldDirty() {
-		return this.badgeClassForm.controls.badge_criteria_text.dirty || this.badgeClassForm.controls.badge_criteria_url.dirty;
+		return (
+			this.badgeClassForm.controls.badge_criteria_text.dirty ||
+			this.badgeClassForm.controls.badge_criteria_url.dirty
+		);
 	}
 
 	readonly badgeClassPlaceholderImageUrl = require('../../../../breakdown/static/images/placeholderavatar.svg');
@@ -50,6 +58,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		.addControl('badge_description', '', Validators.required)
 		.addControl('badge_criteria_url', '')
 		.addControl('badge_criteria_text', '')
+		.addControl('badge_study_load', 1, [Validators.required, this.positiveInteger, Validators.max(1000)])
+		.addControl('badge_category', '', Validators.required)
+		.addControl('badge_level', 'a1', Validators.required)
 		.addArray(
 			'alignments',
 			typedFormGroup()
@@ -105,7 +116,23 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		days: 'Days',
 		weeks: 'Weeks',
 		months: 'Months',
-		years: 'Years'
+		years: 'Years',
+	};
+
+	categoryOptions: { [key in BadgeClassCategory]: string } = {
+		membership: 'Mitgliedschaft',
+		ability: 'Fähigkeit',
+		participation: 'Teilnahme',
+		skill: 'Können',
+	};
+
+	levelOptions: { [key in BadgeClassLevel]: string } = {
+		a1: 'A1 Einsteiger*in',
+		a2: 'A2 Entdecker*in',
+		b1: 'B1 Insider*in',
+		b2: 'B2 Expert*in',
+		c1: 'C1 Leader*in',
+		c2: 'C2 Vorreiter*in',
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,31 +155,35 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	) {
 		super(router, route, sessionService);
 		title.setTitle(`Create Badge - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+
+		this.baseUrl = this.configService.apiConfig.baseUrl;
 	}
 
 	initFormFromExisting() {
 		const badgeClass = this.existingBadgeClass;
 
 		if (badgeClass) {
-			this.badgeClassForm.setValue(
-				{
-					badge_name: badgeClass.name,
-					badge_image: badgeClass.image,
-					badge_description: badgeClass.description,
-					badge_criteria_url: badgeClass.criteria_url,
-					badge_criteria_text: badgeClass.criteria_text,
-					alignments: this.badgeClass.alignments.map(alignment => ({
-						target_name: alignment.target_name,
-						target_url: alignment.target_url,
-						target_description: alignment.target_description,
-						target_framework: alignment.target_framework,
-						target_code: alignment.target_code,
-					}))
-				}
-			);
+			console.log(badgeClass);
+			this.badgeClassForm.setValue({
+				badge_name: badgeClass.name,
+				badge_image: badgeClass.image,
+				badge_description: badgeClass.description,
+				badge_criteria_url: badgeClass.criteria_url,
+				badge_criteria_text: badgeClass.criteria_text,
+				badge_study_load: badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad,
+				badge_category: badgeClass.extension['extensions:CategoryExtension'].Category,
+				badge_level: badgeClass.extension['extensions:LevelExtension'].Level,
+				alignments: this.badgeClass.alignments.map((alignment) => ({
+					target_name: alignment.target_name,
+					target_url: alignment.target_url,
+					target_description: alignment.target_description,
+					target_framework: alignment.target_framework,
+					target_code: alignment.target_code,
+				})),
+			});
 
 			this.tags = new Set();
-			this.badgeClass.tags.forEach(t => this.tags.add(t));
+			this.badgeClass.tags.forEach((t) => this.tags.add(t));
 
 			this.tagsEnabled = this.tags.size > 0;
 			this.alignmentsEnabled = this.badgeClass.alignments.length > 0;
@@ -225,35 +256,50 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	async disableAlignments() {
 		const isPlural = this.badgeClassForm.value.alignments.length > 1;
-		if (!await this.dialogService.confirmDialog.openTrueFalseDialog({
-			dialogTitle: `Remove Alignment${isPlural ? 's' : ''}?`,
-			dialogBody: `Are you sure you want to remove ${isPlural ? "these alignments?" : "this alignment?"} This action cannot be undone.`,
-			resolveButtonLabel: 'Remove',
-			rejectButtonLabel: 'Cancel'
-		})) return;
+		if (
+			!(await this.dialogService.confirmDialog.openTrueFalseDialog({
+				dialogTitle: `Remove Alignment${isPlural ? 's' : ''}?`,
+				dialogBody: `Are you sure you want to remove ${
+					isPlural ? 'these alignments?' : 'this alignment?'
+				} This action cannot be undone.`,
+				resolveButtonLabel: 'Remove',
+				rejectButtonLabel: 'Cancel',
+			}))
+		) {
+			return;
+		}
 		this.alignmentsEnabled = false;
-		this.badgeClassForm.setValue(
-				{...this.badgeClassForm.value, alignments: []});
+		this.badgeClassForm.setValue({
+			...this.badgeClassForm.value,
+			alignments: [],
+		});
 	}
 
 	async removeAlignment(alignment: this['badgeClassForm']['controls']['alignments']['controls'][0]) {
 		const value = alignment.value;
 
-		if ((value.target_name || '').trim().length > 0
-			|| (value.target_url || '').trim().length > 0
-			|| (value.target_description || '').trim().length > 0
-			|| (value.target_framework || '').trim().length > 0
-			|| (value.target_code || '').trim().length > 0
+		if (
+			(value.target_name || '').trim().length > 0 ||
+			(value.target_url || '').trim().length > 0 ||
+			(value.target_description || '').trim().length > 0 ||
+			(value.target_framework || '').trim().length > 0 ||
+			(value.target_code || '').trim().length > 0
 		) {
-			if (!await this.dialogService.confirmDialog.openTrueFalseDialog({
-				dialogTitle: 'Remove Alignment?',
-				dialogBody: 'Are you sure you want to remove this alignment? This action cannot be undone.',
-				resolveButtonLabel: 'Remove Alignment',
-				rejectButtonLabel: 'Cancel'
-			})) return;
+			if (
+				!(await this.dialogService.confirmDialog.openTrueFalseDialog({
+					dialogTitle: 'Remove Alignment?',
+					dialogBody: 'Are you sure you want to remove this alignment? This action cannot be undone.',
+					resolveButtonLabel: 'Remove Alignment',
+					rejectButtonLabel: 'Cancel',
+				}))
+			) {
+				return;
+			}
 		}
 
-		this.badgeClassForm.controls.alignments.removeAt(this.badgeClassForm.controls.alignments.controls.indexOf(alignment));
+		this.badgeClassForm.controls.alignments.removeAt(
+			this.badgeClassForm.controls.alignments.controls.indexOf(alignment)
+		);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,7 +313,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		const criteriaText = (value.badge_criteria_text || '').trim();
 
 		if (!criteriaUrl.length && !criteriaText.length) {
-			return {'criteriaRequired': true};
+			return { criteriaRequired: true };
 		} else {
 			return null;
 		}
@@ -280,19 +326,25 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		}
 
 		if (!this.badgeClassForm.valid || (this.expirationEnabled && !this.expirationForm.valid)) {
-			const firstInvalidInput = this.formElem.nativeElement.querySelector('.ng-invalid,.dropzone-is-error,.u-text-error');
+			const firstInvalidInput = this.formElem.nativeElement.querySelector(
+				'.ng-invalid,.dropzone-is-error,.u-text-error'
+			);
 			if (firstInvalidInput) {
 				if (typeof firstInvalidInput['focus'] === 'function') {
 					firstInvalidInput['focus']();
 				}
 
-				firstInvalidInput.scrollIntoView({behavior: 'smooth'});
+				firstInvalidInput.scrollIntoView({ behavior: 'smooth' });
 			}
 			return;
 		}
 
 		const formState = this.badgeClassForm.value;
 		const expirationState = this.expirationEnabled ? this.expirationForm.value : undefined;
+
+		const studyLoadExtensionContextUrl = `${this.baseUrl}/static/extensions/StudyLoadExtension/context.json`;
+		const categoryExtensionContextUrl = `${this.baseUrl}/static/extensions/CategoryExtension/context.json`;
+		const levelExtensionContextUrl = `${this.baseUrl}/static/extensions/LevelExtension/context.json`;
 
 		if (this.existingBadgeClass) {
 			this.existingBadgeClass.name = formState.badge_name;
@@ -302,6 +354,24 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			this.existingBadgeClass.criteria_url = formState.badge_criteria_url;
 			this.existingBadgeClass.alignments = this.alignmentsEnabled ? formState.alignments : [];
 			this.existingBadgeClass.tags = this.tagsEnabled ? Array.from(this.tags) : [];
+			this.existingBadgeClass.extension = {
+				...this.existingBadgeClass.extension,
+				'extensions:StudyLoadExtension': {
+					'@context': studyLoadExtensionContextUrl,
+					type: ['Extension', 'extensions:StudyLoadExtension'],
+					StudyLoad: Number(formState.badge_study_load),
+				},
+				'extensions:CategoryExtension': {
+					'@context': categoryExtensionContextUrl,
+					type: ['Extension', 'extensions:CategoryExtension'],
+					Category: String(formState.badge_category),
+				},
+				'extensions:LevelExtension': {
+					'@context': levelExtensionContextUrl,
+					type: ['Extension', 'extensions:LevelExtension'],
+					Level: String(formState.badge_level),
+				},
+			};
 			if (this.expirationEnabled) {
 				this.existingBadgeClass.expiresDuration = expirationState.expires_duration as BadgeClassExpiresDuration;
 				this.existingBadgeClass.expiresAmount = parseInt(expirationState.expires_amount, 10);
@@ -319,14 +389,30 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				criteria_url: formState.badge_criteria_url,
 				tags: this.tagsEnabled ? Array.from(this.tags) : [],
 				alignment: this.alignmentsEnabled ? formState.alignments : [],
+				extensions: {
+					'extensions:StudyLoadExtension': {
+						'@context': studyLoadExtensionContextUrl,
+						type: ['Extension', 'extensions:StudyLoadExtension'],
+						StudyLoad: Number(formState.badge_study_load),
+					},
+					'extensions:CategoryExtension': {
+						'@context': categoryExtensionContextUrl,
+						type: ['Extension', 'extensions:CategoryExtension'],
+						Category: String(formState.badge_category),
+					},
+					'extensions:LevelExtension': {
+						'@context': levelExtensionContextUrl,
+						type: ['Extension', 'extensions:LevelExtension'],
+						Level: String(formState.badge_level),
+					},
+				},
 			} as ApiBadgeClassForCreation;
 			if (this.expirationEnabled) {
 				badgeClassData.expires = {
 					duration: expirationState.expires_duration as BadgeClassExpiresDuration,
-					amount: parseInt(expirationState.expires_amount, 10)
+					amount: parseInt(expirationState.expires_amount, 10),
 				};
 			}
-
 
 			this.savePromise = this.badgeClassManager.createBadgeClass(this.issuerSlug, badgeClassData);
 		}
@@ -339,14 +425,15 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	generateRandomImage() {
-		this.badgeStudio.generateRandom().then(imageUrl => this.imageField.useDataUrl(imageUrl, 'Auto-generated image'));
+		this.badgeStudio
+			.generateRandom()
+			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'Auto-generated image'));
 	}
 
 	positiveInteger(control: AbstractControl) {
 		const val = parseInt(control.value, 10);
 		if (isNaN(val) || val < 1) {
-			return {'expires_amount': 'Must be a positive integer'};
+			return { expires_amount: 'Must be a positive integer' };
 		}
 	}
 }
-
