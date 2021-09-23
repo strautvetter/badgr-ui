@@ -28,18 +28,23 @@
 						{{ issuer.description }}
 					</p>
 					<div class="u-margin-top1x">
-						<a href="{{ issuer.websiteUrl }}" class="u-text-outlink"
-							>Website besuchen<svg icon="icon_external_link"></svg
-						></a>
+						<a href="{{ issuer.websiteUrl }}" class="u-text-outlink">
+							Website besuchen
+							<svg icon="icon_external_link"></svg>
+						</a>
 					</div>
 					<p></p>
 				</div>
 				<div class="topbar-x-buttons">
-					<p *ngIf="!issuer.verified" class="u-margin-top1x u-width-paragraph">
+					<p *ngIf="!issuer.apiModel.verified" class="u-margin-top1x u-width-paragraph">
 						Dieser Issuer wurde noch nicht verifiziert
 					</p>
 					<div class="l-primarymore">
-						<button class="button" [routerLink]="['./badges/create']" [disabled]="!issuer.verified">
+						<button
+							class="button"
+							[routerLink]="['./badges/create']"
+							[disabled]="!issuer.apiModel.verified"
+						>
 							Badge erstellen
 						</button>
 						<button class="buttonicon buttonicon-secondary" [bgPopupMenuTrigger]="issuerActionsMenu">

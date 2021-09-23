@@ -1,15 +1,18 @@
-import { IssuerUrl } from "./issuer-api.model";
-import { ApiEntityRef } from "../../common/model/entity-ref";
+import { IssuerUrl } from './issuer-api.model';
+import { ApiEntityRef } from '../../common/model/entity-ref';
 
 export type BadgeClassSlug = string;
 export type BadgeClassUrl = string;
 export type BadgeClassSqlId = number;
 export interface BadgeClassRef extends ApiEntityRef {}
 
-export type BadgeClassExpiresDuration = "days" | "weeks" | "months" | "years";
+export type BadgeClassExpiresDuration = 'days' | 'weeks' | 'months' | 'years';
+
+export type BadgeClassLevel = 'a1' | 'a2' | 'b1' | 'b2' | 'c1' | 'c2';
+export type BadgeClassCategory = 'membership' | 'ability' | 'participation' | 'skill';
 
 export interface ApiBadgeClassJsonld {
-	"@context": string;
+	'@context': string;
 	type: string;
 	id: BadgeClassUrl;
 
