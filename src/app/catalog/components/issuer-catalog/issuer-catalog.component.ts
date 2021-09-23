@@ -79,8 +79,10 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		return new Promise(async (resolve, reject) => {
 			this.issuerManager.getAllIssuers().subscribe(
 				(issuers) => {
-					console.log(issuers);
-					this.issuers = issuers.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+					this.issuers = issuers
+						.slice()
+						.filter((i) => i.apiModel.verified)
+						.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 					resolve(issuers);
 				},
 				(error) => {

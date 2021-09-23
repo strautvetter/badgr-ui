@@ -8,18 +8,6 @@ import { BadgrEnvironment } from './badgr-environment';
 export const environment: BadgrEnvironment = {
 	production: false,
 	config: {
-		features: {
-			externalAuthProviders: [
-				{
-					color: '#ffeace',
-					imgSrc: 'https://hmgstrategy1.blob.core.windows.net/hmgfiles/images/default-source/articles/auth0-logo794e56d3-50c9-4c18-901c-98fffa711981.png?sfvrsn=85689ff5_1',
-					label: 'Auth0',
-					slug: 'auth0',
-				},
-			],
-			socialAccountProviders: ['auth0'],
-			disableIssuers: true,
-		},
 		theme: {
 			welcomeMessage: 'Willkommen auf myBadges',
 			serviceName: 'myBadges',
