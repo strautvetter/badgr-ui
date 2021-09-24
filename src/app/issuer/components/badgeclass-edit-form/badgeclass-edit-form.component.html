@@ -11,10 +11,10 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Badge Basics</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Badge images can be either PNGs or SVGs. All fields are required.
+				Badge Bilder können entweder PNGs oder SVGs sein. Alle Angaben sind verüflichtend.
 			</p>
 			<a href="https://openbadges.org/" class="u-text-outlink"
-				>Learn About Open Badges
+				>Finde mehr über Open Badges heraus
 				<svg icon="icon_external_link"></svg>
 			</a>
 		</div>
@@ -39,7 +39,7 @@
 				<bg-formfield-text
 					[control]="badgeClassForm.rawControlMap.badge_name"
 					label="Name"
-					[errorMessage]="{ required: 'Please enter a badge name' }"
+					[errorMessage]="{ required: 'Bitte gib dem Badge einen Namen' }"
 					[autofocus]="true"
 				></bg-formfield-text>
 			</div>
@@ -49,8 +49,8 @@
 					[control]="badgeClassForm.rawControlMap.badge_description"
 					label="Short Description"
 					id="badgeclass_description_input"
-					placeholder="A short summary of this achievement."
-					[errorMessage]="{ required: 'Please enter a description' }"
+					placeholder="Kurze Beschreibung der Leistung"
+					[errorMessage]="{ required: 'Bitte gib eine Beschreibung ein' }"
 					[multiline]="true"
 				></bg-formfield-text>
 			</div>
@@ -69,8 +69,9 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">What are Criteria?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				The criteria field describes exactly what must be done to earn this badge. Some issuers choose a URL on
-				their website as a promotional page that explains this badge opportunity and how to earn it.
+				Das Kriterienfeld beschreibt genau, was getan werden muss, um das Badge zu erhalten. Einige Issuer
+				wählen eine URL auf ihrer Website als Informationsseite, die erklärt worum es bei dem Badge geht und wie
+				man es erhält.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -81,12 +82,12 @@
 							[hidden]="!alignmentFieldDirty || !badgeClassForm.hasError('criteriaRequired')"
 							class="u-text u-margin-bottom2x u-text-error"
 						>
-							Either text or URL is required.
+							Entweder Text oder eine URL sind verpflichtend.
 						</p>
 
 						<bg-formfield-markdown
 							[control]="badgeClassForm.rawControlMap.badge_criteria_text"
-							label=" How does the recipient earn this badge?"
+							label=" Wie bekommt man dieses Badge?"
 							class="l-formsection-x-inputoffset"
 							[errorMessage]="''"
 						></bg-formfield-markdown>
@@ -100,7 +101,7 @@
 					label="URL"
 					[urlField]="true"
 					fieldType="url"
-					errorMessage="URL to the Badge Criteria Page"
+					errorMessage="URL zu den Badge Kriterien"
 				></bg-formfield-text>
 			</div>
 		</div>
@@ -109,25 +110,23 @@
 	<!-- Criteria Panel -->
 	<div class="formsection">
 		<div class="formsection-x-title">
-			<h2 class="u-text-dark2">Minimale Dauer</h2>
+			<h2 class="u-text-dark2">Dauer</h2>
 		</div>
 
 		<div class="formsection-x-help">
-			<h3 class="u-text-body-bold">Was bedeutet die minimale Dauer?</h3>
+			<h3 class="u-text-body-bold">Was ist die Dauer?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus illum explicabo molestias dolore!
-				A deleniti error cum laborum nam vel ullam debitis delectus optio officiis, deserunt nihil aliquam modi
-				quasi?
+				Im Dauerfeld beschreibst Du den zeitlichen Umfang der Leistung, die nötig ist, um das Badge zu erhalten.
 			</p>
 		</div>
 		<div class="formsection-x-body">
 			<div class="forminput u-margin-bottom2x">
 				<bg-formfield-text
 					[control]="badgeClassForm.rawControlMap.badge_study_load"
-					label="Minimale Dauer in Stunden"
+					label="Dauer in Stunden"
 					[fieldType]="'number'"
 					[errorMessage]="{
-						required: 'Gebe die minimale Dauer in Stunden ein'
+						required: 'Bitte gib die Dauer der Leistung zum Erhalt des Badges ein.'
 					}"
 				></bg-formfield-text>
 			</div>
@@ -143,9 +142,8 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Kategorie?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus illum explicabo molestias dolore!
-				A deleniti error cum laborum nam vel ullam debitis delectus optio officiis, deserunt nihil aliquam modi
-				quasi?
+				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz oder
+				einer Metakompetenz.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -157,7 +155,7 @@
 					[placeholder]="'Wähle eine Kategorie'"
 					[optionMap]="categoryOptions"
 					[errorMessage]="{
-						required: 'Wähle eine Kategorie für den Badge'
+						required: 'Bitte wähle die Kategorie des Badges aus.'
 					}"
 				></bg-formfield-select>
 			</div>
@@ -197,7 +195,7 @@
 	<div *ngIf="alignmentsEnabled" class="formsection">
 		<div class="formsection-x-title">
 			<h2 class="u-text-dark2">
-				Alignment
+				Verknüpfung
 				<span>(Optional)</span>
 			</h2>
 			<button type="button" (click)="disableAlignments()" class="buttonicon buttonicon-link">
@@ -207,11 +205,11 @@
 		</div>
 
 		<div class="formsection-x-help">
-			<h3 class="u-text-body-bold">What is Alignment?</h3>
+			<h3 class="u-text-body-bold">Was ist die Verknüpfung?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				An Open Badge can optionally align to an educational standard. Alignment information may be relevant to
-				people viewing an earner's awarded badges, or to a potential earner deciding whether to apply for the
-				badge.
+				Open Badges können optional mit Bildungsstandards verknüpft werden. Diese Verknüpfungsinformation kann
+				für Menschen wichtig sein, die sehen welche Badges man erhalten hat oder für Mesnchen, die sich
+				überlegen ein bestimmtes Badge zu erhalten.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -234,21 +232,21 @@
 						<bg-formfield-text
 							[control]="alignment.rawControlMap.target_name"
 							label="Name"
-							[errorMessage]="{ required: 'Please enter an alignment name' }"
+							[errorMessage]="{ required: 'Gib den Namen der Verknüpfung ein.' }"
 							id="alignment_name_{{ i }}"
 						></bg-formfield-text>
 
 						<bg-formfield-text
 							[control]="alignment.rawControlMap.target_url"
 							label="URL"
-							[errorMessage]="{ required: 'Please enter an alignment URL' }"
+							[errorMessage]="{ required: 'Bitte gib eine URL zur Verknüpfung an.' }"
 							[urlField]="true"
 							id="alignment_url_{{ i }}"
 						></bg-formfield-text>
 
 						<bg-formfield-text
 							[control]="alignment.rawControlMap.target_description"
-							label="Short Description"
+							label="Kurzbeschreibung"
 							[multiline]="true"
 							id="alignment_description_{{ i }}"
 						></bg-formfield-text>

@@ -37,7 +37,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/auth/login']"
-						>Einloggen</a
+						>Sign In</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -172,7 +172,7 @@
 			><svg icon="icon_compare"></svg>App Integrationen</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/auth/logout']"
-			><svg icon="icon_exit_to_app"></svg>Ausloggen</a
+			><svg icon="icon_exit_to_app"></svg>Logout</a
 		>
 	</bg-popup-menu>
 
@@ -183,8 +183,8 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Einloggen</a>
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Account Erstellen</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Sign In</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Account erstellen</a>
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
 			<a href="{{ lp.launch_url }}" *ngFor="let lp of launchpoints" target="_blank">
@@ -218,7 +218,7 @@
 			<a [routerLink]="['/profile/profile']">Profil</a>
 			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Meine Issuers</a>
 			<a [routerLink]="['/profile/app-integrations']">App Integrationen</a>
-			<a [routerLink]="['/auth/logout']">Ausloggen</a>
+			<a [routerLink]="['/auth/logout']">Logout</a>
 		</div>
 	</nav>
 </header>
@@ -236,10 +236,8 @@
 			<div>
 				<h1 *ngIf="fatalMessage" class="u-text-h2-bold u-text-center">{{ fatalMessage }}</h1>
 				<h1 *ngIf="fatalMessageDetail" class="u-text-h3 u-text-center">{{ fatalMessageDetail }}</h1>
-				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">
-					Whoops! The server has failed to respond.
-				</h1>
-				<h1 *ngIf="!fatalMessageDetail" class="u-text-body u-text-center">Please refresh and try again.</h1>
+				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">Ups! Der Server antwortet nicht.</h1>
+				<h1 *ngIf="!fatalMessageDetail" class="u-text-body u-text-center">Bitte die Seite neu laden.</h1>
 				<img class="u-width-form" [src]="unavailableImageSrc" />
 			</div>
 		</div>
