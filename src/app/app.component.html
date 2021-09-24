@@ -37,7 +37,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/auth/login']"
-						>Sign In</a
+						>Einloggen</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -45,7 +45,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/signup']"
-						>Create Account</a
+						>Account Erstellen</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -53,7 +53,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/public/about']"
-						>About</a
+						>Über myBadges</a
 					>
 				</div>
 			</nav>
@@ -70,7 +70,7 @@
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/badges']"
 					>
-						All Badges
+						Badges
 					</a>
 					<a
 						role="menuitem"
@@ -79,7 +79,7 @@
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/issuers']"
 					>
-						All Issuers
+						Issuers
 					</a>
 					<a
 						role="menuitem"
@@ -95,16 +95,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/recipient/badge-collections']"
-						>Collections</a
-					>
-					<a
-						role="menuitem"
-						*ngIf="showIssuersTab"
-						[class.navitem-light]="!theme.useColorNavbar"
-						class="navitem"
-						routerLinkActive="navitem-is-active"
-						[routerLink]="['/issuer']"
-						>Issuers</a
+						>Sammlungen</a
 					>
 					<button
 						role="menuitem"
@@ -172,13 +163,16 @@
 
 	<bg-popup-menu #accountMenu>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/profile/profile']"
-			><svg icon="icon_member"></svg>Profile</a
+			><svg icon="icon_member"></svg>Mein Profil</a
+		>
+		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/issuer']"
+			><svg icon="icon_issuer"></svg>Meine Issuers</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/profile/app-integrations']"
-			><svg icon="icon_compare"></svg>App Integrations</a
+			><svg icon="icon_compare"></svg>App Integrationen</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/auth/logout']"
-			><svg icon="icon_exit_to_app"></svg>Sign Out</a
+			><svg icon="icon_exit_to_app"></svg>Ausloggen</a
 		>
 	</bg-popup-menu>
 
@@ -189,8 +183,8 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Sign In</a>
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Create Account</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Einloggen</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Account Erstellen</a>
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
 			<a href="{{ lp.launch_url }}" *ngFor="let lp of launchpoints" target="_blank">
@@ -206,9 +200,10 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
+			<a [routerLink]="['/catalog/badges']">Badges</a>
+			<a [routerLink]="['/catalog/issuers']">Issuers</a>
 			<a [routerLink]="['/recipient/badges']">Backpack</a>
-			<a [routerLink]="['/recipient/badge-collections']">Collections</a>
-			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Issuers</a>
+			<a [routerLink]="['/recipient/badge-collections']">Sammlungen</a>
 
 			<hr class="mobilenav-x-rule" *ngIf="launchpoints?.length" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
@@ -220,9 +215,10 @@
 
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label">Account</p>
-			<a [routerLink]="['/profile/profile']">Profile</a>
-			<a [routerLink]="['/profile/app-integrations']">App Integrations</a>
-			<a [routerLink]="['/auth/logout']">Sign Out</a>
+			<a [routerLink]="['/profile/profile']">Profil</a>
+			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Meine Issuers</a>
+			<a [routerLink]="['/profile/app-integrations']">App Integrationen</a>
+			<a [routerLink]="['/auth/logout']">Ausloggen</a>
 		</div>
 	</nav>
 </header>
@@ -265,23 +261,14 @@
 					Powered by <a href="https://badgr.io">Badgr</a>
 				</li>
 				<li *ngIf="theme.providedBy">
-					Provided by <a href="{{ theme.providedBy.url }}" target="_blank">{{ theme.providedBy.name }}</a>
+					Bereitgestellt von
+					<a href="{{ theme.providedBy.url }}" target="_blank">{{ theme.providedBy.name }}</a>
 				</li>
 			</ul>
 
 			<ul class="footer-x-links">
 				<li>
-					<a [href]="theme.termsOfServiceLink || 'https://badgr.org/missing-terms'" target="_blank"
-						>Terms of Service</a
-					>
-				</li>
-				<li>
-					<a [href]="theme.privacyPolicyLink || 'https://badgr.org/missing-privacy-policy'" target="_blank"
-						>Privacy Policy</a
-					>
-				</li>
-				<li *ngIf="theme.showApiDocsLink === undefined || theme.showApiDocsLink">
-					<a href="https://support.badgr.io/docs/" target="_blank">Documentation</a>
+					<a [href]="theme.termsOfServiceLink" target="_blank">Impressum & Datenschutz</a>
 				</li>
 			</ul>
 		</div>

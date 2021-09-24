@@ -13,6 +13,7 @@ import { BadgrRouteData } from '../common/services/navigation.service';
 import { VerifyBadgeDialog } from './components/verify-badge-dialog/verify-badge-dialog.component';
 import { AboutComponent } from './components/about/about.component';
 import { StartComponent } from './components/start/start.component';
+import { ImpressumComponent } from './components/impressum/impressum.component';
 
 export const routes: Routes = [
 	{
@@ -34,6 +35,13 @@ export const routes: Routes = [
 	{
 		path: 'start',
 		component: StartComponent,
+		data: {
+			publiclyAccessible: true,
+		} as BadgrRouteData,
+	},
+	{
+		path: 'impressum',
+		component: ImpressumComponent,
 		data: {
 			publiclyAccessible: true,
 		} as BadgrRouteData,
@@ -85,6 +93,7 @@ export const routes: Routes = [
 	declarations: [
 		AboutComponent,
 		StartComponent,
+		ImpressumComponent,
 		PublicComponent,
 		PublicBadgeAssertionComponent,
 		PublicBadgeClassComponent,
