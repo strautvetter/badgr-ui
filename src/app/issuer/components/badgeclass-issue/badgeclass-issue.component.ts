@@ -1,78 +1,65 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Title } from "@angular/platform-browser";
-import { SessionService } from "../../../common/services/session.service";
-import { MessageService } from "../../../common/services/message.service";
-import { BaseAuthenticatedRoutableComponent } from "../../../common/pages/base-authenticated-routable.component";
-import {
-	EmailValidator,
-	ValidationResult,
-} from "../../../common/validators/email.validator";
-import { UrlValidator } from "../../../common/validators/url.validator";
-import { MdImgValidator } from "../../../common/validators/md-img.validator";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { SessionService } from '../../../common/services/session.service';
+import { MessageService } from '../../../common/services/message.service';
+import { BaseAuthenticatedRoutableComponent } from '../../../common/pages/base-authenticated-routable.component';
+import { EmailValidator, ValidationResult } from '../../../common/validators/email.validator';
+import { UrlValidator } from '../../../common/validators/url.validator';
+import { MdImgValidator } from '../../../common/validators/md-img.validator';
 
-import { BadgeInstanceManager } from "../../services/badgeinstance-manager.service";
-import { BadgeClassManager } from "../../services/badgeclass-manager.service";
-import { IssuerManager } from "../../services/issuer-manager.service";
+import { BadgeInstanceManager } from '../../services/badgeinstance-manager.service';
+import { BadgeClassManager } from '../../services/badgeclass-manager.service';
+import { IssuerManager } from '../../services/issuer-manager.service';
 
-import { Issuer } from "../../models/issuer.model";
-import { BadgeClass } from "../../models/badgeclass.model";
-import { CommonDialogsService } from "../../../common/services/common-dialogs.service";
-import { BadgrApiFailure } from "../../../common/services/api-failure";
-import { RecipientIdentifierType } from "../../models/badgeinstance-api.model";
-import { typedFormGroup } from "../../../common/util/typed-forms";
-import { TelephoneValidator } from "../../../common/validators/telephone.validator";
-import { EventsService } from "../../../common/services/events.service";
-import { FormFieldTextInputType } from "../../../common/components/formfield-text";
-import * as striptags from "striptags";
-import { DateValidator } from "../../../common/validators/date.validator";
-import { AppConfigService } from "../../../common/app-config.service";
-import { LinkEntry } from "../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component";
+import { Issuer } from '../../models/issuer.model';
+import { BadgeClass } from '../../models/badgeclass.model';
+import { CommonDialogsService } from '../../../common/services/common-dialogs.service';
+import { BadgrApiFailure } from '../../../common/services/api-failure';
+import { RecipientIdentifierType } from '../../models/badgeinstance-api.model';
+import { typedFormGroup } from '../../../common/util/typed-forms';
+import { TelephoneValidator } from '../../../common/validators/telephone.validator';
+import { EventsService } from '../../../common/services/events.service';
+import { FormFieldTextInputType } from '../../../common/components/formfield-text';
+import * as striptags from 'striptags';
+import { DateValidator } from '../../../common/validators/date.validator';
+import { AppConfigService } from '../../../common/app-config.service';
+import { LinkEntry } from '../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component';
 
 @Component({
-	selector: "badgeclass-issue",
-	templateUrl: "./badgeclass-issue.component.html",
+	selector: 'badgeclass-issue',
+	templateUrl: './badgeclass-issue.component.html',
 })
-export class BadgeClassIssueComponent
-	extends BaseAuthenticatedRoutableComponent
-	implements OnInit
-{
+export class BadgeClassIssueComponent extends BaseAuthenticatedRoutableComponent implements OnInit {
 	breadcrumbLinkEntries: LinkEntry[] = [];
 
 	get defaultExpiration(): string {
-		if (
-			this.badgeClass &&
-			this.badgeClass.expiresDuration &&
-			this.badgeClass.expiresAmount
-		) {
-			return this.badgeClass
-				.expirationDateRelative()
-				.toISOString()
-				.replace(/T.*/, "");
+		if (this.badgeClass && this.badgeClass.expiresDuration && this.badgeClass.expiresAmount) {
+			return this.badgeClass.expirationDateRelative().toISOString().replace(/T.*/, '');
 		}
 	}
 
 	get issuerSlug() {
-		return this.route.snapshot.params["issuerSlug"];
+		return this.route.snapshot.params['issuerSlug'];
 	}
 
 	get badgeSlug() {
-		return this.route.snapshot.params["badgeSlug"];
+		return this.route.snapshot.params['badgeSlug'];
 	}
 
 	get recipientIdentifierFieldType(): FormFieldTextInputType {
 		switch (this.issueForm.controls.recipient_type.value) {
-			case "email":
-				return "email";
-			case "openBadgeId":
-				return "text";
-			case "telephone":
-				return "tel";
-			case "url":
-				return "url";
+			case 'email':
+				return 'email';
+			case 'openBadgeId':
+				return 'text';
+			case 'telephone':
+				return 'tel';
+			case 'url':
+				return 'url';
 			default:
-				return "text";
+				return 'text';
 		}
 	}
 
@@ -82,30 +69,19 @@ export class BadgeClassIssueComponent
 
 	issuer: Issuer;
 	issueForm = typedFormGroup()
-		.addControl("expires", "", this["expirationValidator"])
-		.addControl(
-			"recipient_type",
-			"email" as RecipientIdentifierType,
-			[Validators.required],
-			(control) => {
-				control.rawControl.valueChanges.subscribe(() => {
-					this.issueForm.controls.recipient_identifier.rawControl.updateValueAndValidity();
-				});
-			}
-		)
-		.addControl("recipient_identifier", "", [
-			Validators.required,
-			this["idValidator"],
-		])
-		.addControl("recipientprofile_name", "")
-		.addControl("narrative", "", MdImgValidator.imageTest)
-		.addControl("notify_earner", true)
+		.addControl('expires', '', this['expirationValidator'])
+		.addControl('recipient_type', 'email' as RecipientIdentifierType, [Validators.required], (control) => {
+			control.rawControl.valueChanges.subscribe(() => {
+				this.issueForm.controls.recipient_identifier.rawControl.updateValueAndValidity();
+			});
+		})
+		.addControl('recipient_identifier', '', [Validators.required, this['idValidator']])
+		.addControl('recipientprofile_name', '')
+		.addControl('narrative', '', MdImgValidator.imageTest)
+		.addControl('notify_earner', true)
 		.addArray(
-			"evidence_items",
-			typedFormGroup()
-				.addControl("narrative", "")
-				.addControl("evidence_url", "")
-				.addControl("expiration", "")
+			'evidence_items',
+			typedFormGroup().addControl('narrative', '').addControl('evidence_url', '').addControl('expiration', '')
 		);
 
 	badgeClass: BadgeClass;
@@ -115,9 +91,9 @@ export class BadgeClassIssueComponent
 	badgeClassLoaded: Promise<unknown>;
 
 	identifierOptionMap = {
-		email: "Email Address",
-		url: "URL",
-		telephone: "Telephone",
+		email: 'E-Mail Adresse',
+		url: 'URL',
+		// telephone: "Telephone",
 	};
 
 	evidenceEnabled = false;
@@ -126,11 +102,11 @@ export class BadgeClassIssueComponent
 	idValidator: (control: FormControl) => ValidationResult = (control) => {
 		if (this.issueForm) {
 			switch (this.issueForm.controls.recipient_type.value) {
-				case "email":
+				case 'email':
 					return EmailValidator.validEmail(control);
-				case "openBadgeId":
+				case 'openBadgeId':
 					return null;
-				case "telephone":
+				case 'telephone':
 					return TelephoneValidator.validTelephone(control);
 				//case 'url': return UrlValidator.validUrl(control);
 				default:
@@ -140,13 +116,9 @@ export class BadgeClassIssueComponent
 			return null;
 		}
 	};
-	expirationValidator: (control: FormControl) => ValidationResult = (
-		control
-	) => {
+	expirationValidator: (control: FormControl) => ValidationResult = (control) => {
 		if (this.expirationEnabled) {
-			return Validators.compose([Validators.required, DateValidator.validDate])(
-				control
-			);
+			return Validators.compose([Validators.required, DateValidator.validDate])(control);
 		} else {
 			return null;
 		}
@@ -166,56 +138,43 @@ export class BadgeClassIssueComponent
 		route: ActivatedRoute
 	) {
 		super(router, route, sessionService);
-		title.setTitle(
-			`Award Badge - ${this.configService.theme["serviceName"] || "Badgr"}`
-		);
+		title.setTitle(`Award Badge - ${this.configService.theme['serviceName'] || 'Badgr'}`);
 
-		this.issuerLoaded = this.issuerManager
-			.issuerBySlug(this.issuerSlug)
-			.then((issuer) => {
-				this.issuer = issuer;
+		this.issuerLoaded = this.issuerManager.issuerBySlug(this.issuerSlug).then((issuer) => {
+			this.issuer = issuer;
 
-				this.badgeClassLoaded = this.badgeClassManager
-					.badgeByIssuerUrlAndSlug(issuer.issuerUrl, this.badgeSlug)
-					.then((badgeClass) => {
-						this.badgeClass = badgeClass;
+			this.badgeClassLoaded = this.badgeClassManager
+				.badgeByIssuerUrlAndSlug(issuer.issuerUrl, this.badgeSlug)
+				.then((badgeClass) => {
+					this.badgeClass = badgeClass;
 
-						this.breadcrumbLinkEntries = [
-							{ title: "Issuers", routerLink: ["/issuer"] },
-							{
-								title: issuer.name,
-								routerLink: ["/issuer/issuers", this.issuerSlug],
-							},
-							{
-								title: "badges",
-								routerLink: ["/issuer/issuers/" + this.issuerSlug + "/badges/"],
-							},
-							{
-								title: badgeClass.name,
-								routerLink: [
-									"/issuer/issuers",
-									this.issuerSlug,
-									"badges",
-									badgeClass.slug,
-								],
-							},
-							{ title: "Award Badge" },
-						];
+					this.breadcrumbLinkEntries = [
+						{ title: 'Issuers', routerLink: ['/issuer'] },
+						{
+							title: issuer.name,
+							routerLink: ['/issuer/issuers', this.issuerSlug],
+						},
+						{
+							title: 'badges',
+							routerLink: ['/issuer/issuers/' + this.issuerSlug + '/badges/'],
+						},
+						{
+							title: badgeClass.name,
+							routerLink: ['/issuer/issuers', this.issuerSlug, 'badges', badgeClass.slug],
+						},
+						{ title: 'Award Badge' },
+					];
 
-						if (badgeClass.expiresDuration && badgeClass.expiresAmount) {
-							this.expirationEnabled = true;
-						}
-						this.issueForm.rawControlMap.expires.setValue(
-							this.defaultExpiration
-						);
+					if (badgeClass.expiresDuration && badgeClass.expiresAmount) {
+						this.expirationEnabled = true;
+					}
+					this.issueForm.rawControlMap.expires.setValue(this.defaultExpiration);
 
-						this.title.setTitle(
-							`Award Badge - ${badgeClass.name} - ${
-								this.configService.theme["serviceName"] || "Badgr"
-							}`
-						);
-					});
-			});
+					this.title.setTitle(
+						`Award Badge - ${badgeClass.name} - ${this.configService.theme['serviceName'] || 'Badgr'}`
+					);
+				});
+		});
 	}
 
 	ngOnInit() {
@@ -244,9 +203,7 @@ export class BadgeClassIssueComponent
 		}
 
 		const formState = this.issueForm.value;
-		const cleanedEvidence = formState.evidence_items.filter(
-			(e) => e.narrative !== "" || e.evidence_url !== ""
-		);
+		const cleanedEvidence = formState.evidence_items.filter((e) => e.narrative !== '' || e.evidence_url !== '');
 		const cleanedName = striptags(formState.recipientprofile_name);
 
 		// const studyLoadExtensionContextUrl =
@@ -270,19 +227,14 @@ export class BadgeClassIssueComponent
 
 		// const extensions = studyLoadExtension;
 
-		if (
-			this.expirationEnabled &&
-			DateValidator.validDate(this.issueForm.controls.expires.rawControl)
-		) {
+		if (this.expirationEnabled && DateValidator.validDate(this.issueForm.controls.expires.rawControl)) {
 			this.dateError = true;
 			return false;
 		} else {
 			this.dateError = false;
 		}
 
-		const isIDValid = this.idValidator(
-			this.issueForm.controls.recipient_identifier.rawControl
-		);
+		const isIDValid = this.idValidator(this.issueForm.controls.recipient_identifier.rawControl);
 		if (isIDValid) {
 			Object.keys(isIDValid).forEach((key) => {
 				this.idError = key;
@@ -293,9 +245,7 @@ export class BadgeClassIssueComponent
 		}
 
 		const expires =
-			this.expirationEnabled && formState.expires
-				? new Date(formState.expires).toISOString()
-				: undefined;
+			this.expirationEnabled && formState.expires ? new Date(formState.expires).toISOString() : undefined;
 
 		this.issueBadgeFinished = this.badgeInstanceManager
 			.createBadgeInstance(this.issuerSlug, this.badgeSlug, {
@@ -303,7 +253,7 @@ export class BadgeClassIssueComponent
 				badge_class: this.badgeSlug,
 				recipient_type: formState.recipient_type,
 				recipient_identifier: formState.recipient_identifier,
-				narrative: this.narrativeEnabled ? formState.narrative : "",
+				narrative: this.narrativeEnabled ? formState.narrative : '',
 				create_notification: formState.notify_earner,
 				evidence_items: this.evidenceEnabled ? cleanedEvidence : [],
 				// extensions,
@@ -313,22 +263,13 @@ export class BadgeClassIssueComponent
 			.then(
 				() => {
 					this.eventsService.recipientBadgesStale.next([]);
-					this.router.navigate([
-						"issuer/issuers",
-						this.issuerSlug,
-						"badges",
-						this.badgeClass.slug,
-					]);
-					this.messageService.setMessage(
-						"Badge awarded to " + formState.recipient_identifier,
-						"success"
-					);
+					this.router.navigate(['issuer/issuers', this.issuerSlug, 'badges', this.badgeClass.slug]);
+					this.messageService.setMessage('Badge awarded to ' + formState.recipient_identifier, 'success');
 				},
 				(error) => {
 					this.messageService.setMessage(
-						"Unable to award badge: " +
-							BadgrApiFailure.from(error).firstMessage,
-						"error"
+						'Unable to award badge: ' + BadgrApiFailure.from(error).firstMessage,
+						'error'
 					);
 				}
 			)
@@ -344,7 +285,7 @@ export class BadgeClassIssueComponent
 				dialogTitle: `Delete Evidence?`,
 				dialogBody: `Are you sure you want to delete this evidence?`,
 				resolveButtonLabel: `Delete Evidence`,
-				rejectButtonLabel: "Cancel",
+				rejectButtonLabel: 'Cancel',
 			}))
 		) {
 			this.issueForm.controls.evidence_items.removeAt(i);

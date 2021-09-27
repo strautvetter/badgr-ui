@@ -18,11 +18,11 @@
 						class="button"
 						[routerLink]="['/issuer/issuers', issuerSlug, 'badges', badgeClass.slug, 'issue']"
 						[disabled-when-requesting]="true"
-						>Award Badge</a
+						>Badge vergeben</a
 					>
 					<button class="buttonicon buttonicon-secondary" id="actionstrigger" [bgPopupMenuTrigger]="moreMenu">
 						<svg icon="icon_more"></svg>
-						<span class="visuallyhidden">More</span>
+						<span class="visuallyhidden">Mehr</span>
 					</button>
 					<bg-popup-menu #moreMenu>
 						<button
@@ -30,10 +30,10 @@
 							type="button"
 							[routerLink]="['/issuer/issuers', issuerSlug, 'badges', badgeClass.slug, 'edit']"
 						>
-							<svg icon="icon_edit"></svg>Edit
+							<svg icon="icon_edit"></svg>Bearbeiten
 						</button>
 						<button class="menuitem" (click)="deleteBadge()" [disabled-when-requesting]="true">
-							<svg icon="icon_remove"></svg>Delete
+							<svg icon="icon_remove"></svg>Löschen
 						</button>
 						<!--
 				        	TODO: Add 'share' action
@@ -63,7 +63,7 @@
 								/>
 							</div>
 							<div>
-								<dt class="u-text-small-bold u-text-dark2">Issued by:</dt>
+								<dt class="u-text-small-bold u-text-dark2">Vergeben von:</dt>
 								<dd class="u-text">
 									<a class="u-break-word" [routerLink]="['/issuer/issuers/', issuerSlug]">{{
 										issuer.name
@@ -78,9 +78,9 @@
 								u-text-dark2
 							"
 						>
-							Created on:
+							Erstellt am:
 						</dt>
-						<dd class="u-text"><time [date]="badgeClass.createdAt" format="MM/dd/y"></time></dd>
+						<dd class="u-text"><time [date]="badgeClass.createdAt" format="dd/MM/y"></time></dd>
 						<dt
 							class="
 								u-text-small-bold u-padding-top2x u-margin-top2x
@@ -89,7 +89,7 @@
 							"
 							*ngIf="badgeClass.expiresAmount"
 						>
-							Expires after:
+							Ablaufdatum:
 						</dt>
 						<dd class="u-text" *ngIf="badgeClass.expiresAmount > 1">
 							{{ badgeClass.expiresAmount }} {{ badgeClass.expiresDuration }}
@@ -147,20 +147,20 @@
 				</div>
 			</div>
 			<div class="badgedetail-x-desc">
-				<h2 class="u-text-h3-semibold u-text-dark2 u-margin-bottom2x u-hidden-mintablet">Description</h2>
+				<h2 class="u-text-h3-semibold u-text-dark2 u-margin-bottom2x u-hidden-mintablet">Beschreibung</h2>
 				<p class="u-text-body u-width-paragraph">{{ badgeClass.description }}</p>
 			</div>
 			<div class="badgedetail-x-body">
 				<!-- criteria -->
 				<section *ngIf="badgeClass.criteria_url || badgeClass.criteria_text">
-					<h3 class="u-text-h3-semibold u-text-dark2 u-margin-bottom2x u-margin-top4x">Criteria</h3>
+					<h3 class="u-text-h3-semibold u-text-dark2 u-margin-bottom2x u-margin-top4x">Kriterien</h3>
 					<show-more>
 						<markdown-display *ngIf="badgeClass.criteria_text" [value]="badgeClass.criteria_text">
 						</markdown-display>
 					</show-more>
 					<div class="u-margin-yaxis2x" *ngIf="badgeClass.criteria_url">
 						<a class="u-text-outlink" target="_blank" [href]="badgeClass.criteria_url"
-							>View External Criteria URL
+							>Externe Kriteruen URL ansehen
 							<svg icon="icon_external_link"></svg>
 						</a>
 					</div>
@@ -172,7 +172,7 @@
 						class="u-text-h3-semibold u-text-dark2 u-margin-yaxis2x"
 						*ngIf="badgeClass.alignments && badgeClass?.alignments.length > 0"
 					>
-						Alignment
+						Anlehnung
 					</h3>
 
 					<div
@@ -190,7 +190,7 @@
 						</div>
 						<div class="u-margin-yaxis2x" *ngIf="alignment.target_url">
 							<a class="u-text-outlink" [href]="alignment.target_url" target="_blank"
-								>View alignment URL
+								>URL der Anlehnung besuchen
 								<svg icon="icon_external_link"></svg>
 							</a>
 						</div>
@@ -213,12 +213,12 @@
 				<!-- recipients -->
 				<div class="l-stack u-margin-bottom2x u-margin-top4x">
 					<h2 class="u-text-h3-semibold u-text-dark2">
-						{{ recipientCount }} Badge {{ recipientCount == 1 ? 'Recipient' : 'Recipients' }}
+						{{ recipientCount }} Badge {{ recipientCount == 1 ? 'Empfänger*in' : 'Empfänger*innen' }}
 					</h2>
 					<div class="forminput forminput-hasicon">
-						<p class="forminput-x-sublabel">Search by full email address</p>
+						<p class="forminput-x-sublabel">Nach E-Mail Adresse suchen</p>
 						<div class="forminput-x-inputs">
-							<input type="text" placeholder="Search by Email" [(ngModel)]="searchQuery" />
+							<input type="text" placeholder="Nach E-Mail Adresse suchen" [(ngModel)]="searchQuery" />
 							<svg class="forminput-x-icon" icon="icon_search"></svg>
 						</div>
 					</div>
@@ -235,7 +235,7 @@
 						<thead class="datatable-x-head">
 							<tr class="datatable-x-header">
 								<th class="datatable-x-cell" scope="col">ID</th>
-								<th class="datatable-x-cell" scope="col">Awarded</th>
+								<th class="datatable-x-cell" scope="col">Vergeben am</th>
 								<th class="datatable-x-cell" scope="col">
 									<span class="visuallyhidden">Actions</span>
 								</th>
@@ -275,7 +275,7 @@
 								</td>
 								<td class="datatable-x-cell">
 									<div class="l-flex l-flex-justifyend l-flex-aligncenter l-flex-1x">
-										<a class="u-text-link-small" target="_blank" [href]="instance.url">View</a>
+										<a class="u-text-link-small" target="_blank" [href]="instance.url">Öffnen</a>
 										<button
 											class="buttonicon buttonicon-link"
 											(click)="popInstance = instance"
@@ -292,10 +292,10 @@
 
 					<bg-popup-menu #mobileTableMoreMenu>
 						<button type="button" class="menuitem" (click)="shareInstance(popInstance)">
-							<svg icon="icon_share"></svg>Share
+							<svg icon="icon_share"></svg>Teilen
 						</button>
 						<button type="button" class="menuitem" (click)="revokeInstance(popInstance)">
-							<svg icon="icon_remove"></svg>Revoke
+							<svg icon="icon_remove"></svg>Zurücknehmen
 						</button>
 						<ng-container *ngIf="launchpoints">
 							<button
@@ -312,10 +312,10 @@
 
 					<bg-popup-menu #tableMoreMenu>
 						<button type="button" class="menuitem" (click)="shareInstance(popInstance)">
-							<svg icon="icon_share"></svg>Share
+							<svg icon="icon_share"></svg>Teilen
 						</button>
 						<button type="button" class="menuitem" (click)="revokeInstance(popInstance)">
-							<svg icon="icon_remove"></svg>Revoke
+							<svg icon="icon_remove"></svg>Zurücknehmen
 						</button>
 						<ng-container *ngIf="launchpoints">
 							<button
@@ -339,7 +339,7 @@
 								[attr.disabled]="hasPrevPage() ? null : 'disabled'"
 								(click)="clickPrevPage()"
 							>
-								Previous
+								Zurück
 							</button>
 							<button
 								class="page"
@@ -347,13 +347,13 @@
 								[attr.disabled]="hasNextPage() ? null : 'disabled'"
 								(click)="clickNextPage()"
 							>
-								Next
+								Weiter
 							</button>
 						</nav>
 					</div>
-					<p class="u-text-body" *ngIf="!allBadgeInstances?.length">No recipients.</p>
+					<p class="u-text-body" *ngIf="!allBadgeInstances?.length">Keine Empfänger*innen.</p>
 					<p class="u-text-body" *ngIf="allBadgeInstances?.length && !instanceResults?.length">
-						No recipients matching filter.
+						Keine Empfänger*innen gefunden.
 					</p>
 				</ng-template>
 			</div>

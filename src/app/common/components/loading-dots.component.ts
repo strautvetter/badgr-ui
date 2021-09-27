@@ -1,13 +1,14 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'loading-dots',
-    template: `
-			<div class="l-flex l-flex-column l-flex-aligncenter l-flex-justifycenter u-margin-top2x {{className}}">
-				<div class="loaderspin loaderspin-large"></div>
-				<p class="u-text u-padding-top2x">Loading...</p>
-			</div>`
+	selector: 'loading-dots',
+	template: ` <div
+		class="l-flex l-flex-column l-flex-aligncenter l-flex-justifycenter u-margin-top2x {{ className }}"
+	>
+		<div class="loaderspin loaderspin-large"></div>
+		<p class="u-text u-padding-top2x">Laden...</p>
+	</div>`,
 })
 export class LoadingDotsComponent {
-    @Input() className: string;
+	@Input() className: string;
 }

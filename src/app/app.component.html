@@ -30,14 +30,14 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/issuers']"
-						>Issuers</a
+						>Institutionen</a
 					>
 					<a
 						[class.navitem-light]="!theme.useColorNavbar"
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/auth/login']"
-						>Sign In</a
+						>Login</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -45,7 +45,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/signup']"
-						>Create Account</a
+						>Registrieren</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -53,7 +53,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/public/about']"
-						>About</a
+						>Über myBadges</a
 					>
 				</div>
 			</nav>
@@ -70,7 +70,7 @@
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/badges']"
 					>
-						All Badges
+						Badges
 					</a>
 					<a
 						role="menuitem"
@@ -79,7 +79,7 @@
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/issuers']"
 					>
-						All Issuers
+						Institutionen
 					</a>
 					<a
 						role="menuitem"
@@ -87,7 +87,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/recipient/badges']"
-						>Backpack</a
+						>Rucksack</a
 					>
 					<a
 						role="menuitem"
@@ -95,16 +95,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/recipient/badge-collections']"
-						>Collections</a
-					>
-					<a
-						role="menuitem"
-						*ngIf="showIssuersTab"
-						[class.navitem-light]="!theme.useColorNavbar"
-						class="navitem"
-						routerLinkActive="navitem-is-active"
-						[routerLink]="['/issuer']"
-						>Issuers</a
+						>Sammlungen</a
 					>
 					<button
 						role="menuitem"
@@ -172,13 +163,19 @@
 
 	<bg-popup-menu #accountMenu>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/profile/profile']"
-			><svg icon="icon_member"></svg>Profile</a
+			><svg icon="icon_member"></svg>Mein Profil</a
+		>
+		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/issuer']"
+			><svg icon="icon_issuer"></svg>Meine Institutionen</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/profile/app-integrations']"
-			><svg icon="icon_compare"></svg>App Integrations</a
+			><svg icon="icon_compare"></svg>App Integrationen</a
+		>
+		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/public/about']"
+			><svg icon="icon_info"></svg>Über myBadges</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/auth/logout']"
-			><svg icon="icon_exit_to_app"></svg>Sign Out</a
+			><svg icon="icon_exit_to_app"></svg>Logout</a
 		>
 	</bg-popup-menu>
 
@@ -189,8 +186,8 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Sign In</a>
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Create Account</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Login</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Registrieren</a>
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
 			<a href="{{ lp.launch_url }}" *ngFor="let lp of launchpoints" target="_blank">
@@ -206,9 +203,10 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
-			<a [routerLink]="['/recipient/badges']">Backpack</a>
-			<a [routerLink]="['/recipient/badge-collections']">Collections</a>
-			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Issuers</a>
+			<a [routerLink]="['/catalog/badges']">Badges</a>
+			<a [routerLink]="['/catalog/issuers']">Institutionen</a>
+			<a [routerLink]="['/recipient/badges']">Rucksack</a>
+			<a [routerLink]="['/recipient/badge-collections']">Sammlungen</a>
 
 			<hr class="mobilenav-x-rule" *ngIf="launchpoints?.length" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
@@ -220,9 +218,11 @@
 
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label">Account</p>
-			<a [routerLink]="['/profile/profile']">Profile</a>
-			<a [routerLink]="['/profile/app-integrations']">App Integrations</a>
-			<a [routerLink]="['/auth/logout']">Sign Out</a>
+			<a [routerLink]="['/profile/profile']">Profil</a>
+			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Meine Institutionen</a>
+			<a [routerLink]="['/profile/app-integrations']">App Integrationen</a>
+			<a [routerLink]="['/public/about']">Über myBadges</a>
+			<a [routerLink]="['/auth/logout']">Logout</a>
 		</div>
 	</nav>
 </header>
@@ -240,10 +240,8 @@
 			<div>
 				<h1 *ngIf="fatalMessage" class="u-text-h2-bold u-text-center">{{ fatalMessage }}</h1>
 				<h1 *ngIf="fatalMessageDetail" class="u-text-h3 u-text-center">{{ fatalMessageDetail }}</h1>
-				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">
-					Whoops! The server has failed to respond.
-				</h1>
-				<h1 *ngIf="!fatalMessageDetail" class="u-text-body u-text-center">Please refresh and try again.</h1>
+				<h1 *ngIf="!fatalMessage" class="u-text-body-bold u-text-center">Ups! Der Server antwortet nicht.</h1>
+				<h1 *ngIf="!fatalMessageDetail" class="u-text-body u-text-center">Bitte die Seite neu laden.</h1>
 				<img class="u-width-form" [src]="unavailableImageSrc" />
 			</div>
 		</div>
@@ -265,23 +263,14 @@
 					Powered by <a href="https://badgr.io">Badgr</a>
 				</li>
 				<li *ngIf="theme.providedBy">
-					Provided by <a href="{{ theme.providedBy.url }}" target="_blank">{{ theme.providedBy.name }}</a>
+					Bereitgestellt von
+					<a href="{{ theme.providedBy.url }}" target="_blank">{{ theme.providedBy.name }}</a>
 				</li>
 			</ul>
 
 			<ul class="footer-x-links">
 				<li>
-					<a [href]="theme.termsOfServiceLink || 'https://badgr.org/missing-terms'" target="_blank"
-						>Terms of Service</a
-					>
-				</li>
-				<li>
-					<a [href]="theme.privacyPolicyLink || 'https://badgr.org/missing-privacy-policy'" target="_blank"
-						>Privacy Policy</a
-					>
-				</li>
-				<li *ngIf="theme.showApiDocsLink === undefined || theme.showApiDocsLink">
-					<a href="https://support.badgr.io/docs/" target="_blank">Documentation</a>
+					<a [href]="theme.termsOfServiceLink" target="_blank">Impressum & Datenschutz</a>
 				</li>
 			</ul>
 		</div>

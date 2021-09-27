@@ -20,8 +20,11 @@ import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.s
 	styleUrls: ['./badge-catalog.component.css'],
 })
 export class BadgeCatalogComponent extends BaseRoutableComponent implements OnInit {
-	readonly issuerPlaceholderSrc = preloadImageURL(require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string);
-	readonly noIssuersPlaceholderSrc = require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg') as string;
+	readonly issuerPlaceholderSrc = preloadImageURL(
+		require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string
+	);
+	readonly noIssuersPlaceholderSrc =
+		require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg') as string;
 
 	Array = Array;
 
@@ -88,6 +91,13 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				}
 			);
 		});
+	}
+
+	async getIssuer(badge: BadgeClass): Promise<Issuer> {
+		const im = badge.issuerManager;
+		const issuer = await im.issuerBySlug(badge.issuerSlug);
+
+		return issuer;
 	}
 
 	ngOnInit() {

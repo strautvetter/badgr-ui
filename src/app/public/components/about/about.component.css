@@ -1,15 +1,24 @@
 .partner {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
 }
 
 .partner a {
-	padding: 5rem;
+	padding: 3rem;
+}
+
+@media screen and (max-width: 770px) {
+	.partner a {
+		padding: 1rem;
+	}
 }
 
 .partner img {
-	max-width: 100%;
+	min-width: 200px;
+	width: 100%;
+	max-width: 500px;
 	transition: 0.2s;
 }
 
