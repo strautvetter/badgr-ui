@@ -124,7 +124,8 @@ export class BadgeClassManager extends BaseHttpApiService {
 			.pipe(first())
 			.toPromise()
 			.then(
-				(badges) => badges.find((b) => b.badgeUrl === badgeUrl) || this.throwError(`No badge with URL ${badgeUrl}`)
+				(badges) =>
+					badges.find((b) => b.badgeUrl === badgeUrl) || this.throwError(`No badge with URL ${badgeUrl}`)
 			);
 	}
 

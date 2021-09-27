@@ -51,7 +51,7 @@
 						href="#"
 						tabindex="-1"
 						[routerLink]="['/auth/request-password-reset', usernameField.value]"
-						>Forgot Password?</a
+						>Password vergessen?</a
 					>
 				</span>
 			</bg-formfield-text>
@@ -65,7 +65,7 @@
 					[loading-promises]="[loginFinished]"
 					loading-message="Signing In"
 				>
-					Sign In
+					Login
 				</button>
 
 				<!-- Remember Me Checkout -->
@@ -76,7 +76,7 @@
 						type="checkbox"
 						[formControl]="loginForm.rawControlMap.rememberMe"
 					/>
-					<span class="checkbox-x-text">Remember me</span>
+					<span class="checkbox-x-text">Angemeldet bleiben</span>
 				</label>
 			</div>
 		</form>

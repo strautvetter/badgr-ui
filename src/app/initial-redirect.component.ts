@@ -14,10 +14,10 @@ import '../thirdparty/scopedQuerySelectorShim';
 })
 export class InitialRedirectComponent {
 	constructor(private sessionService: SessionService, private router: Router) {
-		if (sessionService.isLoggedIn) {
-			router.navigate(['/recipient/badges'], { replaceUrl: true });
-		} else {
-			router.navigate(['/public/start'], { replaceUrl: true });
-		}
+		// if (sessionService.isLoggedIn) {
+		// 	router.navigate(['/recipient/badges'], { replaceUrl: true });
+		// } else {
+		router.navigate(['/public/start'], { replaceUrl: true });
+		// }
 	}
 }

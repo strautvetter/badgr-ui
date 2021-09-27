@@ -30,14 +30,14 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/issuers']"
-						>Issuers</a
+						>Institutionen</a
 					>
 					<a
 						[class.navitem-light]="!theme.useColorNavbar"
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/auth/login']"
-						>Sign In</a
+						>Login</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -45,7 +45,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/signup']"
-						>Account Erstellen</a
+						>Registrieren</a
 					>
 					<a
 						*ngIf="!features.disableRegistration"
@@ -79,7 +79,7 @@
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/catalog/issuers']"
 					>
-						Issuers
+						Institutionen
 					</a>
 					<a
 						role="menuitem"
@@ -87,7 +87,7 @@
 						class="navitem"
 						routerLinkActive="navitem-is-active"
 						[routerLink]="['/recipient/badges']"
-						>Backpack</a
+						>Rucksack</a
 					>
 					<a
 						role="menuitem"
@@ -166,10 +166,13 @@
 			><svg icon="icon_member"></svg>Mein Profil</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/issuer']"
-			><svg icon="icon_issuer"></svg>Meine Issuers</a
+			><svg icon="icon_issuer"></svg>Meine Institutionen</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/profile/app-integrations']"
 			><svg icon="icon_compare"></svg>App Integrationen</a
+		>
+		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/public/about']"
+			><svg icon="icon_info"></svg>Über myBadges</a
 		>
 		<a class="menuitem" routerLinkActive="menuitem-is-active" [routerLink]="['/auth/logout']"
 			><svg icon="icon_exit_to_app"></svg>Logout</a
@@ -183,8 +186,8 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Sign In</a>
-			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Account erstellen</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Login</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Registrieren</a>
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
 			<a href="{{ lp.launch_url }}" *ngFor="let lp of launchpoints" target="_blank">
@@ -201,8 +204,8 @@
 	>
 		<div class="mobilenav-x-navitems">
 			<a [routerLink]="['/catalog/badges']">Badges</a>
-			<a [routerLink]="['/catalog/issuers']">Issuers</a>
-			<a [routerLink]="['/recipient/badges']">Backpack</a>
+			<a [routerLink]="['/catalog/issuers']">Institutionen</a>
+			<a [routerLink]="['/recipient/badges']">Rucksack</a>
 			<a [routerLink]="['/recipient/badge-collections']">Sammlungen</a>
 
 			<hr class="mobilenav-x-rule" *ngIf="launchpoints?.length" />
@@ -216,8 +219,9 @@
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label">Account</p>
 			<a [routerLink]="['/profile/profile']">Profil</a>
-			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Meine Issuers</a>
+			<a [routerLink]="['/issuer']" *ngIf="showIssuersTab">Meine Institutionen</a>
 			<a [routerLink]="['/profile/app-integrations']">App Integrationen</a>
+			<a [routerLink]="['/public/about']">Über myBadges</a>
 			<a [routerLink]="['/auth/logout']">Logout</a>
 		</div>
 	</nav>

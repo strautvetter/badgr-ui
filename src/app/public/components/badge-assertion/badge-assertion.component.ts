@@ -7,7 +7,7 @@ import { LoadedRouteParam } from '../../../common/util/loaded-route-param';
 import {
 	PublicApiBadgeAssertionWithBadgeClass,
 	PublicApiBadgeClass,
-	PublicApiIssuer
+	PublicApiIssuer,
 } from '../../models/public-api.model';
 import { EmbedService } from '../../../common/services/embed.service';
 import { routerLinkForUrl } from '../public/public.component';
@@ -17,13 +17,12 @@ import { AppConfigService } from '../../../common/app-config.service';
 import { saveAs } from 'file-saver';
 import { Title } from '@angular/platform-browser';
 import { VerifyBadgeDialog } from '../verify-badge-dialog/verify-badge-dialog.component';
-
+import { BadgeClassCategory, BadgeClassLevel } from './../../../issuer/models/badgeclass-api.model';
 
 @Component({
-	templateUrl: './badge-assertion.component.html'
+	templateUrl: './badge-assertion.component.html',
 })
 export class PublicBadgeAssertionComponent {
-
 	constructor(
 		private injector: Injector,
 		public embedService: EmbedService,
@@ -31,13 +30,14 @@ export class PublicBadgeAssertionComponent {
 		public configService: AppConfigService,
 		public queryParametersService: QueryParametersService,
 		private title: Title
-
 	) {
-		title.setTitle(`Assertion - ${this.configService.theme['serviceName'] || "Badgr"}`);
+		title.setTitle(`Assertion - ${this.configService.theme['serviceName'] || 'Badgr'}`);
 		this.assertionIdParam = this.createLoadedRouteParam();
 	}
 
-	readonly issuerImagePlacholderUrl = preloadImageURL(require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string);
+	readonly issuerImagePlacholderUrl = preloadImageURL(
+		require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string
+	);
 
 	readonly badgeLoadingImageUrl = require('../../../../breakdown/static/images/badge-loading.svg') as string;
 
@@ -55,14 +55,30 @@ export class PublicBadgeAssertionComponent {
 	routerLinkForUrl = routerLinkForUrl;
 
 	tense = {
-		'expires': {
-			'=1' : 'Expired',
-			'=0' : 'Expires',
+		expires: {
+			'=1': 'Expired',
+			'=0': 'Expires',
 		},
 	};
 
+	categoryOptions: { [key in BadgeClassCategory]: string } = {
+		membership: 'Mitgliedschaft',
+		ability: 'Fähigkeit',
+		participation: 'Teilnahme',
+		skill: 'Können',
+	};
+
+	levelOptions: { [key in BadgeClassLevel]: string } = {
+		a1: 'A1 Einsteiger*in',
+		a2: 'A2 Entdecker*in',
+		b1: 'B1 Insider*in',
+		b2: 'B2 Expert*in',
+		c1: 'C1 Leader*in',
+		c2: 'C2 Vorreiter*in',
+	};
+
 	get showDownload() {
-		return this.queryParametersService.queryStringValue("action") === "download";
+		return this.queryParametersService.queryStringValue('action') === 'download';
 	}
 
 	get assertion(): PublicApiBadgeAssertionWithBadgeClass {
@@ -70,6 +86,7 @@ export class PublicBadgeAssertionComponent {
 	}
 
 	get badgeClass(): PublicApiBadgeClass {
+		console.log(this.assertion.badge);
 		return this.assertion.badge;
 	}
 
@@ -105,7 +122,7 @@ export class PublicBadgeAssertionComponent {
 		return url;
 	}
 
-	onVerifiedBadgeAssertion(ba){
+	onVerifiedBadgeAssertion(ba) {
 		this.assertionIdParam = this.createLoadedRouteParam();
 	}
 
@@ -119,8 +136,8 @@ export class PublicBadgeAssertionComponent {
 
 	openSaveDialog(assertion): void {
 		const xhr = new XMLHttpRequest();
-		xhr.open("GET", assertion.image, true);
-		xhr.responseType = "blob";
+		xhr.open('GET', assertion.image, true);
+		xhr.responseType = 'blob';
 		xhr.onload = (e) => {
 			if (xhr.status === 200) {
 				const fileExtension = this.mimeToExtension(xhr.response.type);
@@ -132,35 +149,30 @@ export class PublicBadgeAssertionComponent {
 	}
 
 	mimeToExtension(mimeType: string): string {
-		if (mimeType.indexOf('svg') !== -1) return ".svg";
-		if (mimeType.indexOf('png') !== -1) return ".png";
-		return "";
+		if (mimeType.indexOf('svg') !== -1) return '.svg';
+		if (mimeType.indexOf('png') !== -1) return '.png';
+		return '';
 	}
 
 	private createLoadedRouteParam() {
-		return new LoadedRouteParam(
-			this.injector.get(ActivatedRoute),
-			"assertionId",
-			paramValue => {
-				this.assertionId = paramValue;
-				const service: PublicApiService = this.injector.get(PublicApiService);
-				return service.getBadgeAssertion(paramValue).then(assertion => {
-					if (assertion.revoked) {
-						if (assertion.revocationReason) {
-							this.messageService.reportFatalError("Assertion has been revoked:", assertion.revocationReason);
-						} else {
-							this.messageService.reportFatalError("Assertion has been revoked.", "");
-						}
-					} else if (this.showDownload) {
-						this.openSaveDialog(assertion);
+		return new LoadedRouteParam(this.injector.get(ActivatedRoute), 'assertionId', (paramValue) => {
+			this.assertionId = paramValue;
+			const service: PublicApiService = this.injector.get(PublicApiService);
+			return service.getBadgeAssertion(paramValue).then((assertion) => {
+				if (assertion.revoked) {
+					if (assertion.revocationReason) {
+						this.messageService.reportFatalError('Assertion has been revoked:', assertion.revocationReason);
+					} else {
+						this.messageService.reportFatalError('Assertion has been revoked.', '');
 					}
-					if (assertion["extensions:recipientProfile"] && assertion["extensions:recipientProfile"].name) {
-						this.awardedToDisplayName = assertion["extensions:recipientProfile"].name;
-					}
-					return assertion;
-				});
-			}
-		);
+				} else if (this.showDownload) {
+					this.openSaveDialog(assertion);
+				}
+				if (assertion['extensions:recipientProfile'] && assertion['extensions:recipientProfile'].name) {
+					this.awardedToDisplayName = assertion['extensions:recipientProfile'].name;
+				}
+				return assertion;
+			});
+		});
 	}
-
 }
