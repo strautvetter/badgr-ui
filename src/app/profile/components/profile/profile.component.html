@@ -8,14 +8,14 @@
 				<div class="l-primarymore">
 					<button [routerLink]="['../change-password']"
 					        class="button"
-					>{{(profile.hasPasswordSet)?'Change':'Set'}} Password
+					>{{(profile.hasPasswordSet)?'Change':'Set'}} Passwort
 					</button>
 					<button [bgPopupMenuTrigger]="editMenu"
 					        class="buttonicon buttonicon-secondary"
 					        id="trigger2"
 					>
 						<svg icon="icon_more"></svg>
-						<span class="visuallyhidden">More</span>
+						<span class="visuallyhidden">Mehr</span>
 					</button>
 				</div>
 			</div>
@@ -45,9 +45,9 @@
 				<div class="forminput forminput-withbutton forminput-light1 u-width-formsmall">
 
 					<bg-formfield-text [control]="emailForm.rawControlMap.email"
-					                   errorMessage="Please enter a valid email address"
+					                   errorMessage="Bitte gib eine gültige Email Adresse ein"
 					                   fieldType="email"
-					                   placeholder="Email Address..."
+					                   placeholder="Email Addresse..."
 					                   inlineButtonText="Add"
 					>
 					</bg-formfield-text>
