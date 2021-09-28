@@ -17,20 +17,20 @@
 			class="u-text u-text-body u-responsivemargin-top1x2x"
 			*ngIf="! oAuthManager.currentAuthorization"
 		>
-			Already have an account?
+			Du hast bereits einen Account?
 			<a [routerLink]="['/auth/login']">Sign in</a>.
 		</p>
 		<p
 			class="u-text u-text-body u-responsivemargin-top1x2x"
 			*ngIf="oAuthManager.currentAuthorization"
 		>
-			The application
+			Die Anwendung
 			<strong>
 				{{ oAuthManager.currentAuthorization.application.name }}
 			</strong>
-			would
-			like to sign you in using {{ theme.serviceName || "Badgr"}}.
-			Already have an account?
+			würde dich gerne 
+			einloggen mit {{ theme.serviceName || "myBadges"}}.
+			Du hast bereits einen Account?
 			<a [routerLink]="['/login']">Sign in</a>!
 		</p>
 		<h3
@@ -57,7 +57,7 @@
 			class="ruleheadline l-ruleheadline"
 			*ngIf="sessionService.enabledExternalAuthProviders.length > 0"
 		>
-			Or
+			Oder
 		</h3>
 
 		<!-- Sign Up Form -->
@@ -79,7 +79,7 @@
 					class="visuallyhidden"
 					id="heading-badgrsignup2"
 				>
-					Sign up with {{ theme.serviceName || "Badgr"}} by providing your information
+					Registrier Dich mit {{ theme.serviceName || "myBadges"}}, indem Du die folgenden Informationen bereitstellst
 				</legend>
 
 				<bg-formfield-text
@@ -87,42 +87,42 @@
 					[control]="signupForm.rawControlMap.username"
 					[label]="'Email'"
 					fieldType="email"
-					[errorMessage]="'Please enter a valid email address'"
+					[errorMessage]="'Bitte gib eine gültige Email Adresse ein.'"
 					[autofocus]="true"
 				></bg-formfield-text>
 
 				<bg-formfield-text
 					class="u-margin-bottom2x"
 					[control]="signupForm.rawControlMap.firstName"
-					[label]="'First Name'"
-					[errorMessage]="'Please enter a first name'"
+					[label]="'Vorname'"
+					[errorMessage]="'Bitte gib einen Vornamen an'"
 				></bg-formfield-text>
 
 				<bg-formfield-text
 					class="u-margin-bottom2x"
 					[control]="signupForm.rawControlMap.lastName"
-					[label]="'Last Name'"
-					[errorMessage]="'Please enter a last name'"
+					[label]="'Nachname'"
+					[errorMessage]="'Bitte gib einen Nachnamen an'"
 				></bg-formfield-text>
 
 				<bg-formfield-text
 					class="u-margin-bottom2x"
 					[control]="signupForm.rawControlMap.password"
-					[label]="'Password (Must be at least 8 characters)'"
+					[label]="'Passwort (Mindestens 8 Zeichen)'"
 					fieldType="password"
 					[errorMessage]="{
-						required: 'Please enter a password',
-						minlength: 'Password must be at least 8 characters'
+						required: 'Bitte gib ein Passwort ein',
+						minlength: 'Das Passwort muss mindestens 8 Zeichen lang sein'
 					}"
 				></bg-formfield-text>
 
 				<bg-formfield-text
 					[control]="signupForm.rawControlMap.passwordConfirm"
-					[label]="'Confirm Password'"
+					[label]="'Passwort bestätigen'"
 					fieldType="password"
 					[errorMessage]="{
-						required: 'Please confirm your password',
-						passwordsMatch: 'Passwords do not match'
+						required: 'Bitte bestätige Dein Passwort',
+						passwordsMatch: 'Die Passwörter sind nicht gleich'
 					}"
 				></bg-formfield-text>
 			</fieldset>

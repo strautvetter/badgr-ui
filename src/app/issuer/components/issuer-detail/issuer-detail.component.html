@@ -49,21 +49,21 @@
 						</button>
 						<button class="buttonicon buttonicon-secondary" [bgPopupMenuTrigger]="issuerActionsMenu">
 							<svg icon="icon_more"></svg>
-							<span class="visuallyhidden">More</span>
+							<span class="visuallyhidden">Mehr</span>
 						</button>
 					</div>
 					<bg-popup-menu #issuerActionsMenu>
 						<a class="menuitem" [routerLink]="['./edit']">
 							<svg icon="icon_edit"></svg>
-							Edit
+							Bearbeiten
 						</a>
 						<a class="menuitem" (click)="delete($event)" href="#">
 							<svg icon="icon_remove"></svg>
-							Delete
+							Löschen
 						</a>
 						<a class="menuitem" [routerLink]="['./staff']">
 							<svg icon="icon_group"></svg>
-							{{ issuer?.currentUserStaffMember?.isOwner ? 'Manage' : 'View' }} Staff
+							Mitglieder {{ issuer?.currentUserStaffMember?.isOwner ? 'bearbeiten' : '' }}
 						</a>
 						<a class="menuitem" *ngFor="let lp of launchpoints" href="{{ lp.launch_url }}" target="_blank">
 							<svg icon="icon_external_link"></svg>
@@ -99,8 +99,8 @@
 				<thead class="datatable-x-head">
 					<tr class="datatable-x-header">
 						<th class="datatable-x-cell">Badge</th>
-						<th class="datatable-x-cell">Created</th>
-						<th class="datatable-x-cell">Recipients</th>
+						<th class="datatable-x-cell">Erstellt am</th>
+						<th class="datatable-x-cell">Empfänger*innen</th>
 						<th class="datatable-x-cell">
 							<span class="visuallyhidden">Actions</span>
 						</th>
@@ -125,7 +125,7 @@
 									<a
 										class="u-text-link-small"
 										[routerLink]="['/issuer/issuers/', issuer.slug, 'badges', badge.slug, 'issue']"
-										>Award</a
+										>Vergeben</a
 									>
 								</div>
 							</div>
@@ -145,7 +145,7 @@
 								<a
 									class="u-text-link-small"
 									[routerLink]="['/issuer/issuers/', issuer.slug, 'badges', badge.slug, 'issue']"
-									>Award</a
+									>Vergeben</a
 								>
 							</div>
 						</td>
