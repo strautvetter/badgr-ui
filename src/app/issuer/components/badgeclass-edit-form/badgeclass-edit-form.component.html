@@ -11,7 +11,7 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Badge Basics</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Badge Bilder können entweder PNGs oder SVGs sein. Alle Angaben sind verüflichtend.
+				Badge Bilder können entweder PNGs oder SVGs sein. Alle Angaben sind verpflichtend.
 			</p>
 			<a href="https://openbadges.org/" class="u-text-outlink"
 				>Finde mehr über Open Badges heraus
@@ -22,7 +22,7 @@
 			<div class="forminput u-margin-bottom2x">
 				<bg-formfield-image
 					#imageField
-					label="Image"
+					label="Bild"
 					imageLoaderName="badge"
 					[newDropZone]="true"
 					[generateRandom]="true"
@@ -47,7 +47,7 @@
 			<div class="forminput">
 				<bg-formfield-text
 					[control]="badgeClassForm.rawControlMap.badge_description"
-					label="Short Description"
+					label="Kurzbeschreibung"
 					id="badgeclass_description_input"
 					placeholder="Kurze Beschreibung der Leistung"
 					[errorMessage]="{ required: 'Bitte gib eine Beschreibung ein' }"
@@ -61,13 +61,13 @@
 	<div class="formsection">
 		<div class="formsection-x-title">
 			<h2 class="u-text-dark2">
-				Criteria
-				<span>(At least one field is required.)</span>
+				Kriterien
+				<span>(Mindestens eines der Felder ist verpflichtend.)</span>
 			</h2>
 		</div>
 
 		<div class="formsection-x-help">
-			<h3 class="u-text-body-bold">What are Criteria?</h3>
+			<h3 class="u-text-body-bold">Was sind die Kriterien?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
 				Das Kriterienfeld beschreibt genau, was getan werden muss, um das Badge zu erhalten. Einige Issuer
 				wählen eine URL auf ihrer Website als Informationsseite, die erklärt worum es bei dem Badge geht und wie
@@ -142,8 +142,8 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Kategorie?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz oder
-				einer Metakompetenz.
+				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz,
+				einer Metakompetenz oder einem Erfolg.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -164,27 +164,28 @@
 
 	<div class="formsection">
 		<div class="formsection-x-title">
-			<h2 class="u-text-dark2">Level</h2>
+			<h2 class="u-text-dark2">Stufe</h2>
 		</div>
 
 		<div class="formsection-x-help">
-			<h3 class="u-text-body-bold">Was ist das Level?</h3>
+			<h3 class="u-text-body-bold">Was ist die Stufe?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus illum explicabo molestias dolore!
-				A deleniti error cum laborum nam vel ullam debitis delectus optio officiis, deserunt nihil aliquam modi
-				quasi?
+				Kompetenzen werden in 6 Stufen abgebildet: A1 Einsteiger*in, A1 Entdecker*in, B1 Insider*in, 
+				B2 Expert*in, C1 Leader*in und C2 Vorreiter*in. Im Badge Bild erkennt man die Stufe durch 
+				die Anzahl der markeirten Kanten im Uhrzeigersinn.
+				
 			</p>
 		</div>
 		<div class="formsection-x-body">
 			<div class="forminput u-margin-bottom2x">
 				<bg-formfield-select
-					ariaLabel="Wähle ein Level"
+					ariaLabel="Wähle eine Stufe"
 					[control]="badgeClassForm.rawControlMap.badge_level"
 					label="Level"
-					[placeholder]="'Wähle ein Level'"
+					[placeholder]="'Wähle eine Stufe'"
 					[optionMap]="levelOptions"
 					[errorMessage]="{
-						required: 'Wähle ein Level für den Badge'
+						required: 'Wähle eine Stufe für das Badge'
 					}"
 				></bg-formfield-select>
 			</div>
@@ -257,7 +258,7 @@
 							type="button"
 							class="u-text-link-small u-margin-yaxis2x"
 						>
-							Show Advanced Options
+							Zeige erweiterte Optionen
 						</button>
 
 						<ng-template [ngIf]="showAdvanced[i]">
@@ -266,10 +267,10 @@
 								type="button"
 								class="u-text-link-small u-margin-yaxis2x"
 							>
-								Hide Advanced Options
+								Verstecke erweiterte Optionen
 							</button>
 
-							<label class="forminput-x-label u-margin-top2x" for="forminput2">Framework</label>
+							<label class="forminput-x-label u-margin-top2x" for="forminput2">Rahmen</label>
 							<input type="text" id="forminput2" name="forminput2" />
 
 							<label class="forminput-x-label u-margin-top2x" for="url">Code</label>
@@ -280,7 +281,7 @@
 			</ng-container>
 
 			<div class="l-stack">
-				<button (click)="addAlignment()" type="button" class="button button-secondary">Add Alignment</button>
+				<button (click)="addAlignment()" type="button" class="button button-secondary">Verknüpfung hinzufügen</button>
 			</div>
 		</div>
 	</div>
@@ -342,36 +343,36 @@
 	<div *ngIf="expirationEnabled" class="formsection">
 		<div class="formsection-x-title">
 			<h2 class="u-text-dark2">
-				Expiration
+				Gültigkeit
 				<span>(Optional)</span>
 			</h2>
 			<button type="button" (click)="disableExpiration()" class="buttonicon buttonicon-link">
 				<svg icon="icon_close"></svg>
-				<span class="visuallyhidden">Close</span>
+				<span class="visuallyhidden">Schliessen</span>
 			</button>
 		</div>
 
 		<div class="formsection-x-help">
-			<h3 class="u-text-body-bold">What is Expiration?</h3>
+			<h3 class="u-text-body-bold">Was ist die Gültikgeit?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Add the duration this badge is generally valid for. This can also be changed at the time of award.
-				Badges will be marked as expired after expiration.
+				Beschreiben Sie die Dauer, für die dieses Badge allgemein gültig ist. Diese Information kann auch bei der Vergabe geändert werden.
+				Badges werden nach Ablauf der Gültigkeit als abgelaufen markiert.
 			</p>
 		</div>
 		<div class="formsection-x-body">
 			<div class="l-spacestack">
 				<bg-formfield-text
 					[control]="expirationForm.rawControlMap.expires_amount"
-					label="Number"
+					label="Anzahl"
 					[fieldType]="'number'"
 					[max]="1000"
 					[maxchar]="4"
 				></bg-formfield-text>
 				<bg-formfield-select
-					ariaLabel="Select Duration"
+					ariaLabel="Wähle Dauer"
 					[control]="expirationForm.rawControlMap.expires_duration"
-					label="Duration"
-					[placeholder]="'Select a duration'"
+					label="Dauer"
+					[placeholder]="'Wähle Dauer'"
 					[optionMap]="durationOptions"
 				></bg-formfield-select>
 			</div>
@@ -380,13 +381,13 @@
 
 	<!-- add options -->
 	<div class="formsection formsection-nohelp">
-		<h2 class="formsection-x-title">Optional Details</h2>
+		<h2 class="formsection-x-title">Optionale Details</h2>
 		<div class="formsection-x-body">
 			<ul>
 				<li class="l-flex l-flex-justifybetween l-flex-aligncenter u-padding-bottom2x">
 					<div class="l-flex l-flex-2x">
 						<svg class="icon icon-dark4" width="24px" viewBox="0 0 24 24" icon="icon_link"></svg>
-						<p class="u-text-body-semibold u-text-dark2">Alignment</p>
+						<p class="u-text-body-semibold u-text-dark2">Verknüpfung zu Bildungsstandards</p>
 					</div>
 					<button
 						type="button"
@@ -394,10 +395,10 @@
 						*ngIf="!alignmentsEnabled"
 						class="u-text-link-small"
 					>
-						Add
+						hinzufügen
 					</button>
 					<button type="button" disabled *ngIf="alignmentsEnabled" class="u-text-link-small u-text-light4">
-						Added
+						hinzugefügt
 					</button>
 				</li>
 				<li
@@ -412,10 +413,10 @@
 						<p class="u-text-body-semibold u-text-dark2">Tags</p>
 					</div>
 					<button type="button" (click)="enableTags()" *ngIf="!tagsEnabled" class="u-text-link-small">
-						Add
+						hinzufügen
 					</button>
 					<button type="button" *ngIf="tagsEnabled" disabled class="u-text-link-small u-text-light4">
-						Added
+						hinzugefügt
 					</button>
 				</li>
 				<li
@@ -427,7 +428,7 @@
 				>
 					<div class="l-flex l-flex-2x">
 						<svg class="icon icon-dark4" width="24px" viewBox="0 0 24 24" icon="icon_pending"></svg>
-						<p class="u-text-body-semibold u-text-dark2">Expiration</p>
+						<p class="u-text-body-semibold u-text-dark2">Gültigkeit</p>
 					</div>
 					<button
 						type="button"
@@ -435,10 +436,10 @@
 						*ngIf="!expirationEnabled"
 						class="u-text-link-small"
 					>
-						Add
+						hinzufügen
 					</button>
 					<button type="button" disabled *ngIf="expirationEnabled" class="u-text-link-small u-text-light4">
-						Added
+						hinzugefügt
 					</button>
 				</li>
 			</ul>
