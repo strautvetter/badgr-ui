@@ -63,9 +63,9 @@ export class PublicBadgeAssertionComponent {
 
 	categoryOptions: { [key in BadgeClassCategory]: string } = {
 		membership: 'Mitgliedschaft',
-		ability: 'Fähigkeit',
-		participation: 'Teilnahme',
-		skill: 'Können',
+		ability: 'Metakompetenz',
+		archievement: 'Teilnahme / Erfolg',
+		skill: 'Fachliche Kompetenz',
 	};
 
 	levelOptions: { [key in BadgeClassLevel]: string } = {
