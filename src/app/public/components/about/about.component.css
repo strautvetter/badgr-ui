@@ -16,12 +16,29 @@
 }
 
 .partner img {
-	min-width: 200px;
+	min-width: 150px;
 	width: 100%;
-	max-width: 500px;
+	max-width: 300px;
 	transition: 0.2s;
 }
 
 .partner a:hover img {
 	transform: scale(1.2);
+}
+
+.foerderung {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@media screen and (max-width: 770px) {
+	.foerderung {
+		flex-wrap: wrap;
+	}
+}
+
+.foerderung img {
+	min-width: 200px;
+	max-width: 300px;
 }
