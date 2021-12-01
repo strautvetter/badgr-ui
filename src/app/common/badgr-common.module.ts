@@ -66,6 +66,7 @@ import {MarkdownHintsDialog} from './dialogs/markdown-hints-dialog.component';
 import { IssuerManager } from "../issuer/services/issuer-manager.service";
 import { IssuerApiService } from "../issuer/services/issuer-api.service";
 import { ZipService } from "./util/zip-service/zip-service.service";
+import { BadgeLegendComponent } from './components/badge-legend/badge-legend.component';
 
 
 const DIRECTIVES = [
@@ -160,12 +161,14 @@ export const COMMON_IMPORTS = [
 		...DIRECTIVES,
 		...COMMON_MODULE_COMPONENTS,
 		...PIPES,
-		ForwardRouteComponent
+		ForwardRouteComponent,
+		BadgeLegendComponent
 	],
 	exports: [
 		...DIRECTIVES,
 		...COMMON_MODULE_COMPONENTS,
 		...PIPES,
+		BadgeLegendComponent
 	],
 	entryComponents: [
 		// Allows the dynamic creation of our components using the ComponentFactoryProvider. This is used in structural

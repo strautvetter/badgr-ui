@@ -29,12 +29,22 @@ export interface ApiIssuer {
 	created_at: string;
 	created_by: string;
 	staff: ApiIssuerStaff[];
-
+	
 	badgeClassCount: number;
-
+	
 	json: ApiIssuerJsonld;
-
+	
 	verified: boolean;
+
+	category?: string;
+	street?: string;
+	streetnumber?: string;
+	zip?: string;
+	city?: string;
+
+	lat?: number;
+	lon?: number;
+
 }
 
 export type IssuerStaffRoleSlug = 'owner' | 'editor' | 'staff';
@@ -64,6 +74,14 @@ export interface ApiIssuerForCreation {
 	image?: string;
 	email: string;
 	url: string;
+	category?: string;
+	street?: string;
+	streetnumber?: string;
+	zip?: string;
+	city?: string;
+
+	lat?: number;
+	lon?:number;
 }
 
 export interface ApiIssuerForEditing {
@@ -72,4 +90,12 @@ export interface ApiIssuerForEditing {
 	image?: string;
 	email: string;
 	url: string;
+	category?: string;
+	street?: string;
+	streetnumber?: string;
+	zip?: string;
+	city?: string;
+
+	lat?: number;
+	lon?:number;
 }

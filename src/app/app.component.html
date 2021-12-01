@@ -55,6 +55,15 @@
 						[routerLink]="['/public/about']"
 						>Über myBadges</a
 					>
+					<a
+						role="menuitem"
+						[class.navitem-light]="!theme.useColorNavbar"
+						class="navitem"
+						routerLinkActive="navitem-is-active"
+						[routerLink]="['/public/faq']"
+						>FAQ</a
+					>
+
 				</div>
 			</nav>
 		</ng-template>
@@ -120,6 +129,14 @@
 						{{ theme.customMenu.label }}
 						<svg class="navitem-x-icon" icon="icon_dropdown"></svg>
 					</a>
+					<a
+						role="menuitem"
+						[class.navitem-light]="!theme.useColorNavbar"
+						class="navitem"
+						routerLinkActive="navitem-is-active"
+						[routerLink]="['/public/faq']"
+						>FAQ</a
+					>
 					<button
 						role="menuitem"
 						aria-haspopup="true"

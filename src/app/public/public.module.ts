@@ -14,6 +14,7 @@ import { VerifyBadgeDialog } from './components/verify-badge-dialog/verify-badge
 import { AboutComponent } from './components/about/about.component';
 import { StartComponent } from './components/start/start.component';
 import { ImpressumComponent } from './components/impressum/impressum.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 export const routes: Routes = [
 	{
@@ -42,6 +43,13 @@ export const routes: Routes = [
 	{
 		path: 'impressum',
 		component: ImpressumComponent,
+		data: {
+			publiclyAccessible: true,
+		} as BadgrRouteData,
+	},
+	{
+		path: 'faq',
+		component: FaqComponent,
 		data: {
 			publiclyAccessible: true,
 		} as BadgrRouteData,
@@ -100,6 +108,7 @@ export const routes: Routes = [
 		PublicIssuerComponent,
 		PublicBadgeCollectionComponent,
 		VerifyBadgeDialog,
+		FaqComponent,
 	],
 	exports: [],
 	providers: [PublicApiService],
