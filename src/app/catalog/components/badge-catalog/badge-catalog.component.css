@@ -1,0 +1,8 @@
+.open-legend-button {
+    color: var(--color-link);
+    text-align: right;
+    width: 100%;
+}
+.open-legend-button a {
+    cursor: pointer;
+}
