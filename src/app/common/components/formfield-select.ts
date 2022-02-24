@@ -28,6 +28,7 @@ import {CustomValidatorMessages, messagesForValidationError} from './formfield-t
 			<select
 				[name]="inputName"
 				[id]="inputName"
+				[attr.disabled]="disabled  ? '' : null"
 				[formControl]="control"
 				(focus)="cacheControlState()"
 				(keypress)="handleKeyPress($event)"
@@ -52,6 +53,7 @@ export class FormFieldSelect implements OnChanges, AfterViewInit {
 	@Input() multiline = false;
 	@Input() description: string;
 	@Input() placeholder: string;
+	@Input() disabled: boolean = false;
 
 	@Input() options: FormFieldSelectOption[];
 	@Input() set optionMap(valueToLabelMap: {[value: string]: string}) {

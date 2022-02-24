@@ -191,6 +191,7 @@
 					ariaLabel="Wähle eine Stufe"
 					[control]="badgeClassForm.rawControlMap.badge_level"
 					label="Level"
+					[disabled]="badgeClassForm.rawControlMap.badge_category.value === 'membership' || badgeClassForm.rawControlMap.badge_category.value === 'archievement' "
 					[placeholder]="'Wähle eine Stufe'"
 					[optionMap]="levelOptions"
 					[errorMessage]="{
