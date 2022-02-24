@@ -1,4 +1,11 @@
 
 .u-width-formsmall {
     box-sizing: border-box;
-  }
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}

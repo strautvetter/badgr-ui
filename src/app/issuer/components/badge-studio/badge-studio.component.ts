@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 // import "font-awesome/css/font-awesome.css";
 import * as FontFaceObserver from 'fontfaceobserver';
 import {canvasVisualCenter} from '../../../common/util/visual-center';
@@ -11,7 +11,7 @@ import {HttpClient} from '@angular/common/http';
 	selector: 'badge-studio',
 	host: {},
 	template: `
-		<canvas #canvas width="400" height="400"></canvas>
+		<canvas [class.fixed]="scrolled" #canvas width="400" height="400"></canvas>
 	`,
 	styleUrls: [
 		'../../../../../node_modules/font-awesome/css/font-awesome.css'
@@ -32,6 +32,7 @@ export class BadgeStudioComponent implements OnInit {
 	@ViewChild("canvas")
 	private canvasElem: ElementRef;
 
+	@Input() scrolled: boolean;
 	// private ready: boolean;
 
 	private fontPromise: Promise<unknown>;

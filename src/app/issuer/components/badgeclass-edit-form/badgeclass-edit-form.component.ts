@@ -100,6 +100,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	@Input()
 	submittingText: string;
 
+	@Input() 
+	scrolled : boolean;
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Tags
 	tagsEnabled = false;
