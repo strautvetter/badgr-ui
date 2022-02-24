@@ -11,7 +11,7 @@ import {HttpClient} from '@angular/common/http';
 	selector: 'badge-studio',
 	host: {},
 	template: `
-		<canvas [class.fixed]="scrolled" #canvas width="400" height="400"></canvas>
+		<canvas #canvas width="400" height="400"></canvas>
 	`,
 	styleUrls: [
 		'../../../../../node_modules/font-awesome/css/font-awesome.css'
