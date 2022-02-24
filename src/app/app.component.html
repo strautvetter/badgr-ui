@@ -186,8 +186,12 @@
 		[class.mobilenav-light]="!theme.useColorNavbar"
 	>
 		<div class="mobilenav-x-navitems">
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/catalog/badges']">Badges</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/catalog/issuers']">Institutionen</a>
 			<a routerLinkActive="menuitem-is-active" [routerLink]="['/auth/login']">Login</a>
 			<a routerLinkActive="menuitem-is-active" [routerLink]="['/signup']">Registrieren</a>
+			<a routerLinkActive="menuitem-is-active" [routerLink]="['/public/about']">Über myBadges</a>
+
 			<hr class="mobilenav-x-rule" />
 			<p class="mobilenav-x-label" *ngIf="launchpoints?.length">Apps</p>
 			<a href="{{ lp.launch_url }}" *ngFor="let lp of launchpoints" target="_blank">
