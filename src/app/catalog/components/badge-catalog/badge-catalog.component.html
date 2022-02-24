@@ -13,19 +13,67 @@
 	</div>
 </header>
 
+<app-badge-legend *ngIf="showLegend" (closed)="closeLegend()"></app-badge-legend>
+
 <div>
 	<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="true">
 		<section class="l-containerxaxis l-containeryaxis l-responsivelist">
+			<div class="l-actionbar u-margin-bottom3x">
+				<div class="forminput l-actionbar-x-search">
+					<div class="forminput-x-inputs">
+						<input
+							type="text"
+							name="forminput"changeOrder
+							id="forminput"
+							placeholder="Badges durchsuchen"
+							[(ngModel)]="searchQuery"
+						/>
+						<svg class="forminput-x-icon" icon="icon_search"></svg>
+					</div>
+				</div>
+				<div class="viewtoggle l-actionbar-x-viewtoggle"
+				[class.viewtoggle-is-listview]="order == 'desc'">
+					<label class="viewtoggle-x-grid" (click)='changeOrder("asc")'>
+						<span class="visuallyhidden">name</span>
+						<input
+							name="radiobutton2"
+							id="radiobutton3"
+							type="radio"
+							value="asc"
+							[(ngModel)]="order"
+						/>
+						<svg style="transform: rotateZ(90deg)" icon="icon_arrow"></svg>
+					</label>
+					<label class="viewtoggle-x-list" (click)='changeOrder("desc")'>
+						<span class="visuallyhidden">-name</span>
+						<input
+							type="radio"
+							name="radiobutton2"
+							id="radiobutton4"
+							value="desc"
+							[(ngModel)]="order"
+						/>
+						<svg style="transform: rotateZ(-90deg)" icon="icon_arrow"></svg>
+					</label>
+				</div>
+			</div>
+			<div class="open-legend-button">
+				<a (click)="openLegend()">Was bedeuten die Rahmen und Farben?</a>
+			</div>
+
 			<div class="l-grid l-grid-large">
 				<!-- TODO: Fix the badgecard link for sharing and routing -->
 				<bg-badgecard
-					*ngFor="let badge of badges"
+					*ngFor="let badge of badgeResults"
 					[badgeTitle]="badge.name"
 					[badgeImage]="badge.image"
 					[badgeDescription]="badge.description"
 					[badgeSlug]="badge.slug"
+					[issuerTitle]="badge.issuerName ? badge.issuerName : badge.issuer.name"
+					[badgeIssueDate]="badge.createdAt"
 					public="true"
 					[publicUrl]="badge.url"
+					[badgeClass]="true"
 				></bg-badgecard>
 			</div>
 		</section>

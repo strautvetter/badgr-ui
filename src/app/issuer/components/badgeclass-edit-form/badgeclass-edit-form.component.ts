@@ -143,6 +143,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	alignmentsEnabled = false;
 	showAdvanced: boolean[] = [false];
 
+	currentImage;
+	showLegend = false;
+
 	constructor(
 		sessionService: SessionService,
 		router: Router,
@@ -166,7 +169,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		const badgeClass = this.existingBadgeClass;
 
 		if (badgeClass) {
-			console.log(badgeClass);
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
 				badge_image: badgeClass.image,
@@ -198,6 +200,23 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	ngOnInit() {
 		super.ngOnInit();
+		let that = this;
+		this.badgeClassForm.rawControl.controls['badge_category'].statusChanges.subscribe(res => {
+			if(this.currentImage){
+				//timeout because of workaround for angular bug.
+				setTimeout(function(){
+					that.generateUploadImage(that.currentImage, that.badgeClassForm.value);
+				},10)
+			}
+		})
+		this.badgeClassForm.rawControl.controls['badge_level'].statusChanges.subscribe(res => {
+			if(this.currentImage){
+				//timeout because of workaround for angular bug.
+				setTimeout(function(){
+					that.generateUploadImage(that.currentImage, that.badgeClassForm.value);
+				},10)
+			}
+		})
 	}
 
 	enableTags() {
@@ -432,11 +451,25 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			.generateRandom()
 			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'Auto-generated image'));
 	}
+	generateUploadImage(image, formdata) {
+		this.currentImage = image;
+		this.badgeStudio
+			.generateUploadImage(image, formdata)
+			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
+	}
 
 	positiveInteger(control: AbstractControl) {
 		const val = parseInt(control.value, 10);
 		if (isNaN(val) || val < 1) {
 			return { expires_amount: 'Must be a positive integer' };
 		}
+	}
+
+	closeLegend() {
+		this.showLegend = false;
+	}
+
+	openLegend() {
+		this.showLegend = true;
 	}
 }

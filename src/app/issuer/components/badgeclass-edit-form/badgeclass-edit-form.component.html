@@ -1,4 +1,6 @@
 <form-message></form-message>
+<app-badge-legend *ngIf="showLegend" (closed)="closeLegend()"></app-badge-legend>
+
 <form [formGroup]="badgeClassForm.rawControl" #formElem (ngSubmit)="onSubmit()" novalidate class="l-responsivelist">
 	<!-- General Details Panel -->
 	<div class="formsection">
@@ -17,6 +19,10 @@
 				>Finde mehr über Open Badges heraus
 				<svg icon="icon_external_link"></svg>
 			</a>
+			<br>
+			<a href="javascript:;" (click)="openLegend()" class="u-text-outlink"
+				>Was bedeuten die Rahmen und Farben?
+			</a>
 		</div>
 		<div class="formsection-x-body">
 			<div class="forminput u-margin-bottom2x">
@@ -25,14 +31,16 @@
 					label="Bild"
 					imageLoaderName="badge"
 					[newDropZone]="true"
-					[generateRandom]="true"
+					[generateRandom]="false"
+					[type]="'badge'"
 					(generateRandomImage)="generateRandomImage()"
+					(imageUploaded)="generateUploadImage($event, badgeClassForm.value)"
 					class="l-formimageupload-x-upload"
 					[placeholderImage]="badgeClassPlaceholderImageUrl"
 					[control]="badgeClassForm.rawControlMap.badge_image"
 				>
 				</bg-formfield-image>
-				<badge-studio [scrolled]="scrolled" #badgeStudio [hidden]="true"></badge-studio>
+				<badge-studio [scrolled]="scrolled" #badgeStudio [formData]="badgeClassForm.value" [hidden]="true"></badge-studio>
 			</div>
 
 			<div class="forminput u-margin-bottom2x">
@@ -54,7 +62,7 @@
 					[multiline]="true"
 				></bg-formfield-text>
 			</div>
-		</div>
+		</div>badgeClassForm
 	</div>
 
 	<!-- Criteria Panel -->

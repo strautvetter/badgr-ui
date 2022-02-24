@@ -99,8 +99,11 @@ export class BgFormFieldImageComponent {
 		require('../../../breakdown/static/images/placeholderavatar-failed.svg') as string
 	);
 
+	@Output() imageUploaded = new EventEmitter();
+
 	@Input() control: FormControl;
 	@Input() label: string;
+	@Input() type: string = null;
 	@Input() errorMessage = 'Please provide a valid image file';
 	@Input() placeholderImage: string;
 	@Input() imageLoader: (file: File) => Promise<string> = basicImageLoader;
@@ -111,6 +114,7 @@ export class BgFormFieldImageComponent {
 
 	isDragging = false;
 
+	generated = false;
 	imageLoading = false;
 	imageProvided = false;
 	imageErrorMessage: string = null;
@@ -127,6 +131,8 @@ export class BgFormFieldImageComponent {
 		const input: HTMLInputElement = ev.target as HTMLInputElement;
 		const self = this;
 
+		console.log("FILEINPUTCHANGE")
+		this.generated = false;
 		if (input.files && input.files[0]) {
 			this.updateFiles(input.files);
 		}
@@ -187,6 +193,7 @@ export class BgFormFieldImageComponent {
 	}
 
 	private updateFiles(files: FileList) {
+		console.log("FILES0", files[0]);
 		this.updateFile(files[0]);
 	}
 
@@ -199,9 +206,18 @@ export class BgFormFieldImageComponent {
 
 		this.imageLoader(file).then(
 			(dataUrl) => {
-				this.imageDataUrl = dataUrl;
-				this.imageProvided = true;
-				this.imageLoading = false;
+				if(this.type === 'badge' && !this.generated){
+					this.imageUploaded.emit(dataUrl);
+					this.generated = true;
+					// this.generateRandom = true;
+					this.imageProvided = true;
+					this.imageLoading = false;
+				} else {
+					this.imageDataUrl = dataUrl;
+					this.imageProvided = true;
+					this.imageLoading = false;
+
+				}
 			},
 			(error: Error) => {
 				this.imageErrorMessage = error.message;

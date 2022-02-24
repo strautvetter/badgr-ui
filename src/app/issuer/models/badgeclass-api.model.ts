@@ -54,6 +54,7 @@ export interface ApiBadgeClassExpiration {
 export interface ApiBadgeClass extends ApiBadgeClassForCreation {
 	id: BadgeClassSqlId;
 	issuer: IssuerUrl;
+	issuerName: string;
 
 	slug: BadgeClassSlug;
 

@@ -25,9 +25,11 @@ declare function require(path: string): string;
 		</div>
 		<div class="badgecard-x-footer">
 			<div class="badgecard-x-date">
+				<span *ngIf="badgeClass">
+					Verfügbar seit:
+				</span>
 				<time [date]="badgeIssueDate" format="mediumDate"></time>
 			</div>
-
 			<!-- Show Verify or Share Button unless public -->
 			<button class="badgecard-x-sharelink" *ngIf="!verifyUrl && !public && (mostRelevantStatus !== 'pending')"
 					(click)="shareClicked.emit($event)">
@@ -48,6 +50,7 @@ export class BgBadgecard {
 	@Input() badgeTitle: string;
 	@Input() badgeDescription: string;
 	@Input() badgeIssueDate: string;
+	@Input() badgeClass: string;
 	@Input() issuerTitle: string;
 	@Input() mostRelevantStatus: "expired" | "new" | "pending" | undefined;
 	@Input() verifyUrl: string;

@@ -66,8 +66,26 @@ export class Issuer extends ManagedEntity<ApiIssuer, IssuerRef> {
 		return new Date(this.apiModel.created_at);
 	}
 
-	get createdBy(): string {
-		return this.apiModel.created_by;
+	get category(): string {
+		return this.apiModel.category;
+	}
+	get street(): string {
+		return this.apiModel.street;
+	}
+	get streetnumber(): string {
+		return this.apiModel.streetnumber;
+	}
+	get zip(): string {
+		return this.apiModel.zip;
+	}
+	get city(): string {
+		return this.apiModel.city;
+	}
+	get lat(): number {
+		return this.apiModel.lat;
+	}
+	get lon(): number {
+		return this.apiModel.lon;
 	}
 
 	get badgeClassCount(): number {

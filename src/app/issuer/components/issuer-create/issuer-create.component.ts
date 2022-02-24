@@ -42,7 +42,14 @@ export class IssuerCreateComponent extends BaseAuthenticatedRoutableComponent im
 			Validators.required,
 			UrlValidator.validUrl
 		])
-		.addControl('issuer_image', '');
+		.addControl('issuer_category', '', [
+			Validators.required
+		])
+		.addControl('issuer_image', '')
+		.addControl('issuer_street', '')
+		.addControl('issuer_streetnumber', '')
+		.addControl('issuer_zip', '')
+		.addControl('issuer_city', '');
 
 	emails: UserProfileEmail[];
 	emailsOptions: FormFieldSelectOption[];
@@ -96,6 +103,11 @@ export class IssuerCreateComponent extends BaseAuthenticatedRoutableComponent im
 			'description': formState.issuer_description,
 			'email': formState.issuer_email,
 			'url': formState.issuer_url,
+			'category': formState.issuer_category,
+			'street': formState.issuer_street,
+			'streetnumber': formState.issuer_streetnumber,
+			'zip': formState.issuer_zip,
+			'city': formState.issuer_city,
 		};
 
 		if (formState.issuer_image && String(formState.issuer_image).length > 0) {

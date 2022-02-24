@@ -35,7 +35,16 @@ export class IssuerEditComponent extends BaseAuthenticatedRoutableComponent impl
 		.addControl('issuer_description', '', [Validators.required, Validators.maxLength(1024)])
 		.addControl('issuer_email', '', [Validators.required])
 		.addControl('issuer_url', '', [Validators.required, UrlValidator.validUrl])
-		.addControl('issuer_image', '');
+		.addControl('issuer_image', '')
+		.addControl('issuer_category', '', [
+			Validators.required
+		])
+		.addControl('issuer_image', '')
+		.addControl('issuer_street', '')
+		.addControl('issuer_streetnumber', '')
+		.addControl('issuer_zip', '')
+		.addControl('issuer_city', '');
+
 
 	emails: UserProfileEmail[];
 	emailsOptions: FormFieldSelectOption[];
@@ -77,6 +86,12 @@ export class IssuerEditComponent extends BaseAuthenticatedRoutableComponent impl
 						issuer_email: this.issuer.email,
 						issuer_url: this.issuer.websiteUrl,
 						issuer_image: this.issuer.image,
+						issuer_category: this.issuer.category,
+						issuer_street: this.issuer.street,
+						issuer_streetnumber: this.issuer.streetnumber,
+						issuer_zip: this.issuer.zip,
+						issuer_city: this.issuer.city,
+			
 					},
 					{emitEvent: false}
 				);
@@ -131,6 +146,12 @@ export class IssuerEditComponent extends BaseAuthenticatedRoutableComponent impl
 			'description': formState.issuer_description,
 			'email': formState.issuer_email,
 			'url': formState.issuer_url,
+			'category': formState.issuer_category,
+			'street': formState.issuer_street,
+			'streetnumber': formState.issuer_streetnumber,
+			'zip': formState.issuer_zip,
+			'city': formState.issuer_city,
+
 		};
 
 		if (formState.issuer_image && String(formState.issuer_image).length > 0) {
