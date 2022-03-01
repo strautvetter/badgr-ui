@@ -3,9 +3,13 @@
     box-sizing: border-box;
 }
 
-.fixed {
+.fixed-imagefield {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 5px;
     z-index: 100;
+}
+
+.fixed-imagefield .forminput-x-label {
+    display: none;
 }
