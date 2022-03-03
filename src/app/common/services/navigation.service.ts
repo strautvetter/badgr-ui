@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {ActivatedRouteSnapshot} from '@angular/router/src/router_state';
+import {ActivatedRouteSnapshot} from '@angular/router';
 
 @Injectable()
 export class NavigationService {

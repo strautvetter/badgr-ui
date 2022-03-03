@@ -143,8 +143,8 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 
 	@Input() autofocus = false;
 
-	@ViewChild("textareaInput") textareaInput: ElementRef;
-	@ViewChild("markdownPreviewPane") markdownPreviewPane: ElementRef;
+	@ViewChild("textareaInput", {static: false}) textareaInput: ElementRef;
+	@ViewChild("markdownPreviewPane", {static: false}) markdownPreviewPane: ElementRef;
 
 	textHeight: number;
 	_preview = false;

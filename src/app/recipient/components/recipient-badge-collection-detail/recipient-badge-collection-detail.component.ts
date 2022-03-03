@@ -25,7 +25,7 @@ export class RecipientBadgeCollectionDetailComponent extends BaseAuthenticatedRo
 	readonly noBadgesImageUrl = require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-backpack.svg');
 	readonly noCollectionsImageUrl = require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-collection.svg');
 
-	@ViewChild("recipientBadgeDialog")
+	@ViewChild("recipientBadgeDialog", {static: false})
 	recipientBadgeDialog: RecipientBadgeSelectionDialog;
 
 	collectionLoadedPromise: Promise<unknown>;
