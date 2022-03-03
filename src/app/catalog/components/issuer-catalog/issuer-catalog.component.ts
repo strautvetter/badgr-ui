@@ -36,6 +36,7 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 	issuersLoaded: Promise<unknown>;
 	//badgesLoaded: Promise<unknown>;
 	issuerResults: Issuer[] = [];
+	issuerResultsByCategory: MatchingIssuerCategory[] = [];
 	order = 'asc';
 	public badgesDisplay = 'grid';
 
@@ -48,13 +49,27 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		// this.saveDisplayState();
 		this.updateResults();
 	}
+	
 
+	private _groupByCategory = false;
+	get groupByCategory() {return this._groupByCategory;}
+	set groupByCategory(val: boolean) {
+		this._groupByCategory = val;
+		this.updateResults();
+	}
 
 	get theme() {
 		return this.configService.theme;
 	}
 	get features() {
 		return this.configService.featuresConfig;
+	}
+
+	issuerKeys = {
+		'schule': 'Schulen',
+		'hochschule': 'Hochschulen und Universitäten',
+		'andere': 'Andere (Bibliotheken, Museen, FabLabs, Unternehmen, Vereine, ...)',
+		'n/a': 'Keine Angabe'
 	}
 
 	plural = {
@@ -172,16 +187,53 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		let that = this;
 		// Clear Results
 		this.issuerResults = [];
+		this.issuerResultsByCategory = [];
+		const issuerResultsByCategoryLocal = {};
 
-		var addIssuerToResults = function(item){
+
+		// var addIssuerToResults = function(item){
+		// 	that.issuerResults.push(item);
+		// }
+
+		var addIssuerToResultsByCategory = function(item){
+
 			that.issuerResults.push(item);
+			
+			let categoryResults = issuerResultsByCategoryLocal[item.category];
+			
+			if (!categoryResults) {
+				categoryResults = issuerResultsByCategoryLocal[item.category] = new MatchingIssuerCategory(
+					item.category,
+					""
+				);
+
+				// append result to the issuerResults array bound to the view template.
+				that.issuerResultsByCategory.push(categoryResults);
+			}
+
+			categoryResults.addIssuer(item);
+
+			// if (!this.issuerResults.find(r => r.category === item)) {
+			// 	// appending the results to the badgeResults array bound to the view template.
+			// 	this.issuerResults.push(new BadgeResult(badge, issuerResults.issuer));
+			// }
+
+			return true;
+
 		}
+	
+
+
+		// this.issuers
+		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
+		// 	.forEach(addIssuerToResults);
+
 		this.issuers
 			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addIssuerToResults);
+			.forEach(addIssuerToResultsByCategory);
 
 		this.issuerResults.sort((a,b) => a.name.localeCompare(b.name))
-
+		this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => a.name.localeCompare(b.name)));
 		this.generateGeoJSON(this.issuerResults)
 	}
 
@@ -269,8 +321,12 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 	changeOrder(order){
 		if(order === 'asc'){
 			this.issuerResults.sort((a,b) => a.name.localeCompare(b.name))
+			this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => a.name.localeCompare(b.name)));
+
 		} else {
 			this.issuerResults.sort((a,b) => b.name.localeCompare(a.name))
+			this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => b.name.localeCompare(a.name)));
+
 		}
 	}
 
@@ -292,5 +348,22 @@ class MatchingAlgorithm {
 		return issuer => (
 			StringMatchingUtil.stringMatches(issuer.name, patternStr, patternExp)
 		);
+	}
+}
+
+
+class MatchingIssuerCategory {
+	constructor(
+		public category: string,
+		public issuer,
+		public issuers: Issuer[] = []
+	) {}
+
+	addIssuer(issuer) {
+		if (issuer.category === this.category) {
+			if (this.issuers.indexOf(issuer) < 0) {
+				this.issuers.push(issuer);
+			}
+		}
 	}
 }
