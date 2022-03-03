@@ -160,13 +160,14 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				"type": "raster",
 				"source": "osm" // This must match the source key above
 			  }
-			]
+			],
+			"glyphs": "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf"
 		  };
 		this.mapObject = new Map({
 		  container: this.mapContainer.nativeElement,
 		  style: style,
 		  center: [initialState.lng, initialState.lat],
-		  zoom: initialState.zoom
+		  zoom: initialState.zoom,
 		});
 	
 		this.mapObject.addControl(new NavigationControl());
@@ -245,7 +246,9 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				properties: {
 					name: issuer.name,
 					slug: issuer.slug,
-					description: issuer.description
+					img: issuer.image,
+					description: issuer.description,
+					category: issuer.category
 				},
 				geometry: {
 					type: "Point",
@@ -262,12 +265,15 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		if(!this.mapObject.getSource('issuers')){
 			this.mapObject.addSource('issuers', {
 				'type': 'geojson',
-				data: this.issuerGeoJson
+				data: this.issuerGeoJson,
+				cluster: true,
+				clusterRadius: 10
 			})
 			this.mapObject.addLayer({
 				'id': 'issuers',
 				'type': 'circle',
 				'source': 'issuers',
+				'filter': ['!', ['has', 'point_count']],
 				// 'layout': {
 				// 	'icon-image': 'custom-marker',
 				// 	// get the year from the source's "year" property
@@ -277,10 +283,73 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				// 	'text-anchor': 'top'
 				// 	}
 				"paint": {
-					"circle-radius": 8,
-					"circle-color": "#5b94c6",
+					"circle-radius": {
+						'base': 4,
+						'stops': [
+						[12, 6],
+						[22, 180]
+						]
+					},
+					'circle-color': [
+						'match',
+						['get', 'category'],
+						'schule',
+						'#fbb03b',
+						'hochschule',
+						'#e55e5e',
+						'andere',
+						'#3bb2d0',
+						'n/a',
+						'#223b53',
+						/* other */ '#ccc'
+						],
+					// "circle-color": "#5b94c6",
 				}
 			});
+
+		
+			this.mapObject.addLayer({
+				'id': 'issuersCluster',
+				'type': 'circle',
+				'source': 'issuers',
+				'filter': ['has', 'point_count'],
+				"paint": {
+					"circle-radius": {
+						'base': 10,
+						'stops': [
+						[12, 10],
+						[22, 180]
+						]
+					},
+					'circle-color': [
+						'match',
+						['get', 'category'],
+						'schule',
+						'#fbb03b',
+						'hochschule',
+						'#e55e5e',
+						'andere',
+						'#3bb2d0',
+						'n/a',
+						'#223b53',
+						/* other */ '#ccc'
+						],
+					// "circle-color": "#5b94c6",
+				}
+			});
+			
+			this.mapObject.addLayer({
+				id: 'cluster-count',
+				type: 'symbol',
+				source: 'issuers',
+				filter: ['has', 'point_count'],
+				layout: {
+				'text-field': '{point_count_abbreviated}',
+				'text-font': ['Open Sans Regular'],
+				'text-size': 12
+				}
+			});
+
 
 			this.mapObject.on('click', 'issuers', (e) => {
 				// Copy coordinates array.

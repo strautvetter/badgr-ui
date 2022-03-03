@@ -278,6 +278,15 @@
 		</section>
 	</ng-template>
 	<div id="mapWrapper" [hidden]="badgesDisplay != 'map'">
-		<div id="map" #map></div>
+		<div id="map" #map>
+		</div>
+		<div id="map-legend">
+			<ul>
+				<li><span class="color cluster"></span>Cluster</li>
+				<li><span class="color schule"></span>Schule</li>
+				<li><span class="color hochschule"></span>Hochschule</li>
+				<li><span class="color andere"></span>Andere</li>
+			</ul>
+		</div>
 	</div>
 </div>

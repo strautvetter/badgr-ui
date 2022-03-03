@@ -57,3 +57,36 @@
     flex-direction: column;
     min-height: calc(100% - 20px);
 }
+
+
+#map-legend {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    padding: 0.8em;
+    background: white;
+}
+
+.color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.3em;
+}
+
+.cluster {
+    background: #ccc;
+}
+
+.schule {
+    background: #fbb03b;
+}
+
+.hochschule {
+    background: #e55e5e;
+}
+
+.andere {
+    background: #3bb2d0;
+}
