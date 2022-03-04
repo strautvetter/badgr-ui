@@ -24,7 +24,9 @@
 						"styles": [
 							"node_modules/@concentricsky/badgr-style/dist/css/screen.css",
 							"node_modules/dialog-polyfill/dialog-polyfill.css",
+							"src/breakdown/static/css/re-style.css",
 							"node_modules/maplibre-gl/dist/maplibre-gl.css"
+
 						],
 						"scripts": []
 					},

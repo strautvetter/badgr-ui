@@ -57,3 +57,12 @@
     flex-direction: column;
     min-height: calc(100% - 20px);
 }
+
+
+#map-legend {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    padding: 0.8em;
+    background: white;
+}

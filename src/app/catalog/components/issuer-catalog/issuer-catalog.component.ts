@@ -36,6 +36,7 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 	issuersLoaded: Promise<unknown>;
 	//badgesLoaded: Promise<unknown>;
 	issuerResults: Issuer[] = [];
+	issuerResultsByCategory: MatchingIssuerCategory[] = [];
 	order = 'asc';
 	public badgesDisplay = 'grid';
 
@@ -48,13 +49,27 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		// this.saveDisplayState();
 		this.updateResults();
 	}
+	
 
+	private _groupByCategory = false;
+	get groupByCategory() {return this._groupByCategory;}
+	set groupByCategory(val: boolean) {
+		this._groupByCategory = val;
+		this.updateResults();
+	}
 
 	get theme() {
 		return this.configService.theme;
 	}
 	get features() {
 		return this.configService.featuresConfig;
+	}
+
+	issuerKeys = {
+		'schule': 'Schulen',
+		'hochschule': 'Hochschulen und Universitäten',
+		'andere': 'Andere (Bibliotheken, Museen, FabLabs, Unternehmen, Vereine, ...)',
+		'n/a': 'Keine Angabe'
 	}
 
 	plural = {
@@ -145,13 +160,14 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				"type": "raster",
 				"source": "osm" // This must match the source key above
 			  }
-			]
+			],
+			"glyphs": "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf"
 		  };
 		this.mapObject = new Map({
 		  container: this.mapContainer.nativeElement,
 		  style: style,
 		  center: [initialState.lng, initialState.lat],
-		  zoom: initialState.zoom
+		  zoom: initialState.zoom,
 		});
 	
 		this.mapObject.addControl(new NavigationControl());
@@ -172,16 +188,53 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		let that = this;
 		// Clear Results
 		this.issuerResults = [];
+		this.issuerResultsByCategory = [];
+		const issuerResultsByCategoryLocal = {};
 
-		var addIssuerToResults = function(item){
+
+		// var addIssuerToResults = function(item){
+		// 	that.issuerResults.push(item);
+		// }
+
+		var addIssuerToResultsByCategory = function(item){
+
 			that.issuerResults.push(item);
+			
+			let categoryResults = issuerResultsByCategoryLocal[item.category];
+			
+			if (!categoryResults) {
+				categoryResults = issuerResultsByCategoryLocal[item.category] = new MatchingIssuerCategory(
+					item.category,
+					""
+				);
+
+				// append result to the issuerResults array bound to the view template.
+				that.issuerResultsByCategory.push(categoryResults);
+			}
+
+			categoryResults.addIssuer(item);
+
+			// if (!this.issuerResults.find(r => r.category === item)) {
+			// 	// appending the results to the badgeResults array bound to the view template.
+			// 	this.issuerResults.push(new BadgeResult(badge, issuerResults.issuer));
+			// }
+
+			return true;
+
 		}
+	
+
+
+		// this.issuers
+		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
+		// 	.forEach(addIssuerToResults);
+
 		this.issuers
 			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addIssuerToResults);
+			.forEach(addIssuerToResultsByCategory);
 
 		this.issuerResults.sort((a,b) => a.name.localeCompare(b.name))
-
+		this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => a.name.localeCompare(b.name)));
 		this.generateGeoJSON(this.issuerResults)
 	}
 
@@ -193,7 +246,9 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				properties: {
 					name: issuer.name,
 					slug: issuer.slug,
-					description: issuer.description
+					img: issuer.image,
+					description: issuer.description,
+					category: issuer.category
 				},
 				geometry: {
 					type: "Point",
@@ -210,12 +265,15 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 		if(!this.mapObject.getSource('issuers')){
 			this.mapObject.addSource('issuers', {
 				'type': 'geojson',
-				data: this.issuerGeoJson
+				data: this.issuerGeoJson,
+				cluster: true,
+				clusterRadius: 10
 			})
 			this.mapObject.addLayer({
 				'id': 'issuers',
 				'type': 'circle',
 				'source': 'issuers',
+				'filter': ['!', ['has', 'point_count']],
 				// 'layout': {
 				// 	'icon-image': 'custom-marker',
 				// 	// get the year from the source's "year" property
@@ -225,17 +283,82 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				// 	'text-anchor': 'top'
 				// 	}
 				"paint": {
-					"circle-radius": 8,
-					"circle-color": "#5b94c6",
+					"circle-radius": {
+						'base': 4,
+						'stops': [
+						[12, 6],
+						[22, 180]
+						]
+					},
+					'circle-color': [
+						'match',
+						['get', 'category'],
+						'schule',
+						'#fbb03b',
+						'hochschule',
+						'#e55e5e',
+						'andere',
+						'#3bb2d0',
+						'n/a',
+						'#223b53',
+						/* other */ '#ccc'
+						],
+					// "circle-color": "#5b94c6",
 				}
 			});
 
+		
+			this.mapObject.addLayer({
+				'id': 'issuersCluster',
+				'type': 'circle',
+				'source': 'issuers',
+				'filter': ['has', 'point_count'],
+				"paint": {
+					"circle-radius": {
+						'base': 10,
+						'stops': [
+						[12, 10],
+						[22, 180]
+						]
+					},
+					'circle-color': [
+						'match',
+						['get', 'category'],
+						'schule',
+						'#fbb03b',
+						'hochschule',
+						'#e55e5e',
+						'andere',
+						'#3bb2d0',
+						'n/a',
+						'#223b53',
+						/* other */ '#ccc'
+						],
+					// "circle-color": "#5b94c6",
+				}
+			});
+			
+			this.mapObject.addLayer({
+				id: 'cluster-count',
+				type: 'symbol',
+				source: 'issuers',
+				filter: ['has', 'point_count'],
+				layout: {
+				'text-field': '{point_count_abbreviated}',
+				'text-font': ['Open Sans Regular'],
+				'text-size': 12
+				}
+			});
+
+
 			this.mapObject.on('click', 'issuers', (e) => {
+
 				// Copy coordinates array.
 				const coordinates = e.features[0].geometry.coordinates.slice();
 				const name = e.features[0].properties.name;
 				const slug = e.features[0].properties.slug;
 				const desc = e.features[0].properties.description;
+				const img = e.features[0].properties.img;
 				 
 				// Ensure that if the map is zoomed out such that multiple
 				// copies of the feature are visible, the popup appears
@@ -246,19 +369,47 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				 
 				new Popup()
 					.setLngLat(coordinates)
-					.setHTML('<a href="public/issuers/'+slug+'">'+name+'</a><br><p>'+desc+'</p>')
+					.setHTML('<div style="padding:5px"><a href="public/issuers/'+slug+'">'+name+'</a><br><p>'+desc+'</p></div>')
 					.addTo(this.mapObject);
+			});
+
+			this.mapObject.on('click', 'issuersCluster', (e) => {
+
+				const coordinates = e.features[0].geometry.coordinates.slice();
+
+				const features = this.mapObject.queryRenderedFeatures(e.point, {
+				layers: ['issuersCluster']
 				});
 				 
-				// Change the cursor to a pointer when the mouse is over the places layer.
-				this.mapObject.on('mouseenter', 'issuers', () => {
-					this.mapObject.getCanvas().style.cursor = 'pointer';
-				});
+				const clusterId = features[0].properties.cluster_id;
+				var pointCount = features[0].properties.point_count;
+
+				var htmlString = '<div style="padding:5px"><ul>'
+
+				this.mapObject.getSource('issuers').getClusterLeaves(clusterId, pointCount, 0, (error, features) => {
+					
+					features.forEach(feature => {
+						htmlString += '<li><a href="public/issuers/'+ feature.properties.slug +'"><div class="color '+ feature.properties.category +'"></div>'+ feature.properties.name +'</li>'
+					})
+					htmlString += '</ul></div>';
+
+					new Popup()
+						.setLngLat(coordinates)
+						.setHTML(htmlString)
+						.addTo(this.mapObject);
+
+				})
+			});
 				 
-				// Change it back to a pointer when it leaves.
-				this.mapObject.on('mouseleave', 'issuers', () => {
-					this.mapObject.getCanvas().style.cursor = '';
-				});
+			// Change the cursor to a pointer when the mouse is over the places layer.
+			this.mapObject.on('mouseenter', 'issuers', () => {
+				this.mapObject.getCanvas().style.cursor = 'pointer';
+			});
+				
+			// Change it back to a pointer when it leaves.
+			this.mapObject.on('mouseleave', 'issuers', () => {
+				this.mapObject.getCanvas().style.cursor = '';
+			});
 
 		} else {
 			this.mapObject.getSource('issuers').setData(this.issuerGeoJson);
@@ -269,8 +420,12 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 	changeOrder(order){
 		if(order === 'asc'){
 			this.issuerResults.sort((a,b) => a.name.localeCompare(b.name))
+			this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => a.name.localeCompare(b.name)));
+
 		} else {
 			this.issuerResults.sort((a,b) => b.name.localeCompare(a.name))
+			this.issuerResultsByCategory.forEach(r => r.issuers.sort((a, b) => b.name.localeCompare(a.name)));
+
 		}
 	}
 
@@ -292,5 +447,22 @@ class MatchingAlgorithm {
 		return issuer => (
 			StringMatchingUtil.stringMatches(issuer.name, patternStr, patternExp)
 		);
+	}
+}
+
+
+class MatchingIssuerCategory {
+	constructor(
+		public category: string,
+		public issuer,
+		public issuers: Issuer[] = []
+	) {}
+
+	addIssuer(issuer) {
+		if (issuer.category === this.category) {
+			if (this.issuers.indexOf(issuer) < 0) {
+				this.issuers.push(issuer);
+			}
+		}
 	}
 }

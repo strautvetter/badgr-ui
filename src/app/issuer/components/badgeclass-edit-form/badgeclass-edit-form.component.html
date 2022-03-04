@@ -30,6 +30,7 @@
 					#imageField
 					label="Bild"
 					imageLoaderName="badge"
+					[class.fixed-imagefield]="scrolled"
 					[newDropZone]="true"
 					[generateRandom]="false"
 					[type]="'badge'"
@@ -40,7 +41,7 @@
 					[control]="badgeClassForm.rawControlMap.badge_image"
 				>
 				</bg-formfield-image>
-				<badge-studio #badgeStudio [formData]="badgeClassForm.value" [hidden]="true"></badge-studio>
+				<badge-studio [scrolled]="scrolled" #badgeStudio [formData]="badgeClassForm.value" [hidden]="true"></badge-studio>
 			</div>
 
 			<div class="forminput u-margin-bottom2x">
@@ -190,6 +191,7 @@
 					ariaLabel="Wähle eine Stufe"
 					[control]="badgeClassForm.rawControlMap.badge_level"
 					label="Level"
+					[disabled]="badgeClassForm.rawControlMap.badge_category.value === 'membership' || badgeClassForm.rawControlMap.badge_category.value === 'archievement' "
 					[placeholder]="'Wähle eine Stufe'"
 					[optionMap]="levelOptions"
 					[errorMessage]="{

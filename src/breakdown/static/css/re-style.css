@@ -1,0 +1,44 @@
+
+.u-width-formsmall {
+    box-sizing: border-box;
+}
+
+.fixed-imagefield {
+    position: fixed;
+    top: 0;
+    left: 5px;
+    z-index: 100;
+}
+
+.fixed-imagefield .forminput-x-label {
+    display: none;
+}
+
+.maplibregl-popup-close-button {
+    right: 5px !important;
+}
+
+
+.color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.3em;
+}
+
+.cluster {
+    background: #ccc;
+}
+
+.schule {
+    background: #fbb03b;
+}
+
+.hochschule {
+    background: #e55e5e;
+}
+
+.andere {
+    background: #3bb2d0;
+}

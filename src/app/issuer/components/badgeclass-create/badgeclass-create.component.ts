@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder} from '@angular/forms';
 import {Title} from '@angular/platform-browser';
@@ -24,6 +24,9 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	issuer: Issuer;
 	issuerLoaded: Promise<unknown>;
 	breadcrumbLinkEntries: LinkEntry [] = [];
+	scrolled = false;
+
+	@ViewChild('badgeimage') badgeImage;
 
 	constructor(
 		sessionService: SessionService,
@@ -68,5 +71,18 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	}
 	creationCanceled() {
 		this.router.navigate(['issuer/issuers', this.issuerSlug ]);
+	}
+
+	@HostListener('window:scroll')
+	onWindowScroll() {
+		var top = window.pageYOffset 
+			|| document.documentElement.scrollTop 
+			|| document.body.scrollTop || 0;
+		
+		if(top > this.badgeImage.componentElem.nativeElement.offsetTop) {
+			this.scrolled = true;
+		} else {
+			this.scrolled = false;
+		}
 	}
 }

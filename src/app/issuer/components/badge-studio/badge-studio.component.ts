@@ -34,6 +34,7 @@ export class BadgeStudioComponent implements OnInit, OnChanges {
 	@ViewChild("canvas")
 	private canvasElem: ElementRef;
 
+	@Input() scrolled: boolean;
 	// private ready: boolean;
 
 	private fontPromise: Promise<unknown>;
