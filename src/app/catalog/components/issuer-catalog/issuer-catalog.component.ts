@@ -352,11 +352,13 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 
 
 			this.mapObject.on('click', 'issuers', (e) => {
+
 				// Copy coordinates array.
 				const coordinates = e.features[0].geometry.coordinates.slice();
 				const name = e.features[0].properties.name;
 				const slug = e.features[0].properties.slug;
 				const desc = e.features[0].properties.description;
+				const img = e.features[0].properties.img;
 				 
 				// Ensure that if the map is zoomed out such that multiple
 				// copies of the feature are visible, the popup appears
@@ -367,19 +369,47 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 				 
 				new Popup()
 					.setLngLat(coordinates)
-					.setHTML('<a href="public/issuers/'+slug+'">'+name+'</a><br><p>'+desc+'</p>')
+					.setHTML('<div style="padding:5px"><a href="public/issuers/'+slug+'">'+name+'</a><br><p>'+desc+'</p></div>')
 					.addTo(this.mapObject);
+			});
+
+			this.mapObject.on('click', 'issuersCluster', (e) => {
+
+				const coordinates = e.features[0].geometry.coordinates.slice();
+
+				const features = this.mapObject.queryRenderedFeatures(e.point, {
+				layers: ['issuersCluster']
 				});
 				 
-				// Change the cursor to a pointer when the mouse is over the places layer.
-				this.mapObject.on('mouseenter', 'issuers', () => {
-					this.mapObject.getCanvas().style.cursor = 'pointer';
-				});
+				const clusterId = features[0].properties.cluster_id;
+				var pointCount = features[0].properties.point_count;
+
+				var htmlString = '<div style="padding:5px"><ul>'
+
+				this.mapObject.getSource('issuers').getClusterLeaves(clusterId, pointCount, 0, (error, features) => {
+					
+					features.forEach(feature => {
+						htmlString += '<li><a href="public/issuers/'+ feature.properties.slug +'"><div class="color '+ feature.properties.category +'"></div>'+ feature.properties.name +'</li>'
+					})
+					htmlString += '</ul></div>';
+
+					new Popup()
+						.setLngLat(coordinates)
+						.setHTML(htmlString)
+						.addTo(this.mapObject);
+
+				})
+			});
 				 
-				// Change it back to a pointer when it leaves.
-				this.mapObject.on('mouseleave', 'issuers', () => {
-					this.mapObject.getCanvas().style.cursor = '';
-				});
+			// Change the cursor to a pointer when the mouse is over the places layer.
+			this.mapObject.on('mouseenter', 'issuers', () => {
+				this.mapObject.getCanvas().style.cursor = 'pointer';
+			});
+				
+			// Change it back to a pointer when it leaves.
+			this.mapObject.on('mouseleave', 'issuers', () => {
+				this.mapObject.getCanvas().style.cursor = '';
+			});
 
 		} else {
 			this.mapObject.getSource('issuers').setData(this.issuerGeoJson);
