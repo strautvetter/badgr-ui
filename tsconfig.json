@@ -11,18 +11,9 @@
 		"downlevelIteration": true,
 		"noImplicitAny": false,
 		"target": "es5",
-		"types": [
-			"node"
-		],
-		"typeRoots": [
-			"node_modules/@types"
-		],
-		"lib": [
-			"es7",
-			"es6",
-			"dom",
-			"esnext"
-		],
+		"types": ["node"],
+		"typeRoots": ["node_modules/@types"],
+		"lib": ["es7", "es6", "dom", "esnext"],
 		"module": "commonjs",
 		"baseUrl": "./"
 	}
