@@ -1,62 +1,12 @@
-.partners, .test {
-	display: flex;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: center;
-	justify-content: space-around;
-	/* hidding last hr on a row and recenter content*/
-	overflow: hidden;
-	border-right: solid 1.5em transparent;
-}
-
-.partner {
-	position: relative; /* put it on top of seperator*/
-	margin: 0.5em 1.5em;
-}
-
-hr {
-	height: 270px;
-	margin: auto -20px;
-	/* border-reset*/
-	border: none;
-	border-left: 1px solid lightgray;
-}
-
-hr:last-child {
-	/* there is one */
-	display: none;
-}
-
-.b:nth-last-child(2) {
-	/* harmless if there is no hr in last position   */
-	margin-right: 0px;
-}
-
-.partners a {
-	padding: 1.5rem;
-}
-
-@media screen and (max-width: 770px) {
-	.partners a {
-		padding: 1rem;
-	}
-}
-
-.partners img {
-	min-width: 112.5px;
-	width: 100%;
-	max-width: 225px;
-	transition: 0.2s;
-}
-
-.partners a:hover img {
-	transform: scale(1.2);
-}
-
 .foerderung {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.foerderung img {
+	min-width: 150px;
+	max-width: 225px;
 }
 
 @media screen and (max-width: 770px) {
@@ -65,7 +15,49 @@ hr:last-child {
 	}
 }
 
-.foerderung img {
-	min-width: 150px;
+@media screen and (max-width: 1217px) {
+	.child + .child {
+		border: 0 !important;
+	}
+}
+
+.container {
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+	padding: 5px;
+	justify-content: space-around;
+	overflow: hidden;
+	align-items: stretch;
+}
+
+.child {
+	flex: 1;
+	display: flex;
+	margin: 5px;
+	margin: 0.5em 1.5em;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.child a {
+	padding: 1.5rem;
+}
+
+image {
+	margin: auto;
+}
+
+.child + .child {
+	border-left: 2px solid #C0C0C0;
+}
+
+.child img {
 	max-width: 225px;
+	transition: 0.2s;
+}
+
+.child a:hover img {
+	transform: scale(1.1);
 }
