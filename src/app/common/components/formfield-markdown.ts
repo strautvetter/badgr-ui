@@ -155,6 +155,7 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
         if (this.autofocus) {
             this.focus();
         }
+        this.markdown_content = this.value;
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -162,9 +163,6 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
         if (!this.control.value) {
             this.unlocked = true;
         }
-
-        console.log(changes);
-        
         
 
         if ('initialValue' in changes) {
