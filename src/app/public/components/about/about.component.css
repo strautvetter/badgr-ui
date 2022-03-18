@@ -9,17 +9,30 @@
 	max-width: 225px;
 }
 
+@media screen and (max-width: 1216px) {
+	.child + .child {
+		border: none !important;
+	}
+}
+
+@media screen and (max-width: 1217px) {
+	.headings {
+		display: none !important;
+	}
+}
+
 @media screen and (max-width: 770px) {
 	.foerderung {
 		flex-wrap: wrap;
 	}
 }
 
-@media screen and (max-width: 1217px) {
-	.child + .child {
-		border: 0 !important;
+@media screen and (max-width: 612px) {
+	.child {
+		margin: 3.5em 1.5em !important;
 	}
 }
+
 
 .container {
 	display: flex;
@@ -60,4 +73,8 @@ image {
 
 .child a:hover img {
 	transform: scale(1.1);
+}
+
+h3 {
+	text-align: center;
 }
