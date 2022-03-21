@@ -41,7 +41,7 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
             this.http.post('http://localhost:8000/upload', fd).subscribe(
                 (result) => {
                     let data: any = result;
-                    console.log('success', data.filename);
+                    this.markdown_content = this.markdown_content + " ![" + files[0].name + "](http://localhost:8000/media/" + data.filename + ")";
                     resolve([{ name: files[0].name, url: 'http://localhost:8000/media/' + data.filename, isImg: true }])
                 },
                 (error) => {
