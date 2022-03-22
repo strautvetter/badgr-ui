@@ -17,14 +17,20 @@
 						"tsConfig": "src/tsconfig.app.json",
 						"polyfills": "src/polyfills.ts",
 						"showCircularDependencies": false,
-						"assets": ["src/assets", "src/_redirects"],
+						"assets": [
+							"src/assets",
+							"src/_redirects",
+							{
+								"glob": "**/*",
+								"input": "node_modules/ace-builds/src-min",
+								"output": "./assets/ace-builds/"
+							}
+						],
 						"styles": [
 							"node_modules/@concentricsky/badgr-style/dist/css/screen.css",
 							"node_modules/dialog-polyfill/dialog-polyfill.css",
 							"src/breakdown/static/css/re-style.css",
-							"node_modules/maplibre-gl/dist/maplibre-gl.css",
-							"node_modules/font-awesome/css/font-awesome.min.css",
-							"node_modules/ngx-markdown-editor/assets/highlight.js/agate.min.css"
+							"node_modules/maplibre-gl/dist/maplibre-gl.css"
 						],
 						"scripts": [
 							"node_modules/ngx-markdown-editor/assets/highlight.js/highlight.min.js",

@@ -19,7 +19,7 @@
 				>Finde mehr über Open Badges heraus
 				<svg icon="icon_external_link"></svg>
 			</a>
-			<br>
+			<br />
 			<a href="javascript:;" (click)="openLegend()" class="u-text-outlink"
 				>Was bedeuten die Rahmen und Farben?
 			</a>
@@ -41,7 +41,12 @@
 					[control]="badgeClassForm.rawControlMap.badge_image"
 				>
 				</bg-formfield-image>
-				<badge-studio [scrolled]="scrolled" #badgeStudio [formData]="badgeClassForm.value" [hidden]="true"></badge-studio>
+				<badge-studio
+					[scrolled]="scrolled"
+					#badgeStudio
+					[formData]="badgeClassForm.value"
+					[hidden]="true"
+				></badge-studio>
 			</div>
 
 			<div class="forminput u-margin-bottom2x">
@@ -63,7 +68,7 @@
 					[multiline]="true"
 				></bg-formfield-text>
 			</div>
-		</div>badgeClassForm
+		</div>
 	</div>
 
 	<!-- Criteria Panel -->
@@ -151,8 +156,8 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Kategorie?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz,
-				einer Metakompetenz oder einem Erfolg.
+				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz, einer
+				Metakompetenz oder einem Erfolg.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -179,10 +184,9 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Stufe?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Kompetenzen werden in 6 Stufen abgebildet: A1 Einsteiger*in, A1 Entdecker*in, B1 Insider*in, 
-				B2 Expert*in, C1 Leader*in und C2 Vorreiter*in. Im Badge Bild erkennt man die Stufe durch 
-				die Anzahl der markeirten Kanten im Uhrzeigersinn.
-				
+				Kompetenzen werden in 6 Stufen abgebildet: A1 Einsteiger*in, A1 Entdecker*in, B1 Insider*in, B2
+				Expert*in, C1 Leader*in und C2 Vorreiter*in. Im Badge Bild erkennt man die Stufe durch die Anzahl der
+				markeirten Kanten im Uhrzeigersinn.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -191,7 +195,10 @@
 					ariaLabel="Wähle eine Stufe"
 					[control]="badgeClassForm.rawControlMap.badge_level"
 					label="Level"
-					[disabled]="badgeClassForm.rawControlMap.badge_category.value === 'membership' || badgeClassForm.rawControlMap.badge_category.value === 'archievement' "
+					[disabled]="
+						badgeClassForm.rawControlMap.badge_category.value === 'membership' ||
+						badgeClassForm.rawControlMap.badge_category.value === 'archievement'
+					"
 					[placeholder]="'Wähle eine Stufe'"
 					[optionMap]="levelOptions"
 					[errorMessage]="{
@@ -291,7 +298,9 @@
 			</ng-container>
 
 			<div class="l-stack">
-				<button (click)="addAlignment()" type="button" class="button button-secondary">Verknüpfung hinzufügen</button>
+				<button (click)="addAlignment()" type="button" class="button button-secondary">
+					Verknüpfung hinzufügen
+				</button>
 			</div>
 		</div>
 	</div>
@@ -365,8 +374,8 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Gültikgeit?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Beschreiben Sie die Dauer, für die dieses Badge allgemein gültig ist. Diese Information kann auch bei der Vergabe geändert werden.
-				Badges werden nach Ablauf der Gültigkeit als abgelaufen markiert.
+				Beschreiben Sie die Dauer, für die dieses Badge allgemein gültig ist. Diese Information kann auch bei
+				der Vergabe geändert werden. Badges werden nach Ablauf der Gültigkeit als abgelaufen markiert.
 			</p>
 		</div>
 		<div class="formsection-x-body">
@@ -412,11 +421,7 @@
 					</button>
 				</li>
 				<li
-					class="
-						l-flex l-flex-justifybetween l-flex-aligncenter
-						border border-top border-light3
-						u-padding-yaxis2x
-					"
+					class="l-flex l-flex-justifybetween l-flex-aligncenter border border-top border-light3 u-padding-yaxis2x"
 				>
 					<div class="l-flex l-flex-2x">
 						<svg class="icon icon-dark4" width="24px" viewBox="0 0 24 24" icon="icon_tags"></svg>
@@ -430,11 +435,7 @@
 					</button>
 				</li>
 				<li
-					class="
-						l-flex l-flex-justifybetween l-flex-aligncenter
-						border border-top border-light3
-						u-padding-yaxis2x
-					"
+					class="l-flex l-flex-justifybetween l-flex-aligncenter border border-top border-light3 u-padding-yaxis2x"
 				>
 					<div class="l-flex l-flex-2x">
 						<svg class="icon icon-dark4" width="24px" viewBox="0 0 24 24" icon="icon_pending"></svg>
