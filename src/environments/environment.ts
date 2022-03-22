@@ -17,8 +17,8 @@ export const environment: BadgrEnvironment = {
 				url: 'https://reedu.de',
 			},
 			logoImg: {
-				small: 'assets/logos/test_mybadges.svg',
-				desktop: 'assets/logos/test_mybadges.svg',
+				small: 'assets/logos/Badges_Entwurf-15-circle.svg',
+				desktop: 'assets/logos/Badges_Entwurf-15-circle.svg',
 			},
 			loadingImg: {
 				imageUrl:
