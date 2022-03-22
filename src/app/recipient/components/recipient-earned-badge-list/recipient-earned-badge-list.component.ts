@@ -31,10 +31,10 @@ export class RecipientEarnedBadgeListComponent extends BaseAuthenticatedRoutable
 	readonly badgeLoadingImageUrl = require('../../../../breakdown/static/images/badge-loading.svg');
 	readonly badgeFailedImageUrl = require('../../../../breakdown/static/images/badge-failed.svg');
 
-	@ViewChild("addBadgeDialog")
+	@ViewChild("addBadgeDialog", {static: false})
 	addBadgeDialog: AddBadgeDialogComponent;
 
-	@ViewChild(ImportLauncherDirective) importLauncherDirective:ImportLauncherDirective;
+	@ViewChild(ImportLauncherDirective, {static: false}) importLauncherDirective:ImportLauncherDirective;
 
 	allBadges: RecipientBadgeInstance[] = [];
 	badgesLoaded: Promise<unknown>;

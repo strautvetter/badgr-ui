@@ -14,7 +14,7 @@ import { UserProfileApiService } from "../../../common/services/user-profile-api
 })
 export class ImportModalComponent extends BaseDialog implements OnInit {
 
-	@ViewChild("importModalDialog")
+	@ViewChild("importModalDialog", {static: false})
 	importModalDialog: ImportModalComponent;
 	csvForm: FormGroup;
 	readonly csvUploadIconUrl = require('../../../../breakdown/static/images/csvuploadicon.svg');

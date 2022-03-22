@@ -57,10 +57,10 @@ export class BadgeClassEditComponent extends BaseAuthenticatedRoutableComponent 
 	// <li class="breadcrumb-x-current">Edit Badge Class</li>
 
 
-	@ViewChild("badgeStudio")
+	@ViewChild("badgeStudio", {static: false})
 	badgeStudio: BadgeStudioComponent;
 
-	@ViewChild("imageField")
+	@ViewChild("imageField", {static: false})
 	imageField: BgFormFieldImageComponent;
 
 	private allBadgeInstances: BadgeClassInstances;

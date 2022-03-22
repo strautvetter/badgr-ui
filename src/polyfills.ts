@@ -85,3 +85,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 // Custom polyfills
 
 import 'inert-polyfill/inert-polyfill';
+
+
+// add this for ngx-markdown-editor
+import 'brace';
+import 'brace/mode/markdown';

@@ -1,256 +1,251 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import {CommonDialogsService} from '../services/common-dialogs.service';
-import {CustomValidatorMessages, messagesForValidationError} from './formfield-text';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { CommonDialogsService } from '../services/common-dialogs.service';
+import { CustomValidatorMessages, messagesForValidationError } from './formfield-text';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { AppConfigService } from '../app-config.service';
+
+interface UploadResult {
+    isImg: boolean;
+    name: string;
+    url: string;
+}
 
 @Component({
-	selector: 'bg-formfield-markdown',
-	host: {
-		'class': "forminput",
-		'[class.forminput-is-error]': "isErrorState",
-		'[class.forminput-locked]': "isLockedState",
-	},
-	template: `
-	<div class="mdeditor">
-		<div class="mdeditor-x-editor">
-			<label [attr.for]="inputName" *ngIf="label || includeLabelAsWrapper">
-				{{ label }} <span *ngIf="optional">(OPTIONAL)</span>
-				<span *ngIf="formFieldAside">{{ formFieldAside }}</span>
-				<button type="button" *ngIf="isLockedState" (click)="unlock()">(unlock)</button>
-				<ng-content select="[label-additions]"></ng-content>
-			</label>
-				<textarea
-				autosize
-				[name]="inputName"
-				[ngStyle]="{'height.px':textHeight}"
-				[id]="inputName"
-				[formControl]="control"
-				[placeholder]="placeholder || ''"
-				(change)="postProcessInput()"
-				(focus)="cacheControlState()"
-				(keypress)="handleKeyPress($event)"
-				*ngIf="!_preview"
-				#textareaInput
-			></textarea>
-		</div>
-
-		<div class="markdown mdeditor-x-preview"
-			     #markdownPreviewPane
-			     [bgMarkdown]="control.value"
-			     [style.minHeight.px]="textHeight"
-			     *ngIf="_preview"
-			>Markdown preview
-			</div>
-
-    <div class="mdeditor-x-tabbar">
-		<div class="mdeditor-x-tabs">
-			<div class="mdeditor-x-tab mdeditor-x-writebutton" [ngClass]="{'mdeditor-x-tab-is-active':!_preview}"
-			(click)="markdownPreview(false);">Write
-			</div>
-			<div class="mdeditor-x-tab mdeditor-x-previewbutton" [ngClass]="{'mdeditor-x-tab-is-active':_preview}"
-			(click)="markdownPreview(true);">Preview
-			</div>
-		</div>
-		<div class="mdeditor-x-help">
-			<div class="l-flex l-flex-1x l-flex-aligncenter">
-				<button class="buttonicon buttonicon-link" type="button" (click)="openMarkdownHintsDialog()">
-					<svg class="icon l-flex-shrink0" icon="icon_markdown"></svg>
-				</button>
-				<button (click)="openMarkdownHintsDialog()" type="button" class="u-text-link-small u-hidden-maxmobilelarge">Markdown Supported</button>
-			</div>
-		</div>
-    </div>
-</div>
-`
+    selector: 'bg-formfield-markdown',
+    host: {
+        class: 'forminput',
+        '[class.forminput-is-error]': 'isErrorState',
+        '[class.forminput-locked]': 'isLockedState',
+    },
+    template: ` <md-editor (ngModelChange)="change()" [(ngModel)]="markdown_content" [upload]="doUpload"></md-editor> `,
 })
 export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 
-	@Input()
-	set unlocked(unlocked: boolean) {
-		this._unlocked = unlocked;
-		this.updateDisabled();
-	}
+    markdown_content = "";
+    
+    constructor(
+        private dialogService: CommonDialogsService,
+        private domSanitizer: DomSanitizer,
+        private http: HttpClient
+    ) {
+        this.doUpload = this.doUpload.bind(this);
+    }
 
-	get unlocked() { return this._unlocked; }
-	@Input()
-	set locked(locked: boolean) {
-		this._locked = locked;
-		this.updateDisabled();
-	}
+    async doUpload(files: Array<File>): Promise<Array<UploadResult>> {
+        var fd = new FormData();
+        fd.append('files', files[0]);
+        return new Promise((resolve, reject) => {
+            this.http.post('http://localhost:8000/upload', fd).subscribe(
+                (result) => {
+                    let data: any = result;
+                    this.markdown_content = this.markdown_content + " ![" + files[0].name + "](http://localhost:8000/media/" + data.filename + ")";
+                    resolve([{ name: files[0].name, url: 'http://localhost:8000/media/' + data.filename, isImg: true }])
+                },
+                (error) => {
+                    console.log('oops', error);
+                }
+            );
+        });
+    }
 
-	get locked() { return this._locked; }
+    @Input()
+    set unlocked(unlocked: boolean) {
+        this._unlocked = unlocked;
+        this.updateDisabled();
+    }
 
-	get inputElement(): HTMLTextAreaElement {
-		if (this.textareaInput && this.textareaInput.nativeElement) {
-			return this.textareaInput.nativeElement;
-		}
-		return null;
-	}
+    get unlocked() {
+        return this._unlocked;
+    }
+    @Input()
+    set locked(locked: boolean) {
+        this._locked = locked;
+        this.updateDisabled();
+    }
 
-	get hasFocus(): boolean {
-		return document.activeElement === this.inputElement;
-	}
+    get locked() {
+        return this._locked;
+    }
 
-	get errorMessageForDisplay(): string {
-		return this.hasFocus ? this.cachedErrorMessage : this.uncachedErrorMessage;
-	}
+    get inputElement(): HTMLTextAreaElement {
+        if (this.textareaInput && this.textareaInput.nativeElement) {
+            return this.textareaInput.nativeElement;
+        }
+        return null;
+    }
 
-	get uncachedErrorMessage(): string {
-		return messagesForValidationError(
-			this.label,
-			this.control && this.control.errors,
-			this.errorMessage
-		).concat(messagesForValidationError(
-			this.label,
-			this.errorGroup && this.errorGroup.errors,
-			this.errorGroupMessage
-		))[ 0 ]; // Only display the first error
-	}
+    get hasFocus(): boolean {
+        return document.activeElement === this.inputElement;
+    }
 
-	get value() {
-		return this.control.value;
-	}
+    get errorMessageForDisplay(): string {
+        return this.hasFocus ? this.cachedErrorMessage : this.uncachedErrorMessage;
+    }
 
-	get controlErrorState() { return this.control.dirty && (!this.control.valid || (this.errorGroup && !this.errorGroup.valid)); }
+    get uncachedErrorMessage(): string {
+        return messagesForValidationError(this.label, this.control && this.control.errors, this.errorMessage).concat(
+            messagesForValidationError(this.label, this.errorGroup && this.errorGroup.errors, this.errorGroupMessage)
+        )[0]; // Only display the first error
+    }
 
-	get isErrorState() {
-		if (this.hasFocus && this.cachedErrorState !== null) {
-			return this.cachedErrorState;
-		} else {
-			return this.controlErrorState;
-		}
-	}
+    get value() {
+        return this.control.value;
+    }
 
-	get isLockedState() { return this.locked && !this.unlocked; }
+    get controlErrorState() {
+        return this.control.dirty && (!this.control.valid || (this.errorGroup && !this.errorGroup.valid));
+    }
 
-	get inputName() { return (this.label || this.placeholder || this.randomName).replace(/[^\w]+/g, "_").toLowerCase(); }
-	@Input() control: FormControl;
-	@Input() initialValue: string;
-	@Input() label: string;
-	@Input() includeLabelAsWrapper = false; // includes label for layout purposes even if label text wasn't passed in.
-	@Input() formFieldAside: string; // Displays additional text above the field. I.E (optional)
-	@Input() errorMessage: CustomValidatorMessages;
-	@Input() description: string;
-	@Input() placeholder: string;
-	@Input() optional = false;
+    get isErrorState() {
+        if (this.hasFocus && this.cachedErrorState !== null) {
+            return this.cachedErrorState;
+        } else {
+            return this.controlErrorState;
+        }
+    }
 
-	@Input() errorGroup: FormGroup;
-	@Input() errorGroupMessage: CustomValidatorMessages;
+    get isLockedState() {
+        return this.locked && !this.unlocked;
+    }
 
-	@Input() unlockConfirmText = "Unlocking this field may have unintended consequences. Are you sure you want to continue?";
+    get inputName() {
+        return (this.label || this.placeholder || this.randomName).replace(/[^\w]+/g, '_').toLowerCase();
+    }
+    @Input() control: FormControl;
+    @Input() initialValue: string;
+    @Input() label: string;
+    @Input() includeLabelAsWrapper = false; // includes label for layout purposes even if label text wasn't passed in.
+    @Input() formFieldAside: string; // Displays additional text above the field. I.E (optional)
+    @Input() errorMessage: CustomValidatorMessages;
+    @Input() description: string;
+    @Input() placeholder: string;
+    @Input() optional = false;
 
-	@Input() autofocus = false;
+    @Input() errorGroup: FormGroup;
+    @Input() errorGroupMessage: CustomValidatorMessages;
 
-	@ViewChild("textareaInput") textareaInput: ElementRef;
-	@ViewChild("markdownPreviewPane") markdownPreviewPane: ElementRef;
+    @Input() unlockConfirmText =
+        'Unlocking this field may have unintended consequences. Are you sure you want to continue?';
 
-	textHeight: number;
-	_preview = false;
+    @Input() autofocus = false;
 
-	private _lastRenderedMarkdown?: string;
-	private _currentMarkdownHtml?: SafeHtml;
+    @ViewChild('textareaInput', { static: false }) textareaInput: ElementRef;
+    @ViewChild('markdownPreviewPane', { static: false }) markdownPreviewPane: ElementRef;
 
-	private _unlocked = false;
+    textHeight: number;
+    _preview = false;
 
-	private _locked = false;
+    private _lastRenderedMarkdown?: string;
+    private _currentMarkdownHtml?: SafeHtml;
 
-	private cachedErrorMessage = null;
-	private cachedErrorState = null;
-	private cachedDirtyState = null;
+    private _unlocked = false;
 
-	private randomName = "field" + Math.random();
+    private _locked = false;
 
-	constructor(
-		private dialogService: CommonDialogsService,
-		private domSanitizer: DomSanitizer,
-	) { }
+    private cachedErrorMessage = null;
+    private cachedErrorState = null;
+    private cachedDirtyState = null;
 
-	ngAfterViewInit() {
-		if (this.autofocus) {
-			this.focus();
-		}
-	}
+    private randomName = 'field' + Math.random();
 
-	ngOnChanges(changes: SimpleChanges) {
-		// Unlocked by default when there is no value
-		if (!this.control.value) {
-			this.unlocked = true;
-		}
+    ngAfterViewInit() {
+        if (this.autofocus) {
+            this.focus();
+        }
+        this.markdown_content = this.value;
+    }
 
-		if ("initialValue" in changes) {
-			const initialValue = changes[ "initialValue" ].currentValue;
-			if ((this.value === null || this.value === undefined || this.value === '') &&
-				(initialValue !== null && initialValue !== undefined && initialValue !== '')
-			) {
-				this.control.setValue(initialValue);
-			}
-		}
+    ngOnChanges(changes: SimpleChanges) {
+        //Unlocked by default when there is no value
+        if (!this.control.value) {
+            this.unlocked = true;
+        }
+        
 
-		this.updateDisabled();
-	}
+        if ('initialValue' in changes) {
+            console.log(changes);
+            const initialValue = changes['initialValue'].currentValue;
+            if (
+                (this.value === null || this.value === undefined || this.value === '') &&
+                initialValue !== null &&
+                initialValue !== undefined &&
+                initialValue !== ''
+            ) {
+                this.control.setValue(initialValue);
+            }
+        }
 
-	markdownPreview(preview) {
-		if (this.textareaInput) {
-			this.textHeight = this.textareaInput.nativeElement.offsetHeight;
-		}
+        this.updateDisabled();
+    }
 
-		this._preview = preview;
-	}
+    markdownPreview(preview) {
+        if (this.textareaInput) {
+            this.textHeight = this.textareaInput.nativeElement.offsetHeight;
+        }
 
-	updateDisabled() {
-		if (!this.control) {
-			return;
-		}
+        this._preview = preview;
+    }
 
-		if (this.isLockedState) {
-			this.control.disable();
-		} else {
-			this.control.enable();
-		}
-	}
+    updateDisabled() {
+        if (!this.control) {
+            return;
+        }
 
-	openMarkdownHintsDialog() {
-		console.log("here we go");
-		this.dialogService.markdownHintsDialog.openDialog();
-	}
+        if (this.isLockedState) {
+            this.control.disable();
+        } else {
+            this.control.enable();
+        }
+    }
 
-	unlock() {
-		this.dialogService.confirmDialog.openResolveRejectDialog({
-			dialogTitle: "Are you sure?",
-			dialogBody: this.unlockConfirmText,
-			resolveButtonLabel: "Continue",
-			rejectButtonLabel: "Cancel",
-		}).then(
-			() => this.unlocked = true,
-			() => void 0
-		);
-	}
+    openMarkdownHintsDialog() {
+        console.log('here we go');
+        this.dialogService.markdownHintsDialog.openDialog();
+    }
 
-	focus() {
-		this.inputElement.focus();
-	}
+    unlock() {
+        this.dialogService.confirmDialog
+            .openResolveRejectDialog({
+                dialogTitle: 'Are you sure?',
+                dialogBody: this.unlockConfirmText,
+                resolveButtonLabel: 'Continue',
+                rejectButtonLabel: 'Cancel',
+            })
+            .then(
+                () => (this.unlocked = true),
+                () => void 0
+            );
+    }
 
-	select() {
-		this.inputElement.select();
-	}
+    focus() {
+        this.inputElement.focus();
+    }
 
-	private cacheControlState() {
-		this.cachedErrorMessage = this.uncachedErrorMessage;
-		this.cachedDirtyState = this.control.dirty;
-		this.cachedErrorState = this.controlErrorState;
-	}
+    select() {
+        this.inputElement.select();
+    }
 
-	private postProcessInput() {
-	}
+    change(){
+        this.control.setValue(this.markdown_content)
+    }
 
-	private handleKeyPress(event: KeyboardEvent) {
-		// This handles revalidating when hitting enter from within an input element. Ideally, we'd catch _all_ form submission
-		// events, but since the form supresses those if things aren't valid, that doesn't really work. So we do this hack.
-		if (event.keyCode === 13) {
-			this.control.markAsDirty();
-			this.cacheControlState();
-		}
-	}
+    private cacheControlState() {
+        this.cachedErrorMessage = this.uncachedErrorMessage;
+        this.cachedDirtyState = this.control.dirty;
+        this.cachedErrorState = this.controlErrorState;
+    }
+
+    private postProcessInput() {}
+
+    private handleKeyPress(event: KeyboardEvent) {
+        // This handles revalidating when hitting enter from within an input element. Ideally, we'd catch _all_ form submission
+        // events, but since the form supresses those if things aren't valid, that doesn't really work. So we do this hack.
+        if (event.keyCode === 13) {
+            this.control.markAsDirty();
+            this.cacheControlState();
+        }
+    }
 }

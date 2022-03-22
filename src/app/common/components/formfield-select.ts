@@ -71,7 +71,7 @@ export class FormFieldSelect implements OnChanges, AfterViewInit {
 
 	@Input() autofocus = false;
 
-	@ViewChild("selectInput") selectInput: ElementRef;
+	@ViewChild("selectInput", {static: false}) selectInput: ElementRef;
 
 	private _unlocked = false;
 	@Input()

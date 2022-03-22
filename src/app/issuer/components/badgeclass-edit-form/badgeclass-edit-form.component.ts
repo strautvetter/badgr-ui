@@ -71,16 +71,16 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				.addControl('target_code', '')
 		);
 
-	@ViewChild('badgeStudio')
+	@ViewChild('badgeStudio', {static: false})
 	badgeStudio: BadgeStudioComponent;
 
-	@ViewChild('imageField')
+	@ViewChild('imageField', {static: false})
 	imageField: BgFormFieldImageComponent;
 
-	@ViewChild('newTagInput')
+	@ViewChild('newTagInput', {static: false})
 	newTagInput: ElementRef<HTMLInputElement>;
 
-	@ViewChild('formElem')
+	@ViewChild('formElem', {static: false})
 	formElem: ElementRef<HTMLFormElement>;
 
 	existingBadgeClass: BadgeClass | null = null;
