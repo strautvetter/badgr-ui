@@ -33,7 +33,6 @@
 	}
 }
 
-
 .container {
 	display: flex;
 	width: 100%;
@@ -62,17 +61,13 @@ image {
 	margin: auto;
 }
 
-.child + .child {
-	border-left: 2px solid #C0C0C0;
-}
-
 .child img {
 	max-width: 225px;
 	transition: 0.2s;
 }
 
 .child a:hover img {
-	transform: scale(1.1);
+	transform: scale(1.05);
 }
 
 h3 {
