@@ -23,7 +23,6 @@
 							"node_modules/dialog-polyfill/dialog-polyfill.css",
 							"src/breakdown/static/css/re-style.css",
 							"node_modules/maplibre-gl/dist/maplibre-gl.css",
-							"node_modules/bootstrap/dist/css/bootstrap.min.css",
 							"node_modules/font-awesome/css/font-awesome.min.css",
 							"node_modules/ngx-markdown-editor/assets/highlight.js/agate.min.css"
 						],
