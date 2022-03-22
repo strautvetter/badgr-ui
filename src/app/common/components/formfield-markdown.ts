@@ -44,7 +44,8 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	constructor(
 		private dialogService: CommonDialogsService,
 		private domSanitizer: DomSanitizer,
-		private http: HttpClient
+		private http: HttpClient,
+		private configService: AppConfigService
 	) {
 		this.doUpload = this.doUpload.bind(this);
 	}
@@ -52,23 +53,21 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	async doUpload(files: Array<File>): Promise<Array<UploadResult>> {
 		var fd = new FormData();
 		fd.append('files', files[0]);
+
+		const name = files[0].name;
+
 		return new Promise((resolve, reject) => {
-			this.http.post('http://localhost:8000/upload', fd).subscribe(
+			const baseUrl = this.configService.apiConfig.baseUrl;
+
+			this.http.post<{ filename: string }>(`${baseUrl}/upload`, fd).subscribe(
 				(result) => {
-					let data: any = result;
-					this.markdown_content =
-						this.markdown_content +
-						' ![' +
-						files[0].name +
-						'](http://localhost:8000/media/' +
-						data.filename +
-						')';
-					resolve([
-						{ name: files[0].name, url: 'http://localhost:8000/media/' + data.filename, isImg: true },
-					]);
+					const url = `${baseUrl}/media/${result.filename}`;
+					this.markdown_content = `${this.markdown_content} ![${name}](${url})`;
+					resolve([{ name, url, isImg: true }]);
 				},
 				(error) => {
-					console.log('oops', error);
+					console.log(error);
+					reject(error);
 				}
 			);
 		});
