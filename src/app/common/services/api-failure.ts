@@ -1,4 +1,3 @@
-import {Response} from '@angular/http';
 import {BadgrApiError} from './base-http-api.service';
 import {HttpErrorResponse, HttpResponse, HttpResponseBase} from '@angular/common/http';
 

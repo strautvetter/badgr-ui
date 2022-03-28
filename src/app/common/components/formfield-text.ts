@@ -175,8 +175,8 @@ export class FormFieldText implements OnChanges, AfterViewInit {
 
 	@Input() autofocus = false;
 
-	@ViewChild('textInput') textInput: ElementRef;
-	@ViewChild('textareaInput') textareaInput: ElementRef;
+	@ViewChild('textInput', {static: false}) textInput: ElementRef;
+	@ViewChild('textareaInput', {static: false}) textareaInput: ElementRef;
 
 	remainingCharactersNum = this.maxchar;
 

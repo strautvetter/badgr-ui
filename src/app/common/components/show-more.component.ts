@@ -25,10 +25,10 @@ export class ShowMore implements AfterViewChecked {
 	@Input()
 	maxCollapsedHeight = 256;
 
-	@ViewChild('content')
+	@ViewChild('content', {static: false})
 	contentRef: ElementRef;
 
-	@ViewChild('container')
+	@ViewChild('container', {static: false})
 	containerRef: ElementRef;
 
 	isOpen = false;

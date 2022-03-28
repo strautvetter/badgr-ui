@@ -51,22 +51,22 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	copyrightYear = new Date().getFullYear();
 
-	@ViewChild("confirmDialog")
+	@ViewChild("confirmDialog", {static: false})
 	private confirmDialog: ConfirmDialog;
 
-	@ViewChild("newTermsDialog")
+	@ViewChild("newTermsDialog", {static: false})
 	private newTermsDialog: NewTermsDialog;
 
-	@ViewChild("shareSocialDialog")
+	@ViewChild("shareSocialDialog", {static: false})
 	private shareSocialDialog: ShareSocialDialog;
 
-	@ViewChild("markdownHintsDialog")
+	@ViewChild("markdownHintsDialog", {static: false})
 	private markdownHintsDialog: MarkdownHintsDialog;
 
-	@ViewChild("issuerLink")
+	@ViewChild("issuerLink", {static: false})
 	private issuerLink: unknown;
 
-	@ViewChild("importModalDialog")
+	@ViewChild("importModalDialog", {static: false})
 	importModalDialog: ImportModalComponent;
 
 	get showAppChrome() {

@@ -91,7 +91,7 @@ export class IssuerCatalogComponent extends BaseRoutableComponent implements OnI
 	};
 
 	mapObject;
-	@ViewChild('map')
+	@ViewChild('map', {static: false})
 	private mapContainer: ElementRef<HTMLElement>;
 
 	constructor(

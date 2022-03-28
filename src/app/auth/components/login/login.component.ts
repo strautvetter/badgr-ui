@@ -37,7 +37,7 @@ export class LoginComponent extends BaseRoutableComponent implements OnInit, Aft
 	verifiedName: string;
 	verifiedEmail: string;
 
-	@ViewChild("passwordField")
+	@ViewChild("passwordField", {static: false})
 	passwordField: FormFieldText;
 
 	initFinished: Promise<unknown> = new Promise(() => {});

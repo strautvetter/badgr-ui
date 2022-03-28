@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Directive, ElementRef, Input, NgZone, Renderer2} from '@angular/core';
-import {OnDestroy} from '@angular/core/src/metadata/lifecycle_hooks';
+import {OnDestroy} from '@angular/core';
 import Popper, {Placement} from 'popper.js';
 
 /**
