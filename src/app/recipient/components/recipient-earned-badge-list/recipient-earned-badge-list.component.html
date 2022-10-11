@@ -118,6 +118,7 @@
 							[badgeIssueDate]="badgeResult?.badge?.issueDate"
 							[mostRelevantStatus]="badgeResult.badge.mostRelevantStatus"
 							[issuerTitle]="badgeResult.badge.badgeClass.issuer.name"
+							[issuerSlug]="issuerIdToSlug(badgeResult.badge.badgeClass.issuer.id)"
 							[badgeSlug]="badgeResult.badge.slug"
 							(shareClicked)="shareBadge(badgeResult.badge)"
 						></bg-badgecard>
@@ -141,6 +142,7 @@
 								[badgeDescription]="badge.badgeClass.description"
 								[badgeIssueDate]="badge.issueDate"
 								[mostRelevantStatus]="badge.mostRelevantStatus"
+								[issuerSlug]="issuerIdToSlug(issuerGroup.issuerId)"
 								[issuerTitle]="badge.badgeClass.issuer.name"
 								[badgeSlug]="badge.slug"
 								(shareClicked)="shareBadge(badge)"
@@ -166,7 +168,10 @@
 						<ng-template ngFor let-issuerGroup [ngForOf]="issuerResults" let-i="index">
 							<tr class="datatable-x-row" *ngIf="groupByIssuer">
 								<th class="datatable-x-inlineheader" scope="row" colspan="4">
-									{{ issuerGroup.issuer.name }}
+									<a class="u-text u-text-link u-text-breakword"
+									   [routerLink]="['../../public/issuers', issuerIdToSlug(issuerGroup.issuerId)]">
+										{{ issuerGroup.issuer.name }}
+									</a>
 								</th>
 							</tr>
 							<!-- Badges -->
@@ -183,9 +188,8 @@
 												[error-src]="badgeFailedImageUrl"
 												[loaded-src]="badge.image"
 											/>
-											<a
-												class="u-text u-text-link u-text-breakword"
-												[routerLink]="['../earned-badge', badge.slug]"
+											<a class="u-text u-text-link u-text-breakword"
+											   [routerLink]="['../earned-badge', badge.slug]"
 												>{{ badge.badgeClass.name }}</a
 											>
 											<div
@@ -198,7 +202,13 @@
 											</div>
 										</div>
 									</td>
-									<td class="datatable-x-cell u-text-body">{{ badge.badgeClass.issuer.name }}</td>
+									<td class="datatable-x-cell u-text-body">
+										<a
+											class="u-text u-text-link u-text-breakword"
+											[routerLink]="['../../public/issuers', issuerIdToSlug(issuerGroup.issuerId)]">
+											{{ issuerGroup.issuer.name }}
+										</a>
+									</td>
 									<td class="datatable-x-cell u-text-body">
 										<time [date]="badge?.issueDate" format="mediumDate"></time>
 									</td>

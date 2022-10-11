@@ -20,7 +20,7 @@ declare function require(path: string): string;
 			</div>
 			<a *ngIf="badgeSlug" class="badgecard-x-title u-text-breakword" [routerLink]="['../earned-badge', badgeSlug]">{{ badgeTitle }}</a>
 			<a *ngIf="publicUrl" class="badgecard-x-title" [href]="publicUrl">{{ badgeTitle }}</a>
-			<div class="badgecard-x-issuer">{{ issuerTitle }}</div>
+			<a class="badgecard-x-issuer" [routerLink]="['../../public/issuers', issuerSlug]">{{ issuerTitle }}</a>
 			<p class="badgecard-x-desc" [truncatedText]="badgeDescription" [maxLength]="100"></p>
 		</div>
 		<div class="badgecard-x-footer">
@@ -45,6 +45,7 @@ export class BgBadgecard {
 	readonly badgeLoadingImageUrl = require('../../../breakdown/static/images/badge-loading.svg');
 	readonly badgeFailedImageUrl = require('../../../breakdown/static/images/badge-failed.svg');
 	@Input() badgeSlug: string;
+	@Input() issuerSlug: string;
 	@Input() publicUrl: string;
 	@Input() badgeImage: string;
 	@Input() badgeTitle: string;
