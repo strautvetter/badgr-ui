@@ -42,3 +42,7 @@
 .andere {
     background: #3bb2d0;
 }
+
+.badgecard-x-issuer:hover {
+    text-decoration: underline;
+}
