@@ -32,7 +32,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	// issuers: Issuer[] = null;
 	badges: BadgeClass[] = null;
 	badgeResults: BadgeClass[] = null;
-	badgeResultsByIssuer: MatchingIssuerCategory[] = [];
+	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
 	order = 'asc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
@@ -145,14 +145,14 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		// 	that.badgeResults.push(item);
 		// }
 
-		var addIssuerToResultsByCategory = function(item){
+		var addBadgeToResultsByIssuer = function(item){
 
 			that.badgeResults.push(item);
 			
 			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
 			
 			if (!issuerResults) {
-				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingIssuerCategory(
+				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingBadgeIssuer(
 					item.issuerName,
 					""
 				);
@@ -163,11 +163,6 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 			issuerResults.addBadge(item);
 
-			// if (!this.issuerResults.find(r => r.category === item)) {
-			// 	// appending the results to the badgeResults array bound to the view template.
-			// 	this.issuerResults.push(new BadgeResult(badge, issuerResults.issuer));
-			// }
-
 			return true;
 
 		}
@@ -176,7 +171,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		// 	.forEach(addIssuerToResults);
 		this.badges
 			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addIssuerToResultsByCategory);
+			.forEach(addBadgeToResultsByIssuer);
 
 		// this.allBadges
 		// 	.filter(MatchingAlgorithm.badgeMatcher(this._searchQuery))
@@ -216,7 +211,7 @@ class MatchingAlgorithm {
 	}
 }
 
-class MatchingIssuerCategory {
+class MatchingBadgeIssuer {
 	constructor(
 		public issuerName: string,
 		public badge,
