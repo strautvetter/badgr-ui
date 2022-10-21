@@ -192,6 +192,15 @@ export class RecipientEarnedBadgeListComponent extends BaseAuthenticatedRoutable
 		this.updateResults();
 	}
 
+	issuerIdToSlug(issuerId) {
+		if(issuerId.startsWith("http")) {
+			let splitted = (issuerId.split(/[/.\s]/))
+			return splitted[splitted.length-1]
+		} else {
+			return issuerId
+		}
+	}
+
 	private updateResults() {
 		// Clear Results
 		this.badgeResults.length = 0;
