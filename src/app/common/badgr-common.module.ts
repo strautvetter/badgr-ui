@@ -62,6 +62,7 @@ import { BgPopupMenu, BgPopupMenuTriggerDirective } from './components/bg-popup-
 import { SvgIconComponent } from './components/svg-icon.component';
 import { BgMarkdownComponent } from './directives/bg-markdown.component';
 import { BgBreadcrumbsComponent } from './components/bg-breadcrumbs/bg-breadcrumbs.component';
+import { CopyBadgeDialog } from './dialogs/copy-badge-dialog/copy-badge-dialog.component';
 import { MarkdownHintsDialog } from './dialogs/markdown-hints-dialog.component';
 import { IssuerManager } from '../issuer/services/issuer-manager.service';
 import { IssuerApiService } from '../issuer/services/issuer-api.service';
@@ -69,6 +70,8 @@ import { ZipService } from './util/zip-service/zip-service.service';
 import { BadgeLegendComponent } from './components/badge-legend/badge-legend.component';
 
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
+import { BadgeClassManager } from '../issuer/services/badgeclass-manager.service';
+import { BadgeClassApiService } from '../issuer/services/badgeclass-api.service';
 
 const DIRECTIVES = [
 	BgAwaitPromises,
@@ -105,6 +108,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	NewTermsDialog,
 	OAuthBannerComponent,
 	ShareSocialDialog,
+	CopyBadgeDialog,
 	MarkdownHintsDialog,
 	ShowMore,
 	SvgIconComponent,
@@ -149,6 +153,10 @@ export const COMMON_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, H
 		FormsModule,
 		LMarkdownEditorModule,
 		// RouterModule.forChild(routes)
+	],
+	providers: [
+		BadgeClassManager,
+		BadgeClassApiService
 	],
 	declarations: [...DIRECTIVES, ...COMMON_MODULE_COMPONENTS, ...PIPES, ForwardRouteComponent, BadgeLegendComponent],
 	exports: [...DIRECTIVES, ...COMMON_MODULE_COMPONENTS, ...PIPES, BadgeLegendComponent],

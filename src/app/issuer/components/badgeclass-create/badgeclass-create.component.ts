@@ -81,4 +81,8 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 			this.scrolled = false;
 		}
 	}
+
+	copyBadge() {
+		this.dialogService.copyBadgeDialog.openDialog();
+	}
 }

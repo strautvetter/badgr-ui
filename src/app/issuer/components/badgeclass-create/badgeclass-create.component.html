@@ -10,6 +10,16 @@
 			You can award a badge to multiple recipients over time.
 		</div>
 	</div>
+	<div class="l-containerxaxis l-containeryaxis l-responsivelist">
+		<button
+			type="submit"
+			class="button"
+			(click)="copyBadge()"
+			loading-message="Loading badge..."
+		>
+			Badge kopieren
+		</button>
+	</div>
 </div>
 
 <div *bgAwaitPromises="[issuerLoaded]" class="l-containerxaxis l-containeryaxis">

@@ -27,6 +27,7 @@ import { Issuer } from "./issuer/models/issuer.model";
 import { IssuerManager } from "./issuer/services/issuer-manager.service";
 import { Angulartics2GoogleAnalytics } from "angulartics2/ga";
 import { ImportModalComponent } from "./mozz-transition/components/import-modal/import-modal.component";
+import { CopyBadgeDialog } from './common/dialogs/copy-badge-dialog/copy-badge-dialog.component';
 
 // Shim in support for the :scope attribute
 // See https://github.com/lazd/scopedQuerySelectorShim and
@@ -62,6 +63,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	@ViewChild("markdownHintsDialog", {static: false})
 	private markdownHintsDialog: MarkdownHintsDialog;
+
+	@ViewChild("copyBadgeDialog", {static: false})
+	private copyBadgeDialog: CopyBadgeDialog;
 
 	@ViewChild("issuerLink", {static: false})
 	private issuerLink: unknown;
@@ -208,7 +212,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 			this.confirmDialog,
 			this.shareSocialDialog,
 			this.newTermsDialog,
-			this.markdownHintsDialog
+			this.markdownHintsDialog,
+			this.copyBadgeDialog
 		);
 	}
 

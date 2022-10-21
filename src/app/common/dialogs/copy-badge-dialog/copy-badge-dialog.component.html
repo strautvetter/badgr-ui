@@ -1,0 +1,80 @@
+<dialog
+	aria-labelledby="CopyBadgeDialog"
+	aria-describedby="dialog1Desc"
+	class="dialog dialog-is-active l-dialog"
+	role="dialog"
+>
+		<div class="dialog-x-box o-container">
+			<div class="dialog-x-header u-background-light3">
+				<h1>Badge kopieren</h1>
+				<button (click)="closeDialog()" class="buttonicon buttonicon-link">
+					<svg icon="icon_close"></svg>
+					<span class="visuallyhidden">Close</span>
+				</button>
+			</div>
+
+			<div
+				class="u-responsivepadding-yaxis u-responsivepadding-xaxis"
+				tabindex="-1"
+				id="sharelink"
+			>
+				<table class="datatable datatable-roundheaders datatable-onlyfirstcolumn datatable-verticalalignmiddle">
+					<thead class="datatable-x-head">
+						<tr class="datatable-x-header">
+							<th class="datatable-x-cell" scope="col">Badge</th>
+							<th class="datatable-x-cell" scope="col">Institution</th>
+							<th class="datatable-x-cell" scope="col"><span class="visuallyhidden">Actions</span></th>
+						</tr>
+					</thead>
+					<tbody class="datatable-x-body">
+						<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="true">
+						<ng-template ngFor let-badge [ngForOf]="badgeResults.badges" let-i="index">
+							<tr class="datatable-x-row">
+								<td class="datatable-x-cell">
+									<div class="l-flex l-flex-2x l-flex-aligncenter">
+										<img
+											class="badgeimage badgeimage-{{
+												badge.mostRelevantStatus
+											}} badgeimage-small u-margin-right2x l-flex-x-shrink0"
+											width="40"
+											[loading-src]="badgeLoadingImageUrl"
+											[error-src]="badgeFailedImageUrl"
+											[loaded-src]="badge.image"
+										/>
+										<a
+											class="u-text u-text-link u-text-breakword"
+											[routerLink]="['../earned-badge', badge.slug]"
+											>{{ badge.badgeClass.name }}</a
+										>
+										<div
+											class="datatable-x-status badgestatus badgestatus-intable badgestatus-{{
+												badge.mostRelevantStatus
+											}}"
+											*ngIf="badge.mostRelevantStatus"
+										>
+											{{ badge.mostRelevantStatus }}
+										</div>
+									</div>
+								</td>
+								<td class="datatable-x-cell u-text-body">{{ badge.badgeClass.issuer.name }}</td>
+								<td class="datatable-x-cell u-text-body">
+									<time [date]="badge?.issueDate" format="mediumDate"></time>
+								</td>
+								<td class="datatable-x-cell">
+									<button
+										class="button"
+										(click)="copyBadge(badge)"
+									>
+										Copy
+									</button>
+								</td>
+							</tr>
+						</ng-template>
+					</ng-template>
+					</tbody>
+				</table>
+			</div>
+
+			<p class="u-text-small">Bisherige Änderungen werden beim Kopieren überschrieben!</p>
+		</div>
+</dialog>
