@@ -32,6 +32,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	// issuers: Issuer[] = null;
 	badges: BadgeClass[] = null;
 	badgeResults: BadgeClass[] = null;
+	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
 	order = 'asc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
@@ -69,7 +70,13 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	get searchQuery() { return this._searchQuery; }
 	set searchQuery(query) {
 		this._searchQuery = query;
-		// this.saveDisplayState();
+		this.updateResults();
+	}
+
+	private _groupByIssuer = false;
+	get groupByIssuer() {return this._groupByIssuer;}
+	set groupByIssuer(val: boolean) {
+		this._groupByIssuer = val;
 		this.updateResults();
 	}
 
@@ -118,9 +125,11 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 	changeOrder(order){
 		if(order === 'asc'){
-			this.badgeResults.sort((a,b) => a.name.localeCompare(b.name))
+			this.badgeResults.sort((a,b) => a.name.localeCompare(b.name));
+			this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
-			this.badgeResults.sort((a,b) => b.name.localeCompare(a.name))
+			this.badgeResults.sort((a,b) => b.name.localeCompare(a.name));
+			this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
 
@@ -129,19 +138,56 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		let that = this;
 		// Clear Results
 		this.badgeResults = [];
+		this.badgeResultsByIssuer = [];
+		const badgeResultsByIssuerLocal = {};
 
-		var addIssuerToResults = function(item){
+		// var addIssuerToResults = function(item){
+		// 	that.badgeResults.push(item);
+		// }
+
+		var addBadgeToResultsByIssuer = function(item){
+
 			that.badgeResults.push(item);
+			
+			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
+			
+			if (!issuerResults) {
+				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingBadgeIssuer(
+					item.issuerName,
+					""
+				);
+
+				// append result to the issuerResults array bound to the view template.
+				that.badgeResultsByIssuer.push(issuerResults);
+			}
+
+			issuerResults.addBadge(item);
+
+			return true;
+
 		}
+		// this.badges
+		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
+		// 	.forEach(addIssuerToResults);
 		this.badges
 			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addIssuerToResults);
+			.forEach(addBadgeToResultsByIssuer);
 
 		// this.allBadges
 		// 	.filter(MatchingAlgorithm.badgeMatcher(this._searchQuery))
 		// 	.forEach(addBadgeToResults);
 
 		this.badgeResults.sort((a,b) => a.name.localeCompare(b.name))
+		this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+	}
+
+	private issuerIdToSlug(issuerId) {
+		if(issuerId.startsWith("http")) {
+			let splitted = (issuerId.split(/[/.\s]/))
+			return splitted[splitted.length-1]
+		} else {
+			return issuerId
+		}
 	}
 
 	openLegend(){
@@ -162,5 +208,21 @@ class MatchingAlgorithm {
 		return badge => (
 			StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp)
 		);
+	}
+}
+
+class MatchingBadgeIssuer {
+	constructor(
+		public issuerName: string,
+		public badge,
+		public badges: BadgeClass[] = [],
+	) {}
+
+	async addBadge(badge) {
+		if (badge.issuerName === this.issuerName) {
+			if (this.badges.indexOf(badge) < 0) {
+				this.badges.push(badge);
+			}
+		}
 	}
 }
