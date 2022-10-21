@@ -126,10 +126,12 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	changeOrder(order){
 		if(order === 'asc'){
 			this.badgeResults.sort((a,b) => a.name.localeCompare(b.name));
-			this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+			this.badgeResultsByIssuer.sort((a,b) => a.issuerName.localeCompare(b.issuerName))
+				.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
 			this.badgeResults.sort((a,b) => b.name.localeCompare(a.name));
-			this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
+			this.badgeResultsByIssuer.sort((a,b) => b.issuerName.localeCompare(a.issuerName))
+				.forEach(r => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
 
