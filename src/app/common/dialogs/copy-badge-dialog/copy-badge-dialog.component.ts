@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../common/services/message.service';
 import { Title } from '@angular/platform-browser';
@@ -16,7 +16,7 @@ import { BaseDialog } from '../base-dialog';
 })
 export class CopyBadgeDialog extends BaseDialog {
 	Array = Array;
-	resolveFunc: () => void;
+	resolveFunc: (BadgeClass) => void;
 	rejectFunc: () => void;
 
 	badges: BadgeClass[] = null;
@@ -54,7 +54,12 @@ export class CopyBadgeDialog extends BaseDialog {
 
 	closeDialog() {
 		this.closeModal();
-		this.resolveFunc();
+		this.rejectFunc();
+	}
+
+	copyBadge(badge) {
+		this.closeModal();
+		this.resolveFunc(badge);
 	}
 
 	async loadBadges() {

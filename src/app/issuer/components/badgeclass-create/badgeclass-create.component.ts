@@ -24,6 +24,7 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	issuerLoaded: Promise<unknown>;
 	breadcrumbLinkEntries: LinkEntry[] = [];
 	scrolled = false;
+	copiedBadgeClass: BadgeClass = null;
 
 	@ViewChild('badgeimage', { static: false }) badgeImage;
 
@@ -83,6 +84,10 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	}
 
 	copyBadge() {
-		this.dialogService.copyBadgeDialog.openDialog();
+		this.dialogService.copyBadgeDialog.openDialog()
+			.then((data: any) => { // TODO
+				this.copiedBadgeClass = data
+			})
+			.catch((error) => console.log(error));
 	}
 }
