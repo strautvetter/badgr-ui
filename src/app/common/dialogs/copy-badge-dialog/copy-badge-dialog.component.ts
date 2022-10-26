@@ -40,7 +40,6 @@ export class CopyBadgeDialog extends BaseDialog {
 		renderer: Renderer2,
 	) {
 		super(componentElem, renderer);
-		this.badgeResults = []
 	}
 
 	async openDialog(): Promise<void> {
@@ -64,7 +63,6 @@ export class CopyBadgeDialog extends BaseDialog {
 				(badges) => {
 					this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 					this.badgeResults = this.badges;
-					console.log(this.badgeResults)
 					resolve(badges);
 				},
 				(error) => {

@@ -28,49 +28,36 @@
 					</thead>
 					<tbody class="datatable-x-body">
 						<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="true">
-						<ng-template ngFor let-badge [ngForOf]="badgeResults.badges" let-i="index">
-							<tr class="datatable-x-row">
-								<td class="datatable-x-cell">
-									<div class="l-flex l-flex-2x l-flex-aligncenter">
-										<img
-											class="badgeimage badgeimage-{{
-												badge.mostRelevantStatus
-											}} badgeimage-small u-margin-right2x l-flex-x-shrink0"
-											width="40"
-											[loading-src]="badgeLoadingImageUrl"
-											[error-src]="badgeFailedImageUrl"
-											[loaded-src]="badge.image"
-										/>
-										<a
-											class="u-text u-text-link u-text-breakword"
-											[routerLink]="['../earned-badge', badge.slug]"
-											>{{ badge.badgeClass.name }}</a
-										>
-										<div
-											class="datatable-x-status badgestatus badgestatus-intable badgestatus-{{
-												badge.mostRelevantStatus
-											}}"
-											*ngIf="badge.mostRelevantStatus"
-										>
-											{{ badge.mostRelevantStatus }}
+							<ng-template ngFor let-badge [ngForOf]="badgeResults" let-i="index">
+								<tr class="datatable-x-row">
+									<td class="datatable-x-cell">
+										<div class="l-flex l-flex-2x l-flex-aligncenter">
+											<img
+												class="badgeimage badgeimage-test badgeimage-small u-margin-right2x l-flex-x-shrink0"
+												width="40"
+												[loading-src]="badgeLoadingImageUrl"
+												[error-src]="badgeFailedImageUrl"
+												[loaded-src]="badge.image"
+											/> 
+											<a
+												class="u-text u-text-link u-text-breakword"
+												[routerLink]="['../earned-badge', badge.slug]"
+												>{{ badge.name }}</a
+											>
 										</div>
-									</div>
-								</td>
-								<td class="datatable-x-cell u-text-body">{{ badge.badgeClass.issuer.name }}</td>
-								<td class="datatable-x-cell u-text-body">
-									<time [date]="badge?.issueDate" format="mediumDate"></time>
-								</td>
-								<td class="datatable-x-cell">
-									<button
-										class="button"
-										(click)="copyBadge(badge)"
-									>
-										Copy
-									</button>
-								</td>
-							</tr>
+									</td>
+									<td class="datatable-x-cell u-text-body">{{ badge.issuerName }}</td>
+									<td class="datatable-x-cell">
+										<button
+											class="button"
+											(click)="copyBadge(badge)"
+										>
+											Copy
+										</button>
+									</td>
+								</tr>
+							</ng-template>
 						</ng-template>
-					</ng-template>
 					</tbody>
 				</table>
 			</div>
