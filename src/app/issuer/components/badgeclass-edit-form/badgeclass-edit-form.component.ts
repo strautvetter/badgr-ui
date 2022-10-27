@@ -34,12 +34,20 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	set badgeClass(badgeClass: BadgeClass) {
 		if (this.existingBadgeClass !== badgeClass) {
 			this.existingBadgeClass = badgeClass;
-			this.initFormFromExisting();
+			this.initFormFromExisting(this.existingBadgeClass);
+		}
+	}
+
+	@Input()
+	set initBadgeClass(badgeClass: BadgeClass) {
+		if (this.initialisedBadgeClass !== badgeClass) {
+			this.initialisedBadgeClass = badgeClass;
+			this.initFormFromExisting(this.initialisedBadgeClass);
 		}
 	}
 
 	get badgeClass() {
-		return this.existingBadgeClass;
+		return (this.initialisedBadgeClass) ? this.initialisedBadgeClass : this.existingBadgeClass;
 	}
 
 	get alignmentFieldDirty() {
@@ -84,6 +92,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	formElem: ElementRef<HTMLFormElement>;
 
 	existingBadgeClass: BadgeClass | null = null;
+
+	initialisedBadgeClass: BadgeClass | null = null;
 
 	@Output()
 	save = new EventEmitter<Promise<BadgeClass>>();
@@ -165,8 +175,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		this.baseUrl = this.configService.apiConfig.baseUrl;
 	}
 
-	initFormFromExisting() {
-		const badgeClass = this.existingBadgeClass;
+	initFormFromExisting(badgeClass: BadgeClass) {
 
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
