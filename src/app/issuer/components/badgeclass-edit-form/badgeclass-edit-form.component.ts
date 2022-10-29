@@ -184,9 +184,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
-				badge_study_load: badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad,
-				badge_category: badgeClass.extension['extensions:CategoryExtension'].Category,
-				badge_level: badgeClass.extension['extensions:LevelExtension'].Level,
+				badge_study_load: (badgeClass.extension['extensions:StudyLoadExtension']) ? badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad : null,
+				badge_category: (badgeClass.extension['extensions:CategoryExtension']) ? badgeClass.extension['extensions:CategoryExtension'].Category : null,
+				badge_level: (badgeClass.extension['extensions:LevelExtension']) ? badgeClass.extension['extensions:LevelExtension'].Level : null,
 				alignments: this.badgeClass.alignments.map((alignment) => ({
 					target_name: alignment.target_name,
 					target_url: alignment.target_url,
