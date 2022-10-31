@@ -43,15 +43,6 @@
     background: #3bb2d0;
 }
 
-.dialog-x-height {
-    max-height: 50vh;
-    overflow: auto;
-}
-
-.dialog-x-options {
-    padding-bottom: calc(var(--gridspacing) * 1.5); 
-}
-
 .badgecard-x-issuer:hover {
     text-decoration: underline;
 }
