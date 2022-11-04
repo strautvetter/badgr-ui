@@ -184,7 +184,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
-				badge_image: badgeClass.image,
+				badge_image: (badgeClass.extension['extensions:OrgImageExtension']) ? badgeClass.extension['extensions:OrgImageExtension'].OrgImage : null, // TODO: what about editing existing badges
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
@@ -385,6 +385,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		const categoryExtensionContextUrl = `${this.baseUrl}/static/extensions/CategoryExtension/context.json`;
 		const levelExtensionContextUrl = `${this.baseUrl}/static/extensions/LevelExtension/context.json`;
 		const basedOnExtensionContextUrl = `${this.baseUrl}/static/extensions/BasedOnExtension/context.json`;
+		const orgImageExtensionContextUrl = `${this.baseUrl}/static/extensions/OrgImageExtension/context.json`;
 
 		if (this.existingBadgeClass) {
 			this.existingBadgeClass.name = formState.badge_name;
@@ -410,6 +411,11 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					'@context': levelExtensionContextUrl,
 					type: ['Extension', 'extensions:LevelExtension'],
 					Level: String(formState.badge_level),
+				},
+				'extensions:OrgImageExtension': {
+					'@context': orgImageExtensionContextUrl,
+					type: ['Extension', 'extensions:OrgImageExtension'],
+					OrgImage: formState.badge_image,
 				},
 			};
 			if (this.expirationEnabled) {
@@ -449,6 +455,11 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						'@context': basedOnExtensionContextUrl,
 						type: ['Extension', 'extensions:BasedOnExtension'],
 						BasedOn: formState.badge_based_on,
+					},
+					'extensions:OrgImageExtension': {
+						'@context': orgImageExtensionContextUrl,
+						type: ['Extension', 'extensions:OrgImageExtension'],
+						OrgImage: formState.badge_image,
 					},
 				},
 			} as ApiBadgeClassForCreation;
