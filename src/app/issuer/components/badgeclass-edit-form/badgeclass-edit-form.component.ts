@@ -69,6 +69,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		.addControl('badge_study_load', 1, [Validators.required, this.positiveInteger, Validators.max(1000)])
 		.addControl('badge_category', '', Validators.required)
 		.addControl('badge_level', 'a1', Validators.required)
+		.addControl('badge_based_on', {
+			slug: '',
+			issuerSlug: ''
+		})
 		.addArray(
 			'alignments',
 			typedFormGroup()
@@ -187,6 +191,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				badge_study_load: (badgeClass.extension['extensions:StudyLoadExtension']) ? badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad : null,
 				badge_category: (badgeClass.extension['extensions:CategoryExtension']) ? badgeClass.extension['extensions:CategoryExtension'].Category : null,
 				badge_level: (badgeClass.extension['extensions:LevelExtension']) ? badgeClass.extension['extensions:LevelExtension'].Level : null,
+				badge_based_on: {
+					slug: badgeClass.slug,
+					issuerSlug: badgeClass.issuerSlug
+				},
 				alignments: this.badgeClass.alignments.map((alignment) => ({
 					target_name: alignment.target_name,
 					target_url: alignment.target_url,
@@ -376,6 +384,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		const studyLoadExtensionContextUrl = `${this.baseUrl}/static/extensions/StudyLoadExtension/context.json`;
 		const categoryExtensionContextUrl = `${this.baseUrl}/static/extensions/CategoryExtension/context.json`;
 		const levelExtensionContextUrl = `${this.baseUrl}/static/extensions/LevelExtension/context.json`;
+		const basedOnExtensionContextUrl = `${this.baseUrl}/static/extensions/BasedOnExtension/context.json`;
 
 		if (this.existingBadgeClass) {
 			this.existingBadgeClass.name = formState.badge_name;
@@ -435,6 +444,11 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						'@context': levelExtensionContextUrl,
 						type: ['Extension', 'extensions:LevelExtension'],
 						Level: String(formState.badge_level),
+					},
+					'extensions:BasedOnExtension': {
+						'@context': basedOnExtensionContextUrl,
+						type: ['Extension', 'extensions:BasedOnExtension'],
+						BasedOn: formState.badge_based_on,
 					},
 				},
 			} as ApiBadgeClassForCreation;
