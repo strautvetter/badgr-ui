@@ -34,7 +34,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	set badgeClass(badgeClass: BadgeClass) {
 		if (this.existingBadgeClass !== badgeClass) {
 			this.existingBadgeClass = badgeClass;
-			this.initFormFromExisting(this.existingBadgeClass);
+			this.initFormFromExisting(this.existingBadgeClass, true);
 		}
 	}
 
@@ -42,7 +42,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	set initBadgeClass(badgeClass: BadgeClass) {
 		if (this.initialisedBadgeClass !== badgeClass) {
 			this.initialisedBadgeClass = badgeClass;
-			this.initFormFromExisting(this.initialisedBadgeClass);
+			this.initFormFromExisting(this.initialisedBadgeClass, false);
 		}
 	}
 
@@ -179,12 +179,13 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		this.baseUrl = this.configService.apiConfig.baseUrl;
 	}
 
-	initFormFromExisting(badgeClass: BadgeClass) {
+	initFormFromExisting(badgeClass: BadgeClass, exisitng: Boolean) {
 
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
-				badge_image: (badgeClass.extension['extensions:OrgImageExtension']) ? badgeClass.extension['extensions:OrgImageExtension'].OrgImage : null, // TODO: what about editing existing badges
+				badge_image: (badgeClass.extension['extensions:OrgImageExtension']) ?
+					badgeClass.extension['extensions:OrgImageExtension'].OrgImage : (exisitng ? badgeClass.image : null),
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
