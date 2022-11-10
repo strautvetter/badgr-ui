@@ -187,7 +187,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
-				badge_image: null, // Setting the image here is causing me a lot of problems with events being triggered, so I resorted to just set it in this.imageField...
+				badge_image: (this.existing ? badgeClass.image : null), // Setting the image here is causing me a lot of problems with events being triggered, so I resorted to just set it in this.imageField...
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
@@ -422,12 +422,17 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					type: ['Extension', 'extensions:LevelExtension'],
 					Level: String(formState.badge_level),
 				},
-				'extensions:OrgImageExtension': {
-					'@context': orgImageExtensionContextUrl,
-					type: ['Extension', 'extensions:OrgImageExtension'],
-					OrgImage: this.currentImage,
-				},
 			};
+			if(this.currentImage) {
+				this.existingBadgeClass.extension = {
+					...this.existingBadgeClass.extension,
+					'extensions:OrgImageExtension': {
+						'@context': orgImageExtensionContextUrl,
+						type: ['Extension', 'extensions:OrgImageExtension'],
+						OrgImage: this.currentImage,
+					},
+				}
+			}
 			if (this.expirationEnabled) {
 				this.existingBadgeClass.expiresDuration = expirationState.expires_duration as BadgeClassExpiresDuration;
 				this.existingBadgeClass.expiresAmount = parseInt(expirationState.expires_amount, 10);
@@ -437,7 +442,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 			this.savePromise = this.existingBadgeClass.save();
 		} else {
-			const badgeClassData = {
+			let badgeClassData = {
 				name: formState.badge_name,
 				description: formState.badge_description,
 				image: formState.badge_image,
@@ -466,13 +471,18 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						type: ['Extension', 'extensions:BasedOnExtension'],
 						BasedOn: formState.badge_based_on,
 					},
+				},
+			} as ApiBadgeClassForCreation;
+			if(this.currentImage) {
+				badgeClassData.extensions = {
+					...badgeClassData.extensions,
 					'extensions:OrgImageExtension': {
 						'@context': orgImageExtensionContextUrl,
 						type: ['Extension', 'extensions:OrgImageExtension'],
 						OrgImage: this.currentImage,
 					},
-				},
-			} as ApiBadgeClassForCreation;
+				}
+			}
 			if (this.expirationEnabled) {
 				badgeClassData.expires = {
 					duration: expirationState.expires_duration as BadgeClassExpiresDuration,
@@ -496,16 +506,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'Auto-generated image'));
 	}
 	generateUploadImage(image, formdata) {
-		if(this.currentImage) {
-			// the imageUploaded-event of the angular image component is also called after initialising the component because the image is set in initFormFromExisting
-			if(this.initedCurrentImage) {
-				this.currentImage = image.slice();
-				this.badgeStudio
-					.generateUploadImage(image.slice(), formdata)
-					.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
-			} else {
-				this.initedCurrentImage = true
-			}
+		// the imageUploaded-event of the angular image component is also called after initialising the component because the image is set in initFormFromExisting
+		if(typeof this.currentImage == "undefined" || this.initedCurrentImage) {
+			this.currentImage = image.slice();
+			this.badgeStudio
+				.generateUploadImage(image.slice(), formdata)
+				.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
+		} else {
+			this.initedCurrentImage = true
 		}
 	}
 	adjustUploadImage(formdata) {
