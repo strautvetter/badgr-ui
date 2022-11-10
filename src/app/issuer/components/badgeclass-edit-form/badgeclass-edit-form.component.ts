@@ -187,8 +187,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
-				badge_image: (badgeClass.extension['extensions:OrgImageExtension']) ?
-					badgeClass.extension['extensions:OrgImageExtension'].OrgImage : (this.existing ? badgeClass.image : null),
+				badge_image: null, // Setting the image here is causing me a lot of problems with events being triggered, so I resorted to just set it in this.imageField...
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
@@ -210,6 +209,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 			this.currentImage = (badgeClass.extension['extensions:OrgImageExtension']) ?
 				badgeClass.extension['extensions:OrgImageExtension'].OrgImage : undefined;
+			if(this.currentImage) {
+				this.imageField.useDataUrl(this.currentImage, 'BADGE')
+			}
 			this.tags = new Set();
 			this.badgeClass.tags.forEach((t) => this.tags.add(t));
 
