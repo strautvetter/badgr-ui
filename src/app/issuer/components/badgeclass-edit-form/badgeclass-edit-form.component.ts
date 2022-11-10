@@ -34,7 +34,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	set badgeClass(badgeClass: BadgeClass) {
 		if (this.existingBadgeClass !== badgeClass) {
 			this.existingBadgeClass = badgeClass;
-			this.initFormFromExisting(this.existingBadgeClass, true);
+			this.existing = true;
+			this.initFormFromExisting(this.existingBadgeClass);
 		}
 	}
 
@@ -42,7 +43,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	set initBadgeClass(badgeClass: BadgeClass) {
 		if (this.initialisedBadgeClass !== badgeClass) {
 			this.initialisedBadgeClass = badgeClass;
-			this.initFormFromExisting(this.initialisedBadgeClass, false);
+			this.initFormFromExisting(this.initialisedBadgeClass);
 		}
 	}
 
@@ -158,6 +159,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	showAdvanced: boolean[] = [false];
 
 	currentImage;
+	initedCurrentImage = false;
+	existing = false;
 	showLegend = false;
 
 	constructor(
@@ -179,13 +182,13 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		this.baseUrl = this.configService.apiConfig.baseUrl;
 	}
 
-	initFormFromExisting(badgeClass: BadgeClass, exisitng: Boolean) {
+	initFormFromExisting(badgeClass: BadgeClass) {
 
 		if (badgeClass) {
 			this.badgeClassForm.setValue({
 				badge_name: badgeClass.name,
 				badge_image: (badgeClass.extension['extensions:OrgImageExtension']) ?
-					badgeClass.extension['extensions:OrgImageExtension'].OrgImage : (exisitng ? badgeClass.image : null),
+					badgeClass.extension['extensions:OrgImageExtension'].OrgImage : (this.existing ? badgeClass.image : null),
 				badge_description: badgeClass.description,
 				badge_criteria_url: badgeClass.criteria_url,
 				badge_criteria_text: badgeClass.criteria_text,
@@ -205,6 +208,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				})),
 			});
 
+			this.currentImage = (badgeClass.extension['extensions:OrgImageExtension']) ?
+				badgeClass.extension['extensions:OrgImageExtension'].OrgImage : undefined;
 			this.tags = new Set();
 			this.badgeClass.tags.forEach((t) => this.tags.add(t));
 
@@ -213,6 +218,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			if (badgeClass.expiresAmount && badgeClass.expiresDuration) {
 				this.enableExpiration();
 			}
+			
+			this.adjustUploadImage(this.badgeClassForm.value);
 		}
 	}
 
@@ -223,7 +230,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			if(this.currentImage){
 				//timeout because of workaround for angular bug.
 				setTimeout(function(){
-					that.generateUploadImage(that.currentImage, that.badgeClassForm.value);
+					that.adjustUploadImage(that.badgeClassForm.value);
 				},10)
 			}
 		})
@@ -231,7 +238,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			if(this.currentImage){
 				//timeout because of workaround for angular bug.
 				setTimeout(function(){
-					that.generateUploadImage(that.currentImage, that.badgeClassForm.value);
+					that.adjustUploadImage(that.badgeClassForm.value);
 				},10)
 			}
 		})
@@ -416,7 +423,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				'extensions:OrgImageExtension': {
 					'@context': orgImageExtensionContextUrl,
 					type: ['Extension', 'extensions:OrgImageExtension'],
-					OrgImage: formState.badge_image,
+					OrgImage: this.currentImage,
 				},
 			};
 			if (this.expirationEnabled) {
@@ -460,7 +467,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					'extensions:OrgImageExtension': {
 						'@context': orgImageExtensionContextUrl,
 						type: ['Extension', 'extensions:OrgImageExtension'],
-						OrgImage: formState.badge_image,
+						OrgImage: this.currentImage,
 					},
 				},
 			} as ApiBadgeClassForCreation;
@@ -487,10 +494,24 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'Auto-generated image'));
 	}
 	generateUploadImage(image, formdata) {
-		this.currentImage = image;
-		this.badgeStudio
-			.generateUploadImage(image, formdata)
-			.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
+		if(this.currentImage) {
+			// the imageUploaded-event of the angular image component is also called after initialising the component because the image is set in initFormFromExisting
+			if(this.initedCurrentImage) {
+				this.currentImage = image.slice();
+				this.badgeStudio
+					.generateUploadImage(image.slice(), formdata)
+					.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
+			} else {
+				this.initedCurrentImage = true
+			}
+		}
+	}
+	adjustUploadImage(formdata) {
+		if(this.currentImage) {
+			this.badgeStudio
+				.generateUploadImage(this.currentImage.slice(), formdata)
+				.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
+		}
 	}
 
 	positiveInteger(control: AbstractControl) {

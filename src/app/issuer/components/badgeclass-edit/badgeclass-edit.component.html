@@ -18,8 +18,14 @@
 	</header>
 
 	<div class="l-containerxaxis l-containeryaxis">
-		<badgeclass-edit-form (save)="badgeClassSaved($event)" (cancel)="editingCanceled()" [issuerSlug]="issuerSlug"
-		 [badgeClass]="badgeClass" submitText="Save Changes" submittingText="Saving..."></badgeclass-edit-form>
+		<badgeclass-edit-form #badgeimage
+			(save)="badgeClassSaved($event)"
+			(cancel)="editingCanceled()"
+			[issuerSlug]="issuerSlug"
+			[badgeClass]="badgeClass"
+			[scrolled]="scrolled"
+			submitText="Save Changes"
+			submittingText="Saving..."></badgeclass-edit-form>
 	</div>
 
 
