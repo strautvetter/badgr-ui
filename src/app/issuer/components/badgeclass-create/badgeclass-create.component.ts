@@ -40,7 +40,6 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 		private configService: AppConfigService,
 		protected dialogService: CommonDialogsService
 	) {
-		// TODO: how does the creation work? If I set existingBadge in the Editor it overwrites the copied one...
 		super(router, route, sessionService);
 		title.setTitle(`Create Badge - ${this.configService.theme['serviceName'] || 'Badgr'}`);
 		this.issuerSlug = this.route.snapshot.params['issuerSlug'];
