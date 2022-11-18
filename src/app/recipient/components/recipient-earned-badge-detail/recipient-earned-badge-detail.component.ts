@@ -209,6 +209,11 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 			this.eventService.externalToolLaunch.next(launchInfo);
 		});
 	}
+
+	exportPdf() {
+		this.dialogService.exportPdfDialog.openDialog(this.badge)
+			.catch((error) => console.log(error));
+	}
 }
 
 export function badgeShareDialogOptionsFor(badge: RecipientBadgeInstance): ShareSocialDialogOptions {

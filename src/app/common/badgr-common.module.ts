@@ -69,6 +69,7 @@ import { ZipService } from './util/zip-service/zip-service.service';
 import { BadgeLegendComponent } from './components/badge-legend/badge-legend.component';
 
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
+import { ExportPdfDialog } from './dialogs/export-pdf-dialog/export-pdf-dialog.component';
 
 const DIRECTIVES = [
 	BgAwaitPromises,
@@ -111,6 +112,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	TimeComponent,
 	TooltipComponent,
 	TruncatedTextComponent,
+	ExportPdfDialog,
 ];
 
 const SERVICES = [

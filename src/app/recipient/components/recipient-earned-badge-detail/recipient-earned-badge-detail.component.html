@@ -37,6 +37,12 @@
 						[href]="v2BakedUrl"
 						>Download Baked Image</a>
 					-->
+					<button
+						class="menuitem"
+						(click)="exportPdf()"
+						loading-message="Loading badge..."
+						[disabled-when-requesting]="true"
+						><svg icon="icon_file"></svg>Export to PDF</button>
 					<button class="menuitem"
 						 (click)="deleteBadge(badge)"
 						 [disabled-when-requesting]="true"

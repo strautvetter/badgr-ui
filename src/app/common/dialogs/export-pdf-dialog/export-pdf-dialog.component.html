@@ -1,0 +1,31 @@
+<dialog
+	aria-labelledby="exportPdfDialog"
+	aria-describedby="dialog1Desc"
+	class="dialog dialog-is-active l-dialog"
+	role="dialog"
+>
+	<div class="dialog-x-box o-container">
+		<div class="dialog-x-header u-background-light3">
+			<h1>Badge exportieren</h1>
+			<button (click)="closeDialog()" class="buttonicon buttonicon-link">
+				<svg icon="icon_close"></svg>
+				<span class="visuallyhidden">Close</span>
+			</button>
+		</div>
+
+		<div class="category u-padding-xaxis3x u-margin-top2x warning">
+			<embed #outputPdf class="output-pdf-embed"/>
+			<div class="l-stack l-stack-right u-margin-top1x u-padding-bottom2x">
+				<button
+					type="submit"
+					class="button"
+					(click)="downloadPdf()"
+					loading-message="Downloading..."
+					[disabled-when-requesting]="true"
+					>
+					Herunterladen
+				</button>
+			</div>
+		</div>
+	</div>
+</dialog>
