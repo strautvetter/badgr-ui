@@ -15,9 +15,24 @@
 					>{{ allBadges.length }} {{ allBadges.length == 1 ? 'Badge' : 'Badges' }}</span
 				>
 			</h2>
-			<button class="button topbar-x-button" (click)="addBadge()" [disabled-when-requesting]="true">
-				Badge hinzufügen
-			</button>
+			<div class="topbar-x-internalheading">
+				<button class="button topbar-x-button" (click)="addBadge()" [disabled-when-requesting]="true">
+					Badge hinzufügen
+				</button>
+				<button class="topbar-x-button buttonicon buttonicon-secondary" [bgPopupMenuTrigger]="collectionActionMenu">
+					<svg icon="icon_more"></svg>
+					<span class="visuallyhidden">mehr</span>
+				</button>
+				<bg-popup-menu #collectionActionMenu>
+					<button
+						class="menuitem"
+						(click)="exportPdf()"
+						loading-message="Loading badge..."
+						[disabled-when-requesting]="true"
+						><svg icon="icon_file"></svg>Export to PDF</button>
+				</bg-popup-menu>
+			</div>
+			
 		</div>
 	</div>
 

@@ -251,6 +251,11 @@ export class RecipientEarnedBadgeListComponent extends BaseAuthenticatedRoutable
 		this.badgeResults.sort((a, b) => b.badge.issueDate.getTime() - a.badge.issueDate.getTime());
 		this.issuerResults.forEach(r => r.badges.sort((a, b) => b.issueDate.getTime() - a.issueDate.getTime()));
 	}
+
+	exportPdf() {
+		this.dialogService.exportPdfDialog.openDialogForBackpack(this.badgeResults)
+			.catch((error) => console.log(error));
+	}
 }
 
 class BadgeResult {
