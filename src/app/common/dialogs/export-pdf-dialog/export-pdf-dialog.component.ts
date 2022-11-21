@@ -5,7 +5,7 @@ import { RecipientBadgeInstance } from '../../../recipient/models/recipient-badg
 
 import { jsPDF } from "jspdf";
 import { ApiRecipientBadgeClass, ApiRecipientBadgeIssuer } from '../../../recipient/models/recipient-badge-api.model';
-import { RecipientBadgeCollection } from 'src/app/recipient/models/recipient-badge-collection.model';
+import { RecipientBadgeCollection } from '../../../recipient/models/recipient-badge-collection.model';
 
 @Component({
 	selector: 'export-pdf-dialog',
