@@ -88,6 +88,8 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 			.then((data: any) => {
 				this.copiedBadgeClass = data
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+				this.messageService.reportAndThrowError('Failed to load badges to copy', error);
+			});
 	}
 }
