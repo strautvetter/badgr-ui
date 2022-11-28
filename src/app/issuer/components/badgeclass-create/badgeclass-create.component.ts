@@ -14,6 +14,7 @@ import { CommonDialogsService } from '../../../common/services/common-dialogs.se
 import { BadgeClass } from '../../models/badgeclass.model';
 import { AppConfigService } from '../../../common/app-config.service';
 import { LinkEntry } from '../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component';
+import { BadgeClassManager } from '../../services/badgeclass-manager.service';
 
 @Component({
 	templateUrl: 'badgeclass-create.component.html',
@@ -26,6 +27,9 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	scrolled = false;
 	copiedBadgeClass: BadgeClass = null;
 
+	badgesLoaded: Promise<unknown>;
+	badges: BadgeClass[] = null;
+
 	@ViewChild('badgeimage', { static: false }) badgeImage;
 
 	constructor(
@@ -36,7 +40,7 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 		protected title: Title,
 		protected messageService: MessageService,
 		protected issuerManager: IssuerManager,
-		// protected badgeClassManager: BadgeClassManager,
+		protected badgeClassService: BadgeClassManager,
 		private configService: AppConfigService,
 		protected dialogService: CommonDialogsService
 	) {
@@ -51,6 +55,25 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 				{ title: issuer.name, routerLink: ['/issuer/issuers', this.issuerSlug] },
 				{ title: 'Create Badge' },
 			];
+
+			this.badgesLoaded = new Promise((resolve, reject) => {
+				this.badgeClassService.badgesByIssuerUrl$.subscribe(
+					(badgesByIssuer) => {
+						this.badges = [];
+						for (const [key, value] of Object.entries(badgesByIssuer)) {
+							this.badges =  this.badges.concat(value)
+						}
+						resolve();
+					},
+					(error) => {
+						this.messageService.reportAndThrowError(
+							`Failed to load badges for ${this.issuer ? this.issuer.name : this.issuerSlug}`,
+							error
+						);
+						resolve();
+					}
+				);
+			});
 		});
 	}
 
@@ -84,7 +107,7 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	}
 
 	copyBadge() {
-		this.dialogService.copyBadgeDialog.openDialog()
+		this.dialogService.copyBadgeDialog.openDialog(this.badges)
 			.then((data: any) => {
 				this.copiedBadgeClass = data
 			})

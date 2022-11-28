@@ -7,8 +7,6 @@ import { BaseDialog } from '../base-dialog';
 import { StringMatchingUtil } from '../../util/string-matching-util';
 import { groupIntoArray, groupIntoObject } from '../../util/array-reducers';
 
-// somehow this is always constructed??
-
 @Component({
 	selector: 'copy-badge-dialog',
 	templateUrl: 'copy-badge-dialog.component.html',
@@ -53,8 +51,12 @@ export class CopyBadgeDialog extends BaseDialog {
 		super(componentElem, renderer);
 	}
 
-	async openDialog(): Promise<void> {
-		this.badgesLoaded = this.loadBadges();
+	async openDialog(badges: BadgeClass[]): Promise<void> {
+		this.badgesLoaded = new Promise((resolve, reject) => {
+			this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			this.updateBadges(badges)
+			resolve(this.badges);
+		});
 		this.showModal();
 
 		return new Promise<void>((resolve, reject) => {
@@ -71,21 +73,6 @@ export class CopyBadgeDialog extends BaseDialog {
 	copyBadge(badge) {
 		this.closeModal();
 		this.resolveFunc(badge);
-	}
-
-	async loadBadges() {
-		return new Promise(async (resolve, reject) => {
-			this.badgeClassService.allPublicBadges$.subscribe(
-				(badges) => {
-					this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-					this.updateBadges(badges)
-					resolve(badges);
-				},
-				(error) => {
-					this.messageService.reportAndThrowError('Failed to load badges', error);
-				}
-			);
-		});
 	}
 
 	private updateBadges(allBadges: BadgeClass[]) {
