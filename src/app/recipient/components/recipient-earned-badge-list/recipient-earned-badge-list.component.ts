@@ -18,7 +18,7 @@ import {UserProfileManager} from '../../../common/services/user-profile-manager.
 import {AppConfigService} from '../../../common/app-config.service';
 import { ImportLauncherDirective } from "../../../mozz-transition/directives/import-launcher/import-launcher.directive";
 import { LinkEntry } from "../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component";
-import { UserProfile } from 'src/app/common/model/user-profile.model';
+import { UserProfile } from '../../../common/model/user-profile.model';
 
 type BadgeDispay = "grid" | "list" ;
 
