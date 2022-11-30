@@ -1,0 +1,80 @@
+<dialog
+	aria-labelledby="CopyBadgeDialog"
+	aria-describedby="dialog1Desc"
+	class="dialog dialog-is-active l-dialog"
+	role="dialog"
+>
+		<div class="dialog-x-box o-container">
+			<div class="dialog-x-header u-background-light3">
+				<h1>Icon suchen</h1>
+				<button (click)="closeDialog()" class="buttonicon buttonicon-link">
+					<svg icon="icon_close"></svg>
+					<span class="visuallyhidden">Close</span>
+				</button>
+			</div>
+			<div
+				class="u-responsivepadding-yaxis u-responsivepadding-xaxis"
+				tabindex="-1"
+				id="sharelink"
+			>
+				<div class="forminput l-actionbar-x-search dialog-x-options">
+					<div class="forminput-x-inputs">
+						<input
+							type="text"
+							name="forminput"
+							id="forminput"
+							placeholder="Badges durchsuchen"
+							[(ngModel)]="searchQuery"
+						/>
+						<svg class="forminput-x-icon" icon="icon_search"></svg>
+					</div>
+				</div>
+				<div class="dialog-x-height">
+						<table class="datatable datatable-roundheaders datatable-onlyfirstcolumn datatable-verticalalignmiddle">
+							<thead class="datatable-x-head">
+								<tr class="datatable-x-header">
+									<th class="datatable-x-cell" scope="col">Icon</th>
+									<th class="datatable-x-cell" scope="col">Name</th>
+									<th class="datatable-x-cell" scope="col"><span class="visuallyhidden">ID</span></th>
+								</tr>
+							</thead>
+							<tbody class="datatable-x-body">
+								<ng-template [bgAwaitPromises]="[IconsLoaded]" [showLoader]="true">
+									<!-- Icons -->
+									<ng-template ngFor let-icon [ngForOf]="icons" let-i="index">
+										<tr class="datatable-x-row">
+											<td class="datatable-x-cell">
+												<div class="l-flex l-flex-2x l-flex-aligncenter">
+													<img
+														class="badgeimage badgeimage-test badgeimage-small u-margin-right2x l-flex-x-shrink0"
+														width="40"
+														[loading-src]="badgeLoadingImageUrl"
+														[error-src]="badgeFailedImageUrl"
+														[loaded-src]="icon.icon_url"
+													/> 
+													<a
+														class="u-text u-text-link u-text-breakword"
+														[routerLink]=""
+														(click)="copyBadge(badge)"
+														>{{ icon.term }}</a
+													>
+												</div>
+											</td>
+											<td class="datatable-x-cell u-text-body">{{ icon.term_id }}</td>
+											<td class="datatable-x-cell">
+												<button
+													class="button"
+													(click)="selectIcon(icon)"
+												>
+													Select
+												</button>
+											</td>
+										</tr>
+									</ng-template>
+								</ng-template>
+							</tbody>
+						</table>
+				</div>
+			</div>
+		</div>
+</dialog>

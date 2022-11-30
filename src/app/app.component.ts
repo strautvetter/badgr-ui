@@ -7,6 +7,7 @@ import {CommonDialogsService} from './common/services/common-dialogs.service';
 import {AppConfigService} from './common/app-config.service';
 import {ShareSocialDialog} from './common/dialogs/share-social-dialog/share-social-dialog.component';
 import {ConfirmDialog} from './common/dialogs/confirm-dialog.component';
+import {NounprojectDialog} from './common/dialogs/nounproject-dialog/nounproject-dialog.component';
 
 import '../thirdparty/scopedQuerySelectorShim';
 import {EventsService} from './common/services/events.service';
@@ -53,6 +54,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	@ViewChild("confirmDialog", {static: false})
 	private confirmDialog: ConfirmDialog;
+
+	@ViewChild("nounprojectDialog", {static: false})
+	private nounprojectDialog: NounprojectDialog;
 
 	@ViewChild("newTermsDialog", {static: false})
 	private newTermsDialog: NewTermsDialog;
@@ -208,7 +212,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 			this.confirmDialog,
 			this.shareSocialDialog,
 			this.newTermsDialog,
-			this.markdownHintsDialog
+			this.markdownHintsDialog,
+			this.nounprojectDialog
 		);
 	}
 

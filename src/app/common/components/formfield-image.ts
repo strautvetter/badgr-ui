@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { base64ByteSize, loadImageURL, preloadImageURL, readFileAsDataURL } from '../util/file-util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { throwExpr } from '../util/throw-expr';
+import { NounprojectDialog } from '../dialogs/nounproject-dialog/nounproject-dialog.component';
 
 @Component({
 	selector: 'bg-formfield-image',
@@ -59,6 +60,7 @@ import { throwExpr } from '../util/throw-expr';
 					<svg class="dropzone-x-icon" icon="icon_upload"></svg>
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
+					<p class="dropzone-x-info2">oder <span class="u-text-link" (click)="imageLabel.click()">online finden</span></p>
 				</ng-container>
 			</label>
 
@@ -121,7 +123,10 @@ export class BgFormFieldImageComponent {
 
 	imageName: string;
 
-	constructor(private elemRef: ElementRef<HTMLElement>, private domSanitizer: DomSanitizer) {}
+	constructor(
+		private elemRef: ElementRef<HTMLElement>,
+		private domSanitizer: DomSanitizer,
+		private nounprojectDialog: NounprojectDialog) {}
 
 	clearFileInput() {
 		(this.element.querySelector("input[type='file']") as HTMLInputElement).value = null;
@@ -224,6 +229,10 @@ export class BgFormFieldImageComponent {
 				this.imageLoading = false;
 			}
 		);
+	}
+
+	findNounproject() {
+		this.nounprojectDialog.openDialog();
 	}
 }
 

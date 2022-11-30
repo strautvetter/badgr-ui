@@ -67,6 +67,7 @@ import { IssuerManager } from '../issuer/services/issuer-manager.service';
 import { IssuerApiService } from '../issuer/services/issuer-api.service';
 import { ZipService } from './util/zip-service/zip-service.service';
 import { BadgeLegendComponent } from './components/badge-legend/badge-legend.component';
+import { NounprojectDialog } from './dialogs/nounproject-dialog/nounproject-dialog.component';
 
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 
@@ -111,6 +112,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	TimeComponent,
 	TooltipComponent,
 	TruncatedTextComponent,
+	NounprojectDialog
 ];
 
 const SERVICES = [
