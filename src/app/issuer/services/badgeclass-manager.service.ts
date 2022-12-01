@@ -73,6 +73,7 @@ export class BadgeClassManager extends BaseHttpApiService {
 
 	removeBadgeClass(badge: BadgeClass) {
 		return this.badgeClassApi.deleteBadgeClass(badge.issuerSlug, badge.slug).then((response) => {
+			this.allBadgesList.remove(badge);
 			this.badgesList.remove(badge);
 			return response;
 		});
@@ -81,7 +82,7 @@ export class BadgeClassManager extends BaseHttpApiService {
 	createBadgeClass(issuerSlug: string, newBadge: ApiBadgeClassForCreation): Promise<BadgeClass> {
 		return this.badgeClassApi
 			.createBadgeClass(issuerSlug, newBadge)
-			.then((retNewBadge) => this.badgesList.addOrUpdate(retNewBadge));
+			.then((retNewBadge) => { this.allBadgesList.addOrUpdate(retNewBadge); return this.badgesList.addOrUpdate(retNewBadge) });
 	}
 
 	badgeByIssuerUrlAndSlug(issuerId: IssuerUrl, badgeSlug: BadgeClassSlug): Promise<BadgeClass> {

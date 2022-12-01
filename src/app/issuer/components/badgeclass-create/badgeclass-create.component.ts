@@ -57,12 +57,9 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 			];
 
 			this.badgesLoaded = new Promise((resolve, reject) => {
-				this.badgeClassService.badgesByIssuerUrl$.subscribe(
-					(badgesByIssuer) => {
-						this.badges = [];
-						for (const [_, value] of Object.entries(badgesByIssuer)) {
-							this.badges =  this.badges.concat(value)
-						}
+				this.badgeClassService.allPublicBadges$.subscribe(
+					(publicBadges) => {
+						this.badges = publicBadges
 						resolve();
 					},
 					(error) => {
@@ -109,7 +106,9 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	copyBadge() {
 		this.dialogService.copyBadgeDialog.openDialog(this.badges)
 			.then((data: any) => {
-				this.copiedBadgeClass = data
+				if (data) {
+					this.copiedBadgeClass = data
+				}
 			})
 			.catch((error) => {
 				this.messageService.reportAndThrowError('Failed to load badges to copy', error);
