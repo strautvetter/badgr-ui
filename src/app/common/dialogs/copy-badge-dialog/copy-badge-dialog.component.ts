@@ -67,7 +67,7 @@ export class CopyBadgeDialog extends BaseDialog {
 
 	closeDialog() {
 		this.closeModal();
-		this.rejectFunc();
+		this.resolveFunc(undefined);
 	}
 
 	copyBadge(badge) {

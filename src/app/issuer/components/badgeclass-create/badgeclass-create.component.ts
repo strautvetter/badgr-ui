@@ -109,7 +109,9 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	copyBadge() {
 		this.dialogService.copyBadgeDialog.openDialog(this.badges)
 			.then((data: any) => {
-				this.copiedBadgeClass = data
+				if (data) {
+					this.copiedBadgeClass = data
+				}
 			})
 			.catch((error) => {
 				this.messageService.reportAndThrowError('Failed to load badges to copy', error);
