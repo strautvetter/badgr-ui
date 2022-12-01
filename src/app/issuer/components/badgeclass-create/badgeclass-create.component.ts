@@ -60,25 +60,7 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 				this.badgeClassService.allPublicBadges$.subscribe(
 					(publicBadges) => {
 						this.badges = publicBadges
-						// to also get own badges (this will also load newly created)
-						this.badgeClassService.badgesByIssuerUrl$.subscribe(
-							(badgesAllIssuer) => {
-								for (const [_, badgesByIssuer] of Object.entries(badgesAllIssuer)) {
-									for (const badge of badgesByIssuer) {
-										if (!this.badges.find(e => e.slug === badge.slug)) {
-											this.badges.push(badge)
-										}
-									}
-								}
-								resolve();
-							},
-							(error) => {
-								this.messageService.reportAndThrowError(
-									`Failed to load badges`,
-									error
-								);
-								resolve();
-							})
+						resolve();
 					},
 					(error) => {
 						this.messageService.reportAndThrowError(
