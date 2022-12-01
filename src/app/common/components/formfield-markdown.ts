@@ -188,7 +188,6 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 		}
 
 		if ('initialValue' in changes) {
-			console.log(changes);
 			const initialValue = changes['initialValue'].currentValue;
 			if (
 				(this.value === null || this.value === undefined || this.value === '') &&
@@ -227,7 +226,6 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	}
 
 	openMarkdownHintsDialog() {
-		console.log('here we go');
 		this.dialogService.markdownHintsDialog.openDialog();
 	}
 
