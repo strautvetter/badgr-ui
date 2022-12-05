@@ -38,6 +38,7 @@ import { ShareSocialDialog } from './dialogs/share-social-dialog/share-social-di
 import { TimeComponent } from './components/time.component';
 import { BadgrButtonComponent } from './components/badgr-button.component';
 import { SharingService } from './services/sharing.service';
+import { NounprojectService } from './services/nounproject.service';
 import { EventsService } from './services/events.service';
 import { ForwardRouteComponent } from './pages/forward-route.component';
 import { MarkdownDisplay } from './components/markdown-display';
@@ -123,6 +124,7 @@ const SERVICES = [
 	MessageService,
 	SettingsService,
 	SharingService,
+	NounprojectService,
 	EventsService,
 	SessionService,
 	QueryParametersService,
@@ -136,7 +138,7 @@ const SERVICES = [
 	ExternalToolsManager,
 	AppConfigService,
 	NavigationService,
-	ZipService,
+	ZipService
 ];
 
 const GUARDS = [AuthGuard];
@@ -159,9 +161,10 @@ export const COMMON_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, H
 		// directives like BgAwaitPromises. See https://github.com/angular/angular/issues/10735 for details.
 		...COMMON_MODULE_COMPONENTS,
 	],
-	/*providers: [
-		...SERVICES,
-	]*/
+	// providers: [
+	// 	...SERVICES,
+	// 	NounprojectDialog
+	// ]
 })
 export class BadgrCommonModule {
 	// Load BadgrCommonModule with forRoot() to preserve singleton status in lazy loaded modules.

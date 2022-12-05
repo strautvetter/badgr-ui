@@ -3,7 +3,8 @@ import { FormControl } from '@angular/forms';
 import { base64ByteSize, loadImageURL, preloadImageURL, readFileAsDataURL } from '../util/file-util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { throwExpr } from '../util/throw-expr';
-import { NounprojectDialog } from '../dialogs/nounproject-dialog/nounproject-dialog.component';
+import { CommonDialogsService } from '../services/common-dialogs.service';
+import { NounProjectIcon } from '../model/nounproject.model';
 
 @Component({
 	selector: 'bg-formfield-image',
@@ -60,7 +61,7 @@ import { NounprojectDialog } from '../dialogs/nounproject-dialog/nounproject-dia
 					<svg class="dropzone-x-icon" icon="icon_upload"></svg>
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
-					<p class="dropzone-x-info2">oder <span class="u-text-link" (click)="imageLabel.click()">online finden</span></p>
+					<p class="dropzone-x-info2">oder <span class="u-text-link" (click)="findNounproject()">online finden</span></p>
 				</ng-container>
 			</label>
 
@@ -126,7 +127,8 @@ export class BgFormFieldImageComponent {
 	constructor(
 		private elemRef: ElementRef<HTMLElement>,
 		private domSanitizer: DomSanitizer,
-		private nounprojectDialog: NounprojectDialog) {}
+		protected dialogService: CommonDialogsService
+		) {}
 
 	clearFileInput() {
 		(this.element.querySelector("input[type='file']") as HTMLInputElement).value = null;
@@ -232,7 +234,10 @@ export class BgFormFieldImageComponent {
 	}
 
 	findNounproject() {
-		this.nounprojectDialog.openDialog();
+		this.dialogService.nounprojectDialog.openDialog()
+			.then((icon: NounProjectIcon) => {
+				this.imageDataUrl = icon.preview_url
+			});
 	}
 }
 
