@@ -23,6 +23,7 @@ export interface NounProjectIcon {
 	uploader: NounProjectIconUploader;
 	uploader_id: string;
     year: number;
+	tag_slugs?: string;
 }
 
 export interface NounProjectIconUploader {

@@ -54,7 +54,7 @@ import { NounProjectIcon } from '../model/nounproject.model';
 					<p class="u-text-body">
 						{{ imageName }}
 						<button (click)="imageLabel.click()" type="button" class="u-text-link">andere Datei wählen</button>
-						<button (click)="findNounproject()" type="button" class="u-text-link">anderes Icon wählen</button>
+						<button (click)="findNounproject()" type="button" class="u-text-link">anderes Icon suchen</button>
 					</p>
 				</div>
 

@@ -35,7 +35,7 @@
 							<thead class="datatable-x-head">
 								<tr class="datatable-x-header">
 									<th class="datatable-x-cell" scope="col">Icon</th>
-									<th class="datatable-x-cell" scope="col">Name</th>
+									<th class="datatable-x-cell" scope="col">Tags</th>
 									<th class="datatable-x-cell" scope="col"><span class="visuallyhidden">ID</span></th>
 								</tr>
 							</thead>
@@ -55,12 +55,12 @@
 													<a
 														class="u-text u-text-link u-text-breakword"
 														[routerLink]=""
-														(click)="copyBadge(badge)"
+														(click)="selectIcon(icon)"
 														>{{ icon.term }}</a
 													>
 												</div>
 											</td>
-											<td class="datatable-x-cell u-text-body">{{ icon.term_id }}</td>
+											<td class="datatable-x-cell u-text-body">{{ icon.tag_slugs }}</td>
 											<td class="datatable-x-cell">
 												<button
 													class="button"

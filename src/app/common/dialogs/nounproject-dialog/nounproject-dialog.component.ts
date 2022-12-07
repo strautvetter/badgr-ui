@@ -53,8 +53,17 @@ export class NounprojectDialog extends BaseDialog {
 		return new Promise(async (resolve, reject) => {
 			this.nounprojectService.getNounProjectIcons(searchTerm, 1).then(
 				(results) => {
+					results.forEach(result => {
+						let tag_slugs = ""
+						result.tags.forEach(tag => {
+							if (tag.slug != searchTerm) {
+								if (tag_slugs != "") tag_slugs += ", "
+								tag_slugs += tag.slug
+							}
+						})
+						result.tag_slugs = tag_slugs
+					})
 					this.icons = results;
-					console.log(results);
 					resolve(results);
 				},
 			);
@@ -67,31 +76,9 @@ export class NounprojectDialog extends BaseDialog {
 	}
 
 	selectIcon(icon: NounProjectIcon) {
+		debugger;
 		this.closeModal();
 		this.resolveFunc(icon);
-	}
-
-	private updateResults(searchTerm: string) {
-
-		// Clear Results
-		this.iconResults = [];
-
-		const addBadgeToResults = (icon: any) => {
-			// Restrict Length
-			if (this.iconResults.length > this.maxDisplayedResults) {
-				return false;
-			}
-
-			if (!this.iconResults.find(r => r.icon === icon)) {
-				// appending the results to the badgeResults array bound to the view template.
-				this.iconResults.push(new IconResult(icon, searchTerm));
-			}
-
-			return true;
-		};
-		
-		this.icons
-			.forEach(addBadgeToResults);
 	}
 }
 
