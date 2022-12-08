@@ -103,7 +103,6 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 	}
 
 	selectIcon(icon: NounProjectIcon) {
-		debugger;
 		this.closeModal();
 		this.resolveFunc(icon);
 	}
