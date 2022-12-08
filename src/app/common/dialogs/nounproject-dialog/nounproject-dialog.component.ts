@@ -25,6 +25,7 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 	iconsLoaded: Promise<unknown>;
 	iconResults: IconResult[];
 	searchTerm: string = "";
+	noResult: boolean = false;
 
 	private _searchQuery = "";
 	get searchQuery() { return this._searchQuery; }
@@ -71,6 +72,7 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 			this.iconsLoaded = new Promise((resolve, reject) => {
 				this.nounprojectService.getNounProjectIcons(searchTerm, 1)
 					.then((results) => {
+						this.noResult = true;
 						if(searchTerm == this.searchTerm) {
 							results.forEach(result => {
 								let tag_slugs = ""
@@ -86,10 +88,14 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 						}
 						resolve(results);
 					}).catch(error => {
-						this.messageService.reportAndThrowError(
-							"No results for this request from nounproject.",
-							error
-						)
+						if(searchTerm == this.searchTerm) {
+							this.noResult = true;
+							this.messageService.reportAndThrowError(
+								"No results for this request from nounproject.",
+								error
+							)
+						}
+						resolve([])
 					});
 			});
 		} else {

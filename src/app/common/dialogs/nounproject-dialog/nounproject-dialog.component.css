@@ -7,6 +7,13 @@
     background-color: var(--color-noticealpha20);
 }
 
+.no-result {
+    text-align: center;
+    color: var(--color-error);
+    font-weight: bold;
+    font-size: var(--font-size-body);
+}
+
 .dialog-x-height {
     max-height: 40vh;
     overflow: auto;
