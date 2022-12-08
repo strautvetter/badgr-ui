@@ -186,8 +186,6 @@ export class BadgeStudioComponent implements OnInit, OnChanges {
 		);
 	}
 	generateUploadImage(uploadedImage, formdata): Promise<string> {
-
-		console.log(formdata.badge_category);
 		return this.fontPromise.then(
 			() => new Promise<string>((resolve, reject) => {
 				// const shapeColor = shapeColors[Math.floor(Math.random() * shapeColors.length)];
