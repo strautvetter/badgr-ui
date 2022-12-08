@@ -20,6 +20,7 @@
 				<div class="forminput l-actionbar-x-search dialog-x-options">
 					<div class="forminput-x-inputs">
 						<input
+							#nounprojectSearch
 							type="text"
 							name="forminput"
 							id="forminput"
@@ -30,50 +31,52 @@
 					</div>
 				</div>
 				<div class="dialog-x-height">
-					<ng-template [bgAwaitPromises]="[IconsLoaded]" [showLoader]="true">
-						<table *ngIf="icons && icons.length > 0" class="datatable datatable-roundheaders datatable-onlyfirstcolumn datatable-verticalalignmiddle">
-							<thead class="datatable-x-head">
-								<tr class="datatable-x-header">
-									<th class="datatable-x-cell" scope="col">Icon</th>
-									<th class="datatable-x-cell" scope="col">Tags</th>
-									<th class="datatable-x-cell" scope="col"><span class="visuallyhidden">ID</span></th>
-								</tr>
-							</thead>
-							<tbody class="datatable-x-body">
-									<!-- Icons -->
-									<ng-template ngFor let-icon [ngForOf]="icons" let-i="index">
-										<tr class="datatable-x-row">
-											<td class="datatable-x-cell">
-												<div class="l-flex l-flex-2x l-flex-aligncenter">
-													<img
-														class="badgeimage badgeimage-test badgeimage-small u-margin-right2x l-flex-x-shrink0"
-														width="40"
-														[loading-src]="badgeLoadingImageUrl"
-														[error-src]="badgeFailedImageUrl"
-														[loaded-src]="icon.preview_url"
-													/> 
-													<a
-														class="u-text u-text-link u-text-breakword"
-														[routerLink]=""
+					<div *ngIf="iconsLoaded">
+						<div *bgAwaitPromises="[iconsLoaded]" class="l-containerxaxis l-containeryaxis">
+							<table *ngIf="icons && icons.length > 0" class="datatable datatable-roundheaders datatable-onlyfirstcolumn datatable-verticalalignmiddle">
+								<thead class="datatable-x-head">
+									<tr class="datatable-x-header">
+										<th class="datatable-x-cell" scope="col">Icon</th>
+										<th class="datatable-x-cell" scope="col">Tags</th>
+										<th class="datatable-x-cell" scope="col"><span class="visuallyhidden">ID</span></th>
+									</tr>
+								</thead>
+								<tbody class="datatable-x-body">
+										<!-- Icons -->
+										<ng-template ngFor let-icon [ngForOf]="icons" let-i="index">
+											<tr class="datatable-x-row">
+												<td class="datatable-x-cell">
+													<div class="l-flex l-flex-2x l-flex-aligncenter">
+														<img
+															class="badgeimage badgeimage-test badgeimage-small u-margin-right2x l-flex-x-shrink0"
+															width="40"
+															[loading-src]="badgeLoadingImageUrl"
+															[error-src]="badgeFailedImageUrl"
+															[loaded-src]="icon.preview_url"
+														/> 
+														<a
+															class="u-text u-text-link u-text-breakword"
+															[routerLink]=""
+															(click)="selectIcon(icon)"
+															>{{ icon.term }}</a
+														>
+													</div>
+												</td>
+												<td class="datatable-x-cell u-text-body">{{ icon.tag_slugs }}</td>
+												<td class="datatable-x-cell">
+													<button
+														class="button"
 														(click)="selectIcon(icon)"
-														>{{ icon.term }}</a
 													>
-												</div>
-											</td>
-											<td class="datatable-x-cell u-text-body">{{ icon.tag_slugs }}</td>
-											<td class="datatable-x-cell">
-												<button
-													class="button"
-													(click)="selectIcon(icon)"
-												>
-													Select
-												</button>
-											</td>
-										</tr>
-									</ng-template>
-							</tbody>
-						</table>
-					</ng-template>
+														Select
+													</button>
+												</td>
+											</tr>
+										</ng-template>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

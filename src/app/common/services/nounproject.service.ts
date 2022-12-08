@@ -20,6 +20,7 @@ export class NounprojectService extends BaseHttpApiService {
 	getNounProjectIcons(searchterm, page): Promise<NounProjectIcon[]> {
 		return this
 			.get<{icons: NounProjectIcon[]}>(`/nounproject/${searchterm}/${page}`)
-			.then(r => r.body.icons as NounProjectIcon[]);
+			.then(r => r.body.icons as NounProjectIcon[],
+				error => []);
 	}
 }

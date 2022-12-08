@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { throwExpr } from '../util/throw-expr';
 import { CommonDialogsService } from '../services/common-dialogs.service';
 import { NounProjectIcon } from '../model/nounproject.model';
+import { MessageService } from '../services/message.service';
 
 @Component({
 	selector: 'bg-formfield-image',
@@ -54,7 +55,7 @@ import { NounProjectIcon } from '../model/nounproject.model';
 					<p class="u-text-body">
 						{{ imageName }}
 						<button (click)="imageLabel.click()" type="button" class="u-text-link">andere Datei wählen</button>
-						<button (click)="findNounproject()" type="button" class="u-text-link">anderes Icon suchen</button>
+						<button *ngIf="loaderName!='basic'" (click)="findNounproject()" type="button" class="u-text-link">anderes Icon suchen</button>
 					</p>
 				</div>
 
@@ -62,7 +63,7 @@ import { NounProjectIcon } from '../model/nounproject.model';
 					<svg class="dropzone-x-icon" icon="icon_upload"></svg>
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
-					<p class="dropzone-x-info2">oder <span class="u-text-link" (click)="findNounproject()">online finden</span></p>
+					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="findNounproject()">online finden</span></p>
 				</ng-container>
 			</label>
 
@@ -70,8 +71,9 @@ import { NounProjectIcon } from '../model/nounproject.model';
 		</div>
 	`,
 })
-export class BgFormFieldImageComponent {
+export class BgFormFieldImageComponent{
 	@Input() set imageLoaderName(name: string) {
+		this.loaderName = name;
 		this.imageLoader = namedImageLoaders[name] || throwExpr(new Error(`Invalid image loader name ${name}`));
 	}
 	get imageDataUrl() {
@@ -122,13 +124,15 @@ export class BgFormFieldImageComponent {
 	imageLoading = false;
 	imageProvided = false;
 	imageErrorMessage: string = null;
+	loaderName: string = "basic";
 
 	imageName: string;
 
 	constructor(
 		private elemRef: ElementRef<HTMLElement>,
 		private domSanitizer: DomSanitizer,
-		protected dialogService: CommonDialogsService
+		protected dialogService: CommonDialogsService,
+		protected messageService: MessageService,
 		) {}
 
 	clearFileInput() {
@@ -237,7 +241,10 @@ export class BgFormFieldImageComponent {
 	findNounproject() {
 		this.dialogService.nounprojectDialog.openDialog()
 			.then((icon: NounProjectIcon) => {
-				this.updateFile(icon.preview_url);
+				if (icon) this.updateFile(icon.preview_url);
+			})
+			.catch((error) => {
+				this.messageService.reportAndThrowError('Failed to load icons from nounproject', error);
 			});
 	}
 }
