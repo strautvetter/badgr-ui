@@ -23,7 +23,6 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 	order = 'asc';
 	
 	iconsLoaded: Promise<unknown>;
-	iconResults: IconResult[];
 	searchTerm: string = "";
 	noResult: boolean = false;
 
@@ -47,6 +46,7 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
+		// debounce the input to prevent spamming of requests
 		fromEvent(this.searchbar.nativeElement, 'input')
 			.pipe(map((event: Event) => (event.target as HTMLInputElement).value))
 			.pipe(debounceTime(300))
@@ -69,11 +69,14 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 		this.searchTerm = searchTerm;
 		this.icons = [];
 		if (searchTerm.length > 0) {
+			// promise for the loading spinner
 			this.iconsLoaded = new Promise((resolve, reject) => {
 				this.nounprojectService.getNounProjectIcons(searchTerm, 1)
 					.then((results) => {
 						this.noResult = true;
+						// To prevent older requests, which took longer to load, from overwriting current results
 						if(searchTerm == this.searchTerm) {
+							// combine all slugs to one string (maybe this could be done in the html?)
 							results.forEach(result => {
 								let tag_slugs = ""
 								result.tags.forEach(tag => {
@@ -89,6 +92,7 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 						resolve(results);
 					}).catch(error => {
 						if(searchTerm == this.searchTerm) {
+							// show the no results error
 							this.noResult = true;
 							this.messageService.reportAndThrowError(
 								"No results for this request from nounproject.",
@@ -112,8 +116,4 @@ export class NounprojectDialog extends BaseDialog implements AfterViewInit {
 		this.closeModal();
 		this.resolveFunc(icon);
 	}
-}
-
-class IconResult {
-	constructor(public icon: BadgeClass, public issuerName: string) {}
 }

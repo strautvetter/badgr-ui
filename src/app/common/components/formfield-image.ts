@@ -63,6 +63,7 @@ import { MessageService } from '../services/message.service';
 					<svg class="dropzone-x-icon" icon="icon_upload"></svg>
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
+					<!-- dont let user select icon when uploading badge -->
 					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="findNounproject()">online finden</span></p>
 				</ng-container>
 			</label>
@@ -247,6 +248,7 @@ export class BgFormFieldImageComponent{
 	}
 }
 
+// file can either be file or url to a file
 export function basicImageLoader(file: File | string): Promise<string> {
 	if (typeof file == "string") {
 		return loadImageURL(file)
@@ -263,6 +265,7 @@ export function basicImageLoader(file: File | string): Promise<string> {
 	}
 }
 
+// file can either be file or url to a file
 export function badgeImageLoader(file: File | string): Promise<string> {
 	// Max file size from https://github.com/mozilla/openbadges-backpack/blob/1193c04847c5fb9eb105c8fb508e1b7f6a39052c/controllers/backpack.js#L397
 	const maxFileSize = 1024 * 256;
@@ -369,6 +372,7 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 	}
 }
 
+// file can either be file or url to a file
 export function issuerImageLoader(file: File | string): Promise<string> {
 	// Max file size from https://github.com/mozilla/openbadges-backpack/blob/1193c04847c5fb9eb105c8fb508e1b7f6a39052c/controllers/backpack.js#L397
 	const maxFileSize = 1024 * 256;
