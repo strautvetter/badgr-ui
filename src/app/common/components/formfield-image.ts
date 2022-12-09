@@ -379,42 +379,56 @@ export function issuerImageLoader(file: File | string): Promise<string> {
 	const startingMaxDimension = 512;
 
 	if (typeof file == "string") {
-		return loadImageURL(file)
+		return new Promise((resolve, reject) => {
+			loadImageURL(file)
 			.then((image) => {
-				const canvas = document.createElement('canvas');
-				let dataURL: string;
+				image.crossOrigin = 'Anonymous';
+				image.onload = function(){
+					const canvas = document.createElement('canvas');
+					let dataURL: string;
 
-				let maxDimension = startingMaxDimension;
+					let maxDimension = startingMaxDimension;
 
-				do {
-					const scaleFactor = Math.min(1, maxDimension / image.width, maxDimension / image.height);
+					do {
+						const scaleFactor = Math.min(1, maxDimension / image.width, maxDimension / image.height);
 
-					const scaledWidth = image.width * scaleFactor;
-					const scaledHeight = image.height * scaleFactor;
+						const scaledWidth = image.width * scaleFactor;
+						const scaledHeight = image.height * scaleFactor;
 
-					canvas.width = scaledWidth;
-					canvas.height = scaledHeight;
+						canvas.width = scaledWidth;
+						canvas.height = scaledHeight;
 
-					const context = canvas.getContext('2d');
+						const context = canvas.getContext('2d');
 
-					context.drawImage(image, 0, 0, image.width, image.height, 0, 0, scaledWidth, scaledHeight);
+						context.drawImage(
+							image,
+							0,
+							0,
+							image.width,
+							image.height,
+							0,
+							0,
+							scaledWidth,
+							scaledHeight);
 
-					dataURL = canvas.toDataURL('image/png');
+						dataURL = canvas.toDataURL('image/png');
 
-					// On the first try, guess a dimension based on the ratio of max pixel count to file size
-					if (maxDimension === startingMaxDimension) {
-						maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
-					}
+						// On the first try, guess a dimension based on the ratio of max pixel count to file size
+						if (maxDimension === startingMaxDimension) {
+							maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
+						}
 
-					// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
-					maxDimension *= 0.95;
-				} while (base64ByteSize(dataURL) > maxFileSize);
+						// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
+						maxDimension *= 0.95;
+					} while (base64ByteSize(dataURL) > maxFileSize);
 
-				return dataURL;
+					resolve(dataURL);
+				}
 			})
 			.catch((e) => {
 				throw new Error(`${file} is not a valid image file`);
 			});
+		})
 	} else if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
 		return basicImageLoader(file);
 	} else {
