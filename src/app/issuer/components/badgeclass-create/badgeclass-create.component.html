@@ -3,12 +3,23 @@
 		<div class="topbar-x-breadcrumbs">
 			<bg-breadcrumbs [linkentries]="breadcrumbLinkEntries"></bg-breadcrumbs>
 		</div>
+	</div>
+	<div class="l-containerxaxis topbar-x-wrap">
 		<div class="topbar-x-heading">
 			Create Badge
 		</div>
 		<div class="topbar-x-subheading">
 			You can award a badge to multiple recipients over time.
 		</div>
+		<button
+			type="submit"
+			class="button topbar-x-button"
+			(click)="copyBadge()"
+			loading-message="Loading badges..."
+			[disabled-when-requesting]="true"
+		>
+			Badge kopieren
+		</button>
 	</div>
 </div>
 
@@ -18,6 +29,7 @@
 									(cancel)="creationCanceled($event)"
 									[scrolled]="scrolled"
 									[issuerSlug]="issuerSlug"
+									[initBadgeClass]="copiedBadgeClass"
 									submitText="Create Badge"
 									submittingText="Creating Badge..."
 	></badgeclass-edit-form>

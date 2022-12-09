@@ -4,6 +4,8 @@ import { ShareSocialDialog } from '../dialogs/share-social-dialog/share-social-d
 import { NewTermsDialog } from '../dialogs/new-terms-dialog.component';
 import { MarkdownHintsDialog } from '../dialogs/markdown-hints-dialog.component';
 import { NounprojectDialog } from '../dialogs/nounproject-dialog/nounproject-dialog.component';
+import { CopyBadgeDialog } from '../dialogs/copy-badge-dialog/copy-badge-dialog.component';
+
 
 @Injectable()
 export class CommonDialogsService {
@@ -12,6 +14,7 @@ export class CommonDialogsService {
 	newTermsDialog: NewTermsDialog;
 	markdownHintsDialog: MarkdownHintsDialog;
 	nounprojectDialog: NounprojectDialog;
+	copyBadgeDialog: CopyBadgeDialog;
 
 	constructor() {}
 
@@ -20,12 +23,14 @@ export class CommonDialogsService {
 		shareSocialDialog: ShareSocialDialog,
 		newTermsDialog: NewTermsDialog,
 		markdownHintsDialog: MarkdownHintsDialog,
-		nounprojectDialog: NounprojectDialog
+		nounprojectDialog: NounprojectDialog,
+		copyBadgeDialog: CopyBadgeDialog
 	) {
 		this.confirmDialog = confirmDialog;
 		this.shareSocialDialog = shareSocialDialog;
 		this.newTermsDialog = newTermsDialog;
 		this.markdownHintsDialog = markdownHintsDialog;
-		this.nounprojectDialog = nounprojectDialog
+		this.nounprojectDialog = nounprojectDialog;
+		this.copyBadgeDialog = copyBadgeDialog;
 	}
 }

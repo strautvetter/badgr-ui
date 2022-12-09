@@ -143,7 +143,6 @@ export class BgFormFieldImageComponent{
 		const input: HTMLInputElement = ev.target as HTMLInputElement;
 		const self = this;
 
-		console.log("FILEINPUTCHANGE")
 		this.generated = false;
 		if (input.files && input.files[0]) {
 			this.updateFiles(input.files);
@@ -205,7 +204,6 @@ export class BgFormFieldImageComponent{
 	}
 
 	private updateFiles(files: FileList) {
-		console.log("FILES0", files[0]);
 		this.updateFile(files[0]);
 	}
 

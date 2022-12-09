@@ -86,7 +86,6 @@ export class PublicBadgeAssertionComponent {
 	}
 
 	get badgeClass(): PublicApiBadgeClass {
-		console.log(this.assertion.badge);
 		return this.assertion.badge;
 	}
 
