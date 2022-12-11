@@ -169,10 +169,9 @@ export const COMMON_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, H
 		// directives like BgAwaitPromises. See https://github.com/angular/angular/issues/10735 for details.
 		...COMMON_MODULE_COMPONENTS,
 	],
-	// providers: [
-	// 	...SERVICES,
-	// 	NounprojectDialog
-	// ]
+	/*providers: [
+		...SERVICES,
+	]*/
 })
 export class BadgrCommonModule {
 	// Load BadgrCommonModule with forRoot() to preserve singleton status in lazy loaded modules.
