@@ -167,7 +167,7 @@ export class BgFormFieldImageComponent{
 
 	drop(ev: DragEvent) {
 		this.dragStop(ev);
-
+		this.generated = false;
 		if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length) {
 			this.updateFiles(ev.dataTransfer.files);
 		}
@@ -240,7 +240,10 @@ export class BgFormFieldImageComponent{
 	findNounproject() {
 		this.dialogService.nounprojectDialog.openDialog()
 			.then((icon: NounProjectIcon) => {
-				if (icon) this.updateFile(icon.preview_url);
+				if (icon) {
+					this.generated = false;
+					this.updateFile(icon.preview_url);
+				}
 			})
 			.catch((error) => {
 				this.messageService.reportAndThrowError('Failed to load icons from nounproject', error);

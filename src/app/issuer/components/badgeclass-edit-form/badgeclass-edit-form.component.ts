@@ -209,7 +209,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 			this.currentImage = (badgeClass.extension['extensions:OrgImageExtension']) ?
 				badgeClass.extension['extensions:OrgImageExtension'].OrgImage : undefined;
-			if(this.currentImage) {
+			if(this.currentImage && this.imageField) {
 				this.imageField.useDataUrl(this.currentImage, 'BADGE')
 			}
 			this.tags = new Set();
@@ -508,6 +508,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	generateUploadImage(image, formdata) {
 		// the imageUploaded-event of the angular image component is also called after initialising the component because the image is set in initFormFromExisting
 		if(typeof this.currentImage == "undefined" || this.initedCurrentImage) {
+			this.initedCurrentImage = true;
 			this.currentImage = image.slice();
 			this.badgeStudio
 				.generateUploadImage(image.slice(), formdata)
@@ -517,7 +518,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		}
 	}
 	adjustUploadImage(formdata) {
-		if(this.currentImage) {
+		if(this.currentImage && this.badgeStudio) {
 			this.badgeStudio
 				.generateUploadImage(this.currentImage.slice(), formdata)
 				.then((imageUrl) => this.imageField.useDataUrl(imageUrl, 'BADGE'));
