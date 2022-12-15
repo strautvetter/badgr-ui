@@ -55,7 +55,7 @@ import { MessageService } from '../services/message.service';
 					<p class="u-text-body">
 						{{ imageName }}
 						<button (click)="imageLabel.click()" type="button" class="u-text-link">andere Datei wählen</button>
-						<button *ngIf="loaderName!='basic'" (click)="findNounproject()" type="button" class="u-text-link">anderes Icon suchen</button>
+						<button *ngIf="loaderName!='basic'" (click)="$event.preventDefault(); findNounproject($event)" type="button" class="u-text-link">anderes Icon suchen</button>
 					</p>
 				</div>
 
@@ -64,7 +64,7 @@ import { MessageService } from '../services/message.service';
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
 					<!-- dont let user select icon when uploading badge -->
-					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="findNounproject()">online finden</span></p>
+					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">online finden</span></p>
 				</ng-container>
 			</label>
 
@@ -237,7 +237,8 @@ export class BgFormFieldImageComponent{
 		);
 	}
 
-	findNounproject() {
+	findNounproject(e) {
+		e.stopPropagation();
 		this.dialogService.nounprojectDialog.openDialog()
 			.then((icon: NounProjectIcon) => {
 				if (icon) {
