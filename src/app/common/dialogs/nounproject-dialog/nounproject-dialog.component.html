@@ -74,10 +74,18 @@
 											</tr>
 										</ng-template>
 								</tbody>
+								<div *ngIf="!endOfResults" id="load-more-icons">
+									<div *ngIf="loadingMore; else NotLoadingMore" class="u-text u-text-breakword">Loading...</div>
+									<ng-template #NotLoadingMore>
+										<a class="u-text u-text-link u-text-breakword"
+										[routerLink]=""
+										(click)="loadMoreIcons()">Load more...</a>
+									</ng-template>
+								</div>
 							</table>
 							<!-- No results error -->
 							<ng-template #noResult>
-								<div class="no-result">
+								<div id="no-icon-result">
 									Kein Icon gefunden für "{{ searchTerm }}"
 								</div>
 							</ng-template>

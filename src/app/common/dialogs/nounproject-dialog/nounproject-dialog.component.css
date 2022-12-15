@@ -7,11 +7,15 @@
     background-color: var(--color-noticealpha20);
 }
 
-.no-result {
+#no-icon-result {
     text-align: center;
     color: var(--color-error);
     font-weight: bold;
     font-size: var(--font-size-body);
+}
+
+#load-more-icons {
+    padding: 0.6em 0 0 0;
 }
 
 .dialog-x-height {
