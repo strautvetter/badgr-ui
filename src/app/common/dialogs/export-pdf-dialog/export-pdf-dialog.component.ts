@@ -7,6 +7,7 @@ import { jsPDF } from "jspdf";
 import { ApiRecipientBadgeClass, ApiRecipientBadgeIssuer } from '../../../recipient/models/recipient-badge-api.model';
 import { RecipientBadgeCollection } from '../../../recipient/models/recipient-badge-collection.model';
 import { UserProfile } from '../../model/user-profile.model';
+import { loadImageURL, readFileAsDataURL } from '../../util/file-util';
 
 @Component({
 	selector: 'export-pdf-dialog',
@@ -19,6 +20,9 @@ export class ExportPdfDialog extends BaseDialog {
 	badgeResults: BadgeResult[] | null = null;
 	badgePdf: string | null = null;
 	doc: jsPDF = null;
+	themeColor: string;
+
+	imageLoader: (file: File | string) => Promise<string> = basicImageLoader;
 
 	@ViewChild('outputPdf', {static: false}) outputElement: ElementRef; 
 
@@ -30,6 +34,9 @@ export class ExportPdfDialog extends BaseDialog {
 		renderer: Renderer2,
 	) {
 		super(componentElem, renderer);
+		var r = document.querySelector(':root');
+		var rs = getComputedStyle(r);
+		this.themeColor = rs.getPropertyValue('--color-interactive1')
 	}
 
 
@@ -84,93 +91,106 @@ export class ExportPdfDialog extends BaseDialog {
 		const pageWidth = this.doc.internal.pageSize.getWidth();
 		const pageHeight = this.doc.internal.pageSize.getHeight();
 
-		// image
-		const canvasWidth = 120;
-		const canvasHeight = 120;
-		const marginXImage = (pageWidth - canvasWidth) / 2;
-		this.doc.addImage(badgeClass.image, 'png', marginXImage, yPos, canvasWidth, canvasHeight);
+		this.imageLoader('assets/logos/Badges_Entwurf-15-circle.svg').then(
+			(dataUrl) => {
+				// image
+				const canvasWidth = 120;
+				const canvasHeight = 120;
+				const marginXImage = (pageWidth - canvasWidth) / 2;
+				this.doc.addImage(badgeClass.image, 'png', marginXImage, yPos, canvasWidth, canvasHeight);
 
-		// title
-		yPos += 140;
-		this.doc.setFontSize(35);
-		this.doc.setFont('Helvetica', 'bold');
-		this.doc.text(badgeClass.name, pageWidth/2, yPos, {
-			align: 'center'
-		});
+				// title
+				yPos += canvasHeight + 20;
+				this.doc.setFontSize(35);
+				this.doc.setFont('Helvetica', 'bold');
+				this.doc.text(badgeClass.name, pageWidth/2, yPos, {
+					align: 'center'
+				});
 
-		// subtitle
-		yPos += 20
-		this.doc.setFontSize(28);
-		this.doc.setFont('Helvetica', 'normal');
-		this.doc.text(badgeClass.description, pageWidth/2, yPos, {
-			align: 'center'
-		});
+				// subtitle
+				yPos += 20
+				this.doc.setFontSize(28);
+				this.doc.setFont('Helvetica', 'normal');
+				this.doc.text(badgeClass.description, pageWidth/2, yPos, {
+					align: 'center'
+				});
 
-		// line
-		yPos += 15
-		this.doc.setDrawColor(0, 0, 255);
-		this.doc.line(25, yPos, pageWidth-25, yPos)
+				// line
+				yPos += 15
+				this.doc.setDrawColor(this.themeColor);
+				this.doc.setLineWidth(1.5);
+				this.doc.line(25, yPos, pageWidth-25, yPos)
 
-		// edge line
-		let edgeLineOffset = 8
-		this.doc.roundedRect(edgeLineOffset, edgeLineOffset, pageWidth-edgeLineOffset*2, pageHeight-edgeLineOffset*2, 5, 5)
+				// edge line
+				let edgeLineOffset = 8
+				this.doc.roundedRect(edgeLineOffset, edgeLineOffset, pageWidth-edgeLineOffset*2, pageHeight-edgeLineOffset*2, 5, 5)
 
-		// awarded to
-		yPos += 20
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		let awardedToContentLength = this.doc.getTextWidth("Paula Scharf");
-		this.doc.setFontSize(20);
-		this.doc.setFont('Helvetica', 'bold');
-		let awardedToLength = this.doc.getTextWidth("Awarded to: ");
-		this.doc.text("Awarded to: ", pageWidth/2 - (awardedToLength+awardedToContentLength)/4, yPos, {
-			align: 'center'
-		});
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		this.doc.text("Paula Scharf", pageWidth/2 - (awardedToLength+awardedToContentLength)/4 + awardedToLength, yPos, {
-			align: 'center'
-		});
+				// awarded to
+				yPos += 20
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				let awardedToContentLength = this.doc.getTextWidth("Paula Scharf");
+				this.doc.setFontSize(20);
+				this.doc.setFont('Helvetica', 'bold');
+				let awardedToLength = this.doc.getTextWidth("Awarded to: ");
+				this.doc.text("Awarded to: ", pageWidth/2 - (awardedToLength+awardedToContentLength)/4, yPos, {
+					align: 'center'
+				});
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				this.doc.text("Paula Scharf", pageWidth/2 - (awardedToLength+awardedToContentLength)/4 + awardedToLength, yPos, {
+					align: 'center'
+				});
 
-		// issued by
-		yPos += 15
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		let issuedByContentLength = this.doc.getTextWidth(badgeClass.issuer.name);
-		this.doc.setFontSize(20);
-		this.doc.setFont('Helvetica', 'bold');
-		let issuedByLength = this.doc.getTextWidth("Issued by: ..");
-		this.doc.text("Issued by: ", pageWidth/2 - (issuedByLength+issuedByContentLength)/4, yPos, {
-			align: 'center'
-		});
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		this.doc.text(badgeClass.issuer.name, pageWidth/2 - (issuedByLength+issuedByContentLength)/4 + issuedByLength, yPos, {
-			align: 'center'
-		});
+				// issued by
+				yPos += 15
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				let issuedByContentLength = this.doc.getTextWidth(badgeClass.issuer.name);
+				this.doc.setFontSize(20);
+				this.doc.setFont('Helvetica', 'bold');
+				let issuedByLength = this.doc.getTextWidth("Issued by: ..");
+				this.doc.text("Issued by: ", pageWidth/2 - (issuedByLength+issuedByContentLength)/4, yPos, {
+					align: 'center'
+				});
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				this.doc.text(badgeClass.issuer.name, pageWidth/2 - (issuedByLength+issuedByContentLength)/4 + issuedByLength, yPos, {
+					align: 'center'
+				});
 
-		// issued on
-		yPos += 15
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		let issuedOnContentLength = this.doc.getTextWidth(badge.issueDate.getDate() + "." + badge.issueDate.getMonth() + "." + badge.issueDate.getFullYear());
-		this.doc.setFontSize(20);
-		this.doc.setFont('Helvetica', 'bold');
-		let issuedOnLength = this.doc.getTextWidth("Issued on: ");
-		this.doc.text("Issued on: ", pageWidth/2 - (issuedOnLength+issuedOnContentLength)/4, yPos, {
-			align: 'center'
-		});
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		this.doc.text(badge.issueDate.getDate() + "." + badge.issueDate.getMonth() + "." + badge.issueDate.getFullYear(), 
-			pageWidth/2 - (issuedOnLength+issuedOnContentLength)/4 + issuedOnLength, yPos, {
-			align: 'center'
-		});
+				// issued on
+				yPos += 15
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				let issuedOnContentLength = this.doc.getTextWidth(badge.issueDate.getDate() + "." + badge.issueDate.getMonth() + "." + badge.issueDate.getFullYear());
+				this.doc.setFontSize(20);
+				this.doc.setFont('Helvetica', 'bold');
+				let issuedOnLength = this.doc.getTextWidth("Issued on: ");
+				this.doc.text("Issued on: ", pageWidth/2 - (issuedOnLength+issuedOnContentLength)/4, yPos, {
+					align: 'center'
+				});
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				this.doc.text(badge.issueDate.getDate() + "." + badge.issueDate.getMonth() + "." + badge.issueDate.getFullYear(), 
+					pageWidth/2 - (issuedOnLength+issuedOnContentLength)/4 + issuedOnLength, yPos, {
+					align: 'center'
+				});
 
-		// TODO: logo
+				// logo
+				const logoWidth = 30;
+				const logoHeight = 30;
+				const marginXImageLogo = (pageWidth - canvasWidth) / 2;
+				this.doc.addImage(dataUrl, 'png', marginXImageLogo, yPos, logoWidth, logoHeight);
 
-		this.badgePdf = this.doc.output('datauristring');
-		this.outputElement.nativeElement.src = this.badgePdf
+				this.badgePdf = this.doc.output('datauristring');
+				this.outputElement.nativeElement.src = this.badgePdf
+			},
+			(error: Error) => {
+				console.log(error)
+			}
+		);
+		
 	}
 
 	generateBadgeCollectionPdf(collection: RecipientBadgeCollection) {
@@ -382,4 +402,22 @@ export class ExportPdfDialog extends BaseDialog {
 
 class BadgeResult {
 	constructor(public badge: RecipientBadgeInstance, public issuer: ApiRecipientBadgeIssuer) {}
+}
+
+// TODO: put this in a service??
+// file can either be file or url to a file
+export function basicImageLoader(file: File | string): Promise<string> {
+	if (typeof file == "string") {
+		return loadImageURL(file)
+			.then(() => file)
+			.catch((e) => {
+				throw new Error(`${file} is not a valid image file`);
+			});
+	} else {
+		return readFileAsDataURL(file)
+			.then((url) => loadImageURL(url).then(() => url))
+			.catch((e) => {
+				throw new Error(`${file.name} is not a valid image file`);
+			});
+	}
 }
