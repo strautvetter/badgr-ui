@@ -241,7 +241,7 @@ export class ExportPdfDialog extends BaseDialog {
 		// });
 
 		this.doc.addImage(img, 'PNG', 25 - logoWidth/2, yPos, logoWidth, logoHeight);
-		this.doc.textWithLink("bereitgestellt von my badges", 25 + logoWidth/2, yPos + logoHeight * 2 / 3, {
+		this.doc.textWithLink("bereitgestellt von myBadges", 25 + logoWidth/2, yPos + logoHeight * 2 / 3, {
 			url: 'https://mybadges.org/public/start'
 		});
 
