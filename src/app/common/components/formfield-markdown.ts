@@ -145,6 +145,7 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	@Input() description: string;
 	@Input() placeholder: string;
 	@Input() optional = false;
+	@Input() newValue: any;
 
 	@Input() errorGroup: FormGroup;
 	@Input() errorGroupMessage: CustomValidatorMessages;
@@ -187,7 +188,6 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 		}
 
 		if ('initialValue' in changes) {
-			console.log(changes);
 			const initialValue = changes['initialValue'].currentValue;
 			if (
 				(this.value === null || this.value === undefined || this.value === '') &&
@@ -197,6 +197,9 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 			) {
 				this.control.setValue(initialValue);
 			}
+		} else if ('newValue' in changes){
+			const newValue = changes['newValue'].currentValue;
+			this.markdown_content = newValue;
 		}
 
 		this.updateDisabled();
@@ -223,7 +226,6 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	}
 
 	openMarkdownHintsDialog() {
-		console.log('here we go');
 		this.dialogService.markdownHintsDialog.openDialog();
 	}
 
