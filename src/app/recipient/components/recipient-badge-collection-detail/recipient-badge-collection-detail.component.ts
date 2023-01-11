@@ -158,6 +158,11 @@ export class RecipientBadgeCollectionDetailComponent extends BaseAuthenticatedRo
 	shareCollection() {
 		this.dialogService.shareSocialDialog.openDialog(shareCollectionDialogOptionsFor(this.collection));
 	}
+
+	// exportPdf() {
+	// 	this.dialogService.exportPdfDialog.openDialogForCollections(this.collection)
+	// 		.catch((error) => console.log(error));
+	// }
 }
 
 export function shareCollectionDialogOptionsFor(collection: RecipientBadgeCollection): ShareSocialDialogOptions {

@@ -72,6 +72,7 @@ import { BadgeLegendComponent } from './components/badge-legend/badge-legend.com
 import { NounprojectDialog } from './dialogs/nounproject-dialog/nounproject-dialog.component';
 
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
+import { ExportPdfDialog } from './dialogs/export-pdf-dialog/export-pdf-dialog.component';
 import { BadgeClassManager } from '../issuer/services/badgeclass-manager.service';
 import { BadgeClassApiService } from '../issuer/services/badgeclass-api.service';
 
@@ -117,6 +118,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	TimeComponent,
 	TooltipComponent,
 	TruncatedTextComponent,
+	ExportPdfDialog,
 	NounprojectDialog
 ];
 

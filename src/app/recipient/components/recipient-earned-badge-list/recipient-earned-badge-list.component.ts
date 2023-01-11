@@ -18,6 +18,7 @@ import {UserProfileManager} from '../../../common/services/user-profile-manager.
 import {AppConfigService} from '../../../common/app-config.service';
 import { ImportLauncherDirective } from "../../../mozz-transition/directives/import-launcher/import-launcher.directive";
 import { LinkEntry } from "../../../common/components/bg-breadcrumbs/bg-breadcrumbs.component";
+import { UserProfile } from '../../../common/model/user-profile.model';
 
 type BadgeDispay = "grid" | "list" ;
 
@@ -251,6 +252,18 @@ export class RecipientEarnedBadgeListComponent extends BaseAuthenticatedRoutable
 		this.badgeResults.sort((a, b) => b.badge.issueDate.getTime() - a.badge.issueDate.getTime());
 		this.issuerResults.forEach(r => r.badges.sort((a, b) => b.issueDate.getTime() - a.issueDate.getTime()));
 	}
+
+	// exportPdf() {
+	// 	this.profileManager.userProfilePromise.then(
+	// 		(profile: UserProfile) => {
+	// 			this.dialogService.exportPdfDialog.openDialogForBackpack(this.badgeResults, profile)
+	// 				.catch((error) => console.log(error));
+	// 		},
+	// 		error => this.messageService.reportAndThrowError(
+	// 			"Failed to load userProfile", error
+	// 		)
+	// 	);
+	// }
 }
 
 class BadgeResult {
