@@ -38,6 +38,7 @@ import { ShareSocialDialog } from './dialogs/share-social-dialog/share-social-di
 import { TimeComponent } from './components/time.component';
 import { BadgrButtonComponent } from './components/badgr-button.component';
 import { SharingService } from './services/sharing.service';
+import { NounprojectService } from './services/nounproject.service';
 import { EventsService } from './services/events.service';
 import { ForwardRouteComponent } from './pages/forward-route.component';
 import { MarkdownDisplay } from './components/markdown-display';
@@ -68,6 +69,7 @@ import { IssuerManager } from '../issuer/services/issuer-manager.service';
 import { IssuerApiService } from '../issuer/services/issuer-api.service';
 import { ZipService } from './util/zip-service/zip-service.service';
 import { BadgeLegendComponent } from './components/badge-legend/badge-legend.component';
+import { NounprojectDialog } from './dialogs/nounproject-dialog/nounproject-dialog.component';
 
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 import { BadgeClassManager } from '../issuer/services/badgeclass-manager.service';
@@ -115,6 +117,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	TimeComponent,
 	TooltipComponent,
 	TruncatedTextComponent,
+	NounprojectDialog
 ];
 
 const SERVICES = [
@@ -125,6 +128,7 @@ const SERVICES = [
 	MessageService,
 	SettingsService,
 	SharingService,
+	NounprojectService,
 	EventsService,
 	SessionService,
 	QueryParametersService,
@@ -138,7 +142,7 @@ const SERVICES = [
 	ExternalToolsManager,
 	AppConfigService,
 	NavigationService,
-	ZipService,
+	ZipService
 ];
 
 const GUARDS = [AuthGuard];

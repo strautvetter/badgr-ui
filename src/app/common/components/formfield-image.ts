@@ -3,6 +3,9 @@ import { FormControl } from '@angular/forms';
 import { base64ByteSize, loadImageURL, preloadImageURL, readFileAsDataURL } from '../util/file-util';
 import { DomSanitizer } from '@angular/platform-browser';
 import { throwExpr } from '../util/throw-expr';
+import { CommonDialogsService } from '../services/common-dialogs.service';
+import { NounProjectIcon } from '../model/nounproject.model';
+import { MessageService } from '../services/message.service';
 
 @Component({
 	selector: 'bg-formfield-image',
@@ -51,7 +54,8 @@ import { throwExpr } from '../util/throw-expr';
 					<img [src]="imageDataUrl" alt="" />
 					<p class="u-text-body">
 						{{ imageName }}
-						<button (click)="imageLabel.click()" type="button" class="u-text-link">Bild ändern</button>
+						<button (click)="imageLabel.click()" type="button" class="u-text-link">andere Datei wählen</button>
+						<button *ngIf="loaderName!='basic'" (click)="$event.preventDefault(); findNounproject($event)" type="button" class="u-text-link">anderes Icon suchen</button>
 					</p>
 				</div>
 
@@ -59,6 +63,8 @@ import { throwExpr } from '../util/throw-expr';
 					<svg class="dropzone-x-icon" icon="icon_upload"></svg>
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
+					<!-- dont let user select icon when uploading badge -->
+					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">online finden</span></p>
 				</ng-container>
 			</label>
 
@@ -66,8 +72,9 @@ import { throwExpr } from '../util/throw-expr';
 		</div>
 	`,
 })
-export class BgFormFieldImageComponent {
+export class BgFormFieldImageComponent{
 	@Input() set imageLoaderName(name: string) {
+		this.loaderName = name;
 		this.imageLoader = namedImageLoaders[name] || throwExpr(new Error(`Invalid image loader name ${name}`));
 	}
 	get imageDataUrl() {
@@ -106,7 +113,7 @@ export class BgFormFieldImageComponent {
 	@Input() type: string = null;
 	@Input() errorMessage = 'Please provide a valid image file';
 	@Input() placeholderImage: string;
-	@Input() imageLoader: (file: File) => Promise<string> = basicImageLoader;
+	@Input() imageLoader: (file: File | string) => Promise<string> = basicImageLoader;
 
 	@Input() newDropZone = false;
 
@@ -118,10 +125,16 @@ export class BgFormFieldImageComponent {
 	imageLoading = false;
 	imageProvided = false;
 	imageErrorMessage: string = null;
+	loaderName: string = "basic";
 
 	imageName: string;
 
-	constructor(private elemRef: ElementRef<HTMLElement>, private domSanitizer: DomSanitizer) {}
+	constructor(
+		private elemRef: ElementRef<HTMLElement>,
+		private domSanitizer: DomSanitizer,
+		protected dialogService: CommonDialogsService,
+		protected messageService: MessageService,
+		) {}
 
 	clearFileInput() {
 		(this.element.querySelector("input[type='file']") as HTMLInputElement).value = null;
@@ -154,7 +167,7 @@ export class BgFormFieldImageComponent {
 
 	drop(ev: DragEvent) {
 		this.dragStop(ev);
-
+		this.generated = false;
 		if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length) {
 			this.updateFiles(ev.dataTransfer.files);
 		}
@@ -195,8 +208,8 @@ export class BgFormFieldImageComponent {
 		this.updateFile(files[0]);
 	}
 
-	private updateFile(file: File) {
-		this.imageName = file.name;
+	private updateFile(file: File | string) {
+		this.imageName = (typeof file == "string") ? "icon" : file.name;
 		this.imageDataUrl = null;
 		this.imageProvided = false;
 		this.imageErrorMessage = null;
@@ -223,22 +236,96 @@ export class BgFormFieldImageComponent {
 			}
 		);
 	}
+
+	findNounproject(e) {
+		e.stopPropagation();
+		this.dialogService.nounprojectDialog.openDialog()
+			.then((icon: NounProjectIcon) => {
+				if (icon) {
+					this.generated = false;
+					this.updateFile(icon.preview_url);
+				}
+			})
+			.catch((error) => {
+				this.messageService.reportAndThrowError('Failed to load icons from nounproject', error);
+			});
+	}
 }
 
-export function basicImageLoader(file: File): Promise<string> {
-	return readFileAsDataURL(file)
-		.then((url) => loadImageURL(url).then(() => url))
-		.catch((e) => {
-			throw new Error(`${file.name} is not a valid image file`);
-		});
+// file can either be file or url to a file
+export function basicImageLoader(file: File | string): Promise<string> {
+	if (typeof file == "string") {
+		return loadImageURL(file)
+			.then(() => file)
+			.catch((e) => {
+				throw new Error(`${file} is not a valid image file`);
+			});
+	} else {
+		return readFileAsDataURL(file)
+			.then((url) => loadImageURL(url).then(() => url))
+			.catch((e) => {
+				throw new Error(`${file.name} is not a valid image file`);
+			});
+	}
 }
 
-export function badgeImageLoader(file: File): Promise<string> {
+// file can either be file or url to a file
+export function badgeImageLoader(file: File | string): Promise<string> {
 	// Max file size from https://github.com/mozilla/openbadges-backpack/blob/1193c04847c5fb9eb105c8fb508e1b7f6a39052c/controllers/backpack.js#L397
 	const maxFileSize = 1024 * 256;
 	const startingMaxDimension = 512;
 
-	if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
+	if (typeof file == "string") {
+		return new Promise((resolve, reject) => {
+			loadImageURL(file)
+				.then((image) => {
+					image.crossOrigin = 'Anonymous';
+					image.onload = function(){
+						const canvas = document.createElement('canvas');
+						let maxDimension = Math.min(Math.max(image.width, image.height), startingMaxDimension);
+						let dataURL: string;
+
+						do {
+							canvas.width = canvas.height = maxDimension;
+
+							const context = canvas.getContext('2d');
+
+							// Inspired by https://stackoverflow.com/questions/26705803/image-object-crop-and-draw-in-center-of-canvas
+							const scaleFactor = Math.min(canvas.width / image.width, canvas.height / image.height);
+							const scaledWidth = image.width * scaleFactor;
+							const scaledHeight = image.height * scaleFactor;
+
+							context.drawImage(
+								image,
+								0,
+								0,
+								image.width,
+								image.height,
+								(canvas.width - scaledWidth) / 2,
+								(canvas.height - scaledHeight) / 2,
+								scaledWidth,
+								scaledHeight
+							);
+
+							dataURL = canvas.toDataURL('image/png');
+
+							// On the first try, guess a dimension based on the ratio of max pixel count to file size
+							if (maxDimension === startingMaxDimension) {
+								maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
+							}
+
+							// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
+							maxDimension *= 0.95;
+						} while (base64ByteSize(dataURL) > maxFileSize);
+
+						resolve(dataURL);
+					};
+				})
+				.catch((e) => {
+					throw new Error(`${file} is not a valid image file`);
+				})
+			});
+	} else if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
 		return basicImageLoader(file);
 	} else {
 		return readFileAsDataURL(file)
@@ -289,12 +376,64 @@ export function badgeImageLoader(file: File): Promise<string> {
 	}
 }
 
-export function issuerImageLoader(file: File): Promise<string> {
+// file can either be file or url to a file
+export function issuerImageLoader(file: File | string): Promise<string> {
 	// Max file size from https://github.com/mozilla/openbadges-backpack/blob/1193c04847c5fb9eb105c8fb508e1b7f6a39052c/controllers/backpack.js#L397
 	const maxFileSize = 1024 * 256;
 	const startingMaxDimension = 512;
 
-	if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
+	if (typeof file == "string") {
+		return new Promise((resolve, reject) => {
+			loadImageURL(file)
+			.then((image) => {
+				image.crossOrigin = 'Anonymous';
+				image.onload = function(){
+					const canvas = document.createElement('canvas');
+					let dataURL: string;
+
+					let maxDimension = startingMaxDimension;
+
+					do {
+						const scaleFactor = Math.min(1, maxDimension / image.width, maxDimension / image.height);
+
+						const scaledWidth = image.width * scaleFactor;
+						const scaledHeight = image.height * scaleFactor;
+
+						canvas.width = scaledWidth;
+						canvas.height = scaledHeight;
+
+						const context = canvas.getContext('2d');
+
+						context.drawImage(
+							image,
+							0,
+							0,
+							image.width,
+							image.height,
+							0,
+							0,
+							scaledWidth,
+							scaledHeight);
+
+						dataURL = canvas.toDataURL('image/png');
+
+						// On the first try, guess a dimension based on the ratio of max pixel count to file size
+						if (maxDimension === startingMaxDimension) {
+							maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
+						}
+
+						// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
+						maxDimension *= 0.95;
+					} while (base64ByteSize(dataURL) > maxFileSize);
+
+					resolve(dataURL);
+				}
+			})
+			.catch((e) => {
+				throw new Error(`${file} is not a valid image file`);
+			});
+		})
+	} else if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
 		return basicImageLoader(file);
 	} else {
 		return readFileAsDataURL(file)
