@@ -20,7 +20,10 @@ declare function require(path: string): string;
 			</div>
 			<a *ngIf="badgeSlug" class="badgecard-x-title u-text-breakword" [routerLink]="['../earned-badge', badgeSlug]">{{ badgeTitle }}</a>
 			<a *ngIf="publicUrl" class="badgecard-x-title" [href]="publicUrl">{{ badgeTitle }}</a>
-			<a class="badgecard-x-issuer" [routerLink]="['../../public/issuers', issuerSlug]">{{ issuerTitle }}</a>
+			<a *ngIf="issuerSlug; else noIssuerSlug" class="badgecard-x-issuer" [routerLink]="['../../public/issuers', issuerSlug]">{{ issuerTitle }}</a>
+			<ng-template #noIssuerSlug>
+				<div class="badgecard-x-issuer">{{ issuerTitle }}</div>
+			</ng-template>
 			<p class="badgecard-x-desc" [truncatedText]="badgeDescription" [maxLength]="100"></p>
 		</div>
 		<div class="badgecard-x-footer">
