@@ -161,25 +161,25 @@ export class ExportPdfDialog extends BaseDialog {
 			if(this.profile.lastName) {
 				name += this.profile.lastName;
 			}
-			this.doc.setFontSize(18);
-			this.doc.setFont('Helvetica', 'normal');
-			let awardedToContentLength = this.doc.getTextWidth(name);
 			this.doc.setFontSize(20);
 			this.doc.setFont('Helvetica', 'bold');
+			let awardedToContentLength = this.doc.getTextWidth(name);
+			this.doc.setFontSize(18);
+			this.doc.setFont('Helvetica', 'normal');
 			let awardedToLength = this.doc.getTextWidth("Awarded to: ");
 			if(awardedToContentLength+awardedToLength > cutoff) {
 				name = name.substring(0, name.length - (awardedToContentLength+awardedToLength-cutoff)/2);
 				name += "..."
-				this.doc.setFontSize(18);
-				this.doc.setFont('Helvetica', 'normal');
-				awardedToContentLength = this.doc.getTextWidth(name);
 				this.doc.setFontSize(20);
 				this.doc.setFont('Helvetica', 'bold');
+				awardedToContentLength = this.doc.getTextWidth(name);
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
 			}
 			this.doc.text("Awarded to: ", pageWidth/2 - (awardedToContentLength+awardedToLength)/2, yPos, {
 			});
-			this.doc.setFontSize(18);
-			this.doc.setFont('Helvetica', 'normal');
+			this.doc.setFontSize(20);
+			this.doc.setFont('Helvetica', 'bold');
 			this.doc.text(name, pageWidth/2 + (awardedToContentLength+awardedToLength)/2 - awardedToContentLength, yPos, {
 			});
 		}
@@ -187,40 +187,40 @@ export class ExportPdfDialog extends BaseDialog {
 		// issued by
 		yPos += 15
 		let issuedBy = badgeClass.issuer.name;
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		let issuedByContentLength = this.doc.getTextWidth(issuedBy);
 		this.doc.setFontSize(20);
 		this.doc.setFont('Helvetica', 'bold');
+		let issuedByContentLength = this.doc.getTextWidth(issuedBy);
+		this.doc.setFontSize(18);
+		this.doc.setFont('Helvetica', 'normal');
 		let issuedByLength = this.doc.getTextWidth("Issued by: ..");
 		if(issuedByContentLength+issuedByLength > cutoff) {
 			issuedBy = issuedBy.substring(0, issuedBy.length - (issuedByContentLength+issuedByLength-cutoff)/2);
 			issuedBy += "..."
-			this.doc.setFontSize(18);
-			this.doc.setFont('Helvetica', 'normal');
-			issuedByContentLength = this.doc.getTextWidth(issuedBy);
 			this.doc.setFontSize(20);
 			this.doc.setFont('Helvetica', 'bold');
+			issuedByContentLength = this.doc.getTextWidth(issuedBy);
+			this.doc.setFontSize(18);
+			this.doc.setFont('Helvetica', 'normal');
 		}
 		this.doc.text("Issued by: ", pageWidth/2 - (issuedByLength+issuedByContentLength)/2, yPos, {
 		});
 		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
+		this.doc.setFont('Helvetica', 'bold');
 		this.doc.text(issuedBy, pageWidth/2 + (issuedByLength+issuedByContentLength)/2 - issuedByContentLength, yPos, {
 		});
 
 		// issued on
 		yPos += 15
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
-		let issuedOnContentLength = this.doc.getTextWidth(badge.issueDate.toLocaleDateString("uk-UK"));
 		this.doc.setFontSize(20);
 		this.doc.setFont('Helvetica', 'bold');
+		let issuedOnContentLength = this.doc.getTextWidth(badge.issueDate.toLocaleDateString("uk-UK"));
+		this.doc.setFontSize(18);
+		this.doc.setFont('Helvetica', 'normal');
 		let issuedOnLength = this.doc.getTextWidth("Issued on: ");
 		this.doc.text("Issued on: ", pageWidth/2 - (issuedOnLength+issuedOnContentLength)/2, yPos, {
 		});
-		this.doc.setFontSize(18);
-		this.doc.setFont('Helvetica', 'normal');
+		this.doc.setFontSize(20);
+		this.doc.setFont('Helvetica', 'bold');
 		this.doc.text(badge.issueDate.toLocaleDateString("uk-UK"), 
 			pageWidth/2 + (issuedOnLength+issuedOnContentLength)/2 - issuedOnContentLength, yPos, {
 		});
@@ -248,9 +248,10 @@ export class ExportPdfDialog extends BaseDialog {
 		this.badgePdf = this.doc.output('datauristring');
 		this.outputElement.nativeElement.src = this.badgePdf
 			
-		
+		this.outputElement.nativeElement.setAttribute('style', 'overflow: auto')
 	}
 
+	// disclaimer: unfinished
 	generateBadgeCollectionPdf(collection: RecipientBadgeCollection) {
 		const badges: RecipientBadgeInstance[] = collection.badges
 		this.doc = new jsPDF();
@@ -355,6 +356,7 @@ export class ExportPdfDialog extends BaseDialog {
 		this.outputElement.nativeElement.src = this.badgePdf
 	}
 
+	// disclaimer: unfinished
 	generateBackpackPdf(badgeResults: BadgeResult[], profile: UserProfile) {
 		this.doc = new jsPDF();
 

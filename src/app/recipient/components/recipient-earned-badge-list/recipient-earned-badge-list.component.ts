@@ -253,17 +253,17 @@ export class RecipientEarnedBadgeListComponent extends BaseAuthenticatedRoutable
 		this.issuerResults.forEach(r => r.badges.sort((a, b) => b.issueDate.getTime() - a.issueDate.getTime()));
 	}
 
-	exportPdf() {
-		this.profileManager.userProfilePromise.then(
-			(profile: UserProfile) => {
-				this.dialogService.exportPdfDialog.openDialogForBackpack(this.badgeResults, profile)
-					.catch((error) => console.log(error));
-			},
-			error => this.messageService.reportAndThrowError(
-				"Failed to load userProfile", error
-			)
-		);
-	}
+	// exportPdf() {
+	// 	this.profileManager.userProfilePromise.then(
+	// 		(profile: UserProfile) => {
+	// 			this.dialogService.exportPdfDialog.openDialogForBackpack(this.badgeResults, profile)
+	// 				.catch((error) => console.log(error));
+	// 		},
+	// 		error => this.messageService.reportAndThrowError(
+	// 			"Failed to load userProfile", error
+	// 		)
+	// 	);
+	// }
 }
 
 class BadgeResult {

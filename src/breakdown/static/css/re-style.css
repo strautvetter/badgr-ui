@@ -46,3 +46,10 @@
 .badgecard-x-issuer:hover {
     text-decoration: underline;
 }
+
+/* the dialog background should fill the whole page */
+.dialog {
+	margin: 0;
+	max-width: None;
+	max-height: None;
+}
