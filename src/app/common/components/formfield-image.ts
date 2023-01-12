@@ -64,7 +64,7 @@ import { MessageService } from '../services/message.service';
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
 					<!-- dont let user select icon when uploading badge -->
-					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">online finden</span></p>
+					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">Icon suchen</span></p>
 				</ng-container>
 			</label>
 
