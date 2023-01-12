@@ -14,7 +14,13 @@
 		</div>
 
 		<div class="category u-padding-xaxis3x u-margin-top2x warning">
-			<embed #outputPdf class="output-pdf-embed"/>
+			<embed #outputPdf class="output-pdf-embed" *ngIf="!pdfError; else showError"/>
+			<!-- No results error -->
+			<ng-template #showError>
+				<div id="show-error-result">
+					PDF konnte nicht erstellt werden...
+				</div>
+			</ng-template>
 			<div class="l-stack l-stack-right u-margin-top1x u-padding-bottom2x">
 				<button
 					type="submit"
@@ -22,6 +28,7 @@
 					(click)="downloadPdf()"
 					loading-message="Downloading..."
 					[disabled-when-requesting]="true"
+					[disabled]="pdfError"
 					>
 					Herunterladen
 				</button>
