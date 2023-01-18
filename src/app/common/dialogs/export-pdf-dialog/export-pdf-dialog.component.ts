@@ -232,22 +232,18 @@ export class ExportPdfDialog extends BaseDialog {
 			});
 
 			// logo
-			yPos += 15;
+			yPos += 11;
 			const logoWidth = 20;
 			const logoHeight = 20;
-			this.doc.setFontSize(18);
+			this.doc.setFontSize(14);
 			this.doc.setFont('Helvetica', 'normal');
 			let logoTextOnContentLength = this.doc.getTextWidth("bereitgestellt von my badges");
-			const marginXImageLogo = (pageWidth - logoWidth - logoTextOnContentLength) / 2;
+			const marginXImageLogo = (pageWidth - logoWidth) / 2;
 			var img = new Image()
 			img.src = 'assets/logos/Badges_Entwurf-15.png'
-			// this.doc.addImage(img, 'PNG', marginXImageLogo, yPos, logoWidth, logoHeight);
-			// this.doc.textWithLink("bereitgestellt von my badges", (pageWidth + logoWidth - logoTextOnContentLength) / 2, yPos + logoHeight * 2 / 3, {
-			// 	url: 'https://mybadges.org/public/start'
-			// });
-
-			this.doc.addImage(img, 'PNG', 25 - logoWidth/2, yPos, logoWidth, logoHeight);
-			this.doc.textWithLink("bereitgestellt von myBadges", 25 + logoWidth/2, yPos + logoHeight * 2 / 3, {
+			this.doc.addImage(img, 'PNG', marginXImageLogo, yPos, logoWidth, logoHeight);
+			yPos += 13;
+			this.doc.textWithLink("bereitgestellt von myBadges", (pageWidth - logoTextOnContentLength) / 2, yPos + logoHeight * 2 / 3, {
 				url: 'https://mybadges.org/public/start'
 			});
 
