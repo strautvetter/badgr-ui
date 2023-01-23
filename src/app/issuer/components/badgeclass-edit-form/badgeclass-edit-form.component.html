@@ -13,12 +13,8 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Badge Basics</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Badge Bilder können entweder PNGs oder SVGs sein. Alle Angaben sind verpflichtend.
+				Badge Bilder können entweder PNGs oder SVGs oder die über die Iconsuche gewählten Icons sein. Um das gewählte Bild/Icon wird automatisch, je nach Kategorie, ein Rahmen gesetzt.
 			</p>
-			<a href="https://openbadges.org/" class="u-text-outlink"
-				>Finde mehr über Open Badges heraus
-				<svg icon="icon_external_link"></svg>
-			</a>
 			<br />
 			<a href="javascript:;" (click)="openLegend()" class="u-text-outlink"
 				>Was bedeuten die Rahmen und Farben?
@@ -148,7 +144,6 @@
 		</div>
 	</div>
 
-	<!-- Criteria Panel -->
 	<div class="formsection">
 		<div class="formsection-x-title">
 			<h2 class="u-text-dark2">Kategorie</h2>
@@ -157,9 +152,12 @@
 		<div class="formsection-x-help">
 			<h3 class="u-text-body-bold">Was ist die Kategorie?</h3>
 			<p class="u-text u-margin-top1x u-margin-bottom2x">
-				Als Kategorie wählst Du zwischen der Teilnahme, der Mitgliedschaft, einer fachlichen Kompetenz, einer
-				Metakompetenz oder einem Erfolg.
+				Als Kategorie wählst Du zwischen der Teilnahme/Erfolg, der Mitgliedschaft, einer fachlichen Kompetenz oder einer Metakompetenz.
 			</p>
+			<br />
+			<a href="javascript:;" (click)="openLegend()" class="u-text-outlink"
+				>Mehr zu den Kategorien
+			</a>
 		</div>
 		<div class="formsection-x-body">
 			<div class="forminput u-margin-bottom2x">
@@ -455,6 +453,15 @@
 					</button>
 				</li>
 			</ul>
+		</div>
+	</div>
+
+	<div class="formsection formsection-nohelp">
+		<div class="formsection-x-body">
+			<a href="https://openbadges.org/" class="u-text-outlink">
+				Finde mehr über Open Badges heraus
+				<svg icon="icon_external_link"></svg>
+			</a>
 		</div>
 	</div>
 
