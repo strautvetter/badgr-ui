@@ -279,7 +279,6 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
 				.then((image) => {
-					image.crossOrigin = 'Anonymous';
 					image.onload = function(){
 						const canvas = document.createElement('canvas');
 						let maxDimension = Math.min(Math.max(image.width, image.height), startingMaxDimension);
@@ -386,7 +385,6 @@ export function issuerImageLoader(file: File | string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
 			.then((image) => {
-				image.crossOrigin = 'Anonymous';
 				image.onload = function(){
 					const canvas = document.createElement('canvas');
 					let dataURL: string;

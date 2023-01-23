@@ -116,7 +116,6 @@ export class ExportPdfDialog extends BaseDialog {
 			const marginXImage = (pageWidth - canvasWidth) / 2;
 			let badge_img = new Image();
 			badge_img.src = badgeClass.image;
-			badge_img.crossOrigin = 'Anonymous';
 			this.doc.addImage(badge_img, 'JPEG', marginXImage, yPos, canvasWidth, canvasHeight);
 
 			// title
