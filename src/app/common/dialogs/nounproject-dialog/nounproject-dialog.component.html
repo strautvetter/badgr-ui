@@ -24,7 +24,7 @@
 							type="text"
 							name="forminput"
 							id="forminput"
-							placeholder="Badges durchsuchen"
+							placeholder="Icon suchen"
 							(ngModel)="searchQuery"
 						/>
 						<svg class="forminput-x-icon" icon="icon_search"></svg>
@@ -44,7 +44,7 @@
 								<tbody class="datatable-x-body">
 										<!-- Icons -->
 										<ng-template ngFor let-icon [ngForOf]="icons" let-i="index">
-											<tr class="datatable-x-row">
+											<tr class="datatable-x-row u-cursor-pointer" (click)="selectIcon(icon)">
 												<td class="datatable-x-cell">
 													<div class="l-flex l-flex-2x l-flex-aligncenter">
 														<img
@@ -54,11 +54,11 @@
 															[error-src]="badgeFailedImageUrl"
 															[loaded-src]="icon.preview_url"
 														/> 
-														<a
-															class="u-text u-text-link u-text-breakword"
+														<p
+															class="u-text-bold u-text-breakword"
 															[routerLink]=""
 															(click)="selectIcon(icon)"
-															>{{ icon.term }}</a
+															>{{ icon.term }}</p
 														>
 													</div>
 												</td>
@@ -68,18 +68,18 @@
 														class="button"
 														(click)="selectIcon(icon)"
 													>
-														Select
+														Auswählen
 													</button>
 												</td>
 											</tr>
 										</ng-template>
 								</tbody>
 								<div *ngIf="!endOfResults" id="load-more-icons">
-									<div *ngIf="loadingMore; else NotLoadingMore" class="u-text u-text-breakword">Loading...</div>
+									<div *ngIf="loadingMore; else NotLoadingMore" class="u-text u-text-breakword">Lädt...</div>
 									<ng-template #NotLoadingMore>
 										<a class="u-text u-text-link u-text-breakword"
 										[routerLink]=""
-										(click)="loadMoreIcons()">Load more...</a>
+										(click)="loadMoreIcons()">Mehr laden...</a>
 									</ng-template>
 								</div>
 							</table>
@@ -95,7 +95,7 @@
 				<!-- Language warning -->
 				<div class="category u-padding-xaxis3x u-margin-top2x warning">
 					<p>
-						Bitte nutze Englische Begriffe zum Suchen der Icons.
+						Bitte nutze englische Begriffe zum Suchen der Icons.
 					</p>
 				</div>
 			</div>

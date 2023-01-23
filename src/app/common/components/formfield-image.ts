@@ -64,7 +64,7 @@ import { MessageService } from '../services/message.service';
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
 					<!-- dont let user select icon when uploading badge -->
-					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">online finden</span></p>
+					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">Icon suchen</span></p>
 				</ng-container>
 			</label>
 
@@ -279,7 +279,6 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
 				.then((image) => {
-					image.crossOrigin = 'Anonymous';
 					image.onload = function(){
 						const canvas = document.createElement('canvas');
 						let maxDimension = Math.min(Math.max(image.width, image.height), startingMaxDimension);
@@ -386,7 +385,6 @@ export function issuerImageLoader(file: File | string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
 			.then((image) => {
-				image.crossOrigin = 'Anonymous';
 				image.onload = function(){
 					const canvas = document.createElement('canvas');
 					let dataURL: string;
