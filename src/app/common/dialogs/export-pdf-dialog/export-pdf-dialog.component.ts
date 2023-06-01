@@ -124,8 +124,7 @@ export class ExportPdfDialog extends BaseDialog {
 				this.doc.setFont('Helvetica', 'bold');
 				let title = badgeClass.name;
 				if (this.doc.getTextWidth(title) > cutoff) {
-					title = title.substring(0, title.length - (this.doc.getTextWidth(title) - cutoff) / 2);
-					title += '...';
+					title = this.doc.splitTextToSize(title, cutoff - this.doc.getTextWidth('...'))[0] + '...';
 				}
 				this.doc.text(title, pageWidth / 2, yPos, {
 					align: 'center',
@@ -137,11 +136,7 @@ export class ExportPdfDialog extends BaseDialog {
 				this.doc.setFont('Helvetica', 'normal');
 				let subtitle = badgeClass.description;
 				if (this.doc.getTextWidth(subtitle) > cutoff) {
-					subtitle = subtitle.substring(
-						0,
-						subtitle.length - (this.doc.getTextWidth(subtitle) - cutoff) / 4.2
-					);
-					subtitle += '...';
+					subtitle = this.doc.splitTextToSize(subtitle, cutoff - this.doc.getTextWidth('...'))[0] + '...';
 				}
 				this.doc.text(subtitle, pageWidth / 2, yPos, {
 					align: 'center',
@@ -181,21 +176,22 @@ export class ExportPdfDialog extends BaseDialog {
 				} else {
 					name = this.profile.emails.entities[0].email;
 				}
-				this.doc.setFontSize(20);
-				this.doc.setFont('Helvetica', 'bold');
-				let awardedToContentLength = this.doc.getTextWidth(name);
 				this.doc.setFontSize(18);
 				this.doc.setFont('Helvetica', 'normal');
 				let awardedToLength = this.doc.getTextWidth('Erlangt von: ');
+				this.doc.setFontSize(20);
+				this.doc.setFont('Helvetica', 'bold');
+				let awardedToContentLength = this.doc.getTextWidth(name);
 				if (awardedToContentLength + awardedToLength > cutoff) {
-					name = name.substring(0, name.length - (awardedToContentLength + awardedToLength - cutoff) / 2);
-					name += '...';
+					name =
+						this.doc.splitTextToSize(name, cutoff - awardedToLength - this.doc.getTextWidth('...'))[0] +
+						'...';
 					this.doc.setFontSize(20);
 					this.doc.setFont('Helvetica', 'bold');
 					awardedToContentLength = this.doc.getTextWidth(name);
-					this.doc.setFontSize(18);
-					this.doc.setFont('Helvetica', 'normal');
 				}
+				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
 				this.doc.text(
 					'Erlangt von: ',
 					pageWidth / 2 - (awardedToContentLength + awardedToLength) / 2,
@@ -214,26 +210,24 @@ export class ExportPdfDialog extends BaseDialog {
 				// issued by
 				yPos += 15;
 				let issuedBy = badgeClass.issuer.name;
-				this.doc.setFontSize(20);
-				this.doc.setFont('Helvetica', 'bold');
-				let issuedByContentLength = this.doc.getTextWidth(issuedBy);
 				this.doc.setFontSize(18);
 				this.doc.setFont('Helvetica', 'normal');
 				let issuedByLength = this.doc.getTextWidth('Vergeben von: ..');
+				this.doc.setFontSize(20);
+				this.doc.setFont('Helvetica', 'bold');
+				let issuedByContentLength = this.doc.getTextWidth(issuedBy);
 				if (issuedByContentLength + issuedByLength > cutoff) {
-					issuedBy = issuedBy.substring(
-						0,
-						issuedBy.length - (issuedByContentLength + issuedByLength - cutoff) / 2
-					);
-					issuedBy += '...';
+					issuedBy =
+						this.doc.splitTextToSize(name, cutoff - awardedToLength - this.doc.getTextWidth('...'))[0] +
+						'...';
 					this.doc.setFontSize(20);
 					this.doc.setFont('Helvetica', 'bold');
 					issuedByContentLength = this.doc.getTextWidth(issuedBy);
-					this.doc.setFontSize(18);
-					this.doc.setFont('Helvetica', 'normal');
 				}
-				this.doc.text('Vergeben von: ', pageWidth / 2 - (issuedByLength + issuedByContentLength) / 2, yPos, {});
 				this.doc.setFontSize(18);
+				this.doc.setFont('Helvetica', 'normal');
+				this.doc.text('Vergeben von: ', pageWidth / 2 - (issuedByLength + issuedByContentLength) / 2, yPos, {});
+				this.doc.setFontSize(20);
 				this.doc.setFont('Helvetica', 'bold');
 				this.doc.text(
 					issuedBy,
