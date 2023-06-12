@@ -1,9 +1,10 @@
-import {forwardRef, Inject, Injectable} from '@angular/core';
-import {UserProfileApiService} from './user-profile-api.service';
-import {StandaloneEntitySet} from '../model/managed-entity-set';
-import {UserProfile} from '../model/user-profile.model';
-import {ApiUserProfile} from '../model/user-profile-api.model';
-import {CommonEntityManager} from '../../entity-manager/services/common-entity-manager.service';
+import { forwardRef, Inject, Injectable } from '@angular/core';
+import { UserProfileApiService } from './user-profile-api.service';
+import { StandaloneEntitySet } from '../model/managed-entity-set';
+import { UserProfile } from '../model/user-profile.model';
+import { ApiUserProfile } from '../model/user-profile-api.model';
+import { CommonEntityManager } from '../../entity-manager/services/common-entity-manager.service';
+import { resolve } from 'dns';
 
 /**
  * Manager for the singleton `UserProfile` instance that provides access to the current user's profile.
@@ -11,9 +12,14 @@ import {CommonEntityManager} from '../../entity-manager/services/common-entity-m
 @Injectable()
 export class UserProfileManager {
 	userProfileSet = new StandaloneEntitySet<UserProfile, ApiUserProfile>(
-		apiModel => new UserProfile(this.commonEntityManager),
-		apiModel => UserProfile.currentProfileId,
-		() => this.profileService.getProfile().then(p => [p])
+		(apiModel) => new UserProfile(this.commonEntityManager),
+		(apiModel) => UserProfile.currentProfileId,
+		() => {
+			return this.profileService
+				.getProfile()
+				.then((p) => [p])
+				.catch((e) => []);
+		}
 	);
 
 	/**
@@ -22,18 +28,40 @@ export class UserProfileManager {
 	 *
 	 * @returns {UserProfile}
 	 */
-	get userProfile() { return this.userProfileSet.entities[0]; }
+	get userProfile() {
+		return this.userProfileSet.entities[0];
+	}
 
 	/**
 	 * A promise for the loaded user profile.
 	 *
 	 * @returns {Promise<UserProfile>}
 	 */
-	get userProfilePromise(): Promise<UserProfile> { return this.userProfileSet.loadedPromise.then(() => this.userProfile); }
+	get userProfilePromise(): Promise<UserProfile> {
+		return this.userProfileSet.loadedPromise.then(() => this.userProfile);
+	}
 
 	constructor(
 		@Inject(forwardRef(() => CommonEntityManager))
 		public commonEntityManager: CommonEntityManager,
 		public profileService: UserProfileApiService
 	) {}
+
+	reloadUserProfileSet() {
+		return new Promise((resolve, reject) => {
+			this.userProfileSet = new StandaloneEntitySet<UserProfile, ApiUserProfile>(
+				(apiModel) => new UserProfile(this.commonEntityManager),
+				(apiModel) => UserProfile.currentProfileId,
+				() => {
+					return this.profileService
+						.getProfile()
+						.then((p) => [p])
+						.catch((e) => [])
+						.finally(() => {
+							resolve('userProfileSet updated');
+						});
+				}
+			);
+		});
+	}
 }
