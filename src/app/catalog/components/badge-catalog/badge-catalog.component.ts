@@ -35,7 +35,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badgeResults: BadgeClass[] = null;
 	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
 	badgeResultsByCategory: MatchingBadgeCategory[] = [];
-	order = 'asc';
+	order = 'desc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
 	// issuersLoaded: Promise<unknown>;
@@ -136,13 +136,15 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	}
 
 	changeOrder(order) {
-		if (order === 'asc') {
+		this.order = order;
+		console.log(this.order);
+		if (this.order === 'asc') {
 			this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
 			this.badgeResultsByIssuer
 				.sort((a, b) => a.issuerName.localeCompare(b.issuerName))
 				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 			this.badgeResultsByCategory
-				.sort((a, b) => a.category.localeCompare(b.category))
+				.sort((a, b) => this.categoryOptions[a.category].localeCompare(this.categoryOptions[b.category]))
 				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
 			this.badgeResults.sort((a, b) => b.name.localeCompare(a.name));
@@ -150,7 +152,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				.sort((a, b) => b.issuerName.localeCompare(a.issuerName))
 				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 			this.badgeResultsByCategory
-				.sort((a, b) => b.category.localeCompare(a.category))
+				.sort((a, b) => this.categoryOptions[b.category].localeCompare(this.categoryOptions[a.category]))
 				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
@@ -165,8 +167,6 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		const badgeResultsByCategoryLocal = {};
 
 		var addBadgeToResultsByIssuer = function (item) {
-			that.badgeResults.push(item);
-
 			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
 
 			if (!issuerResults) {
@@ -184,8 +184,6 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			return true;
 		};
 		var addBadgeToResultsByCategory = function (item) {
-			that.badgeResults.push(item);
-
 			let categoryResults = badgeResultsByCategoryLocal[item.extension['extensions:CategoryExtension'].Category];
 
 			if (!categoryResults) {
@@ -200,21 +198,13 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 			return true;
 		};
-		this.badges.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery)).forEach(addBadgeToResultsByIssuer);
-		this.badges.filter(MatchingAlgorithm.categoryMatcher(this.searchQuery)).forEach(addBadgeToResultsByCategory);
+		this.badges.filter(this.badgeMatcher(this.searchQuery)).forEach((item) => {
+			that.badgeResults.push(item);
+			addBadgeToResultsByIssuer(item);
+			addBadgeToResultsByCategory(item);
+		});
 
-		this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
-		this.badgeResultsByIssuer.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
-		this.badgeResultsByCategory.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
-	}
-
-	private issuerIdToSlug(issuerId) {
-		if (issuerId.startsWith('http')) {
-			let splitted = issuerId.split(/[/.\s]/);
-			return splitted[splitted.length - 1];
-		} else {
-			return issuerId;
-		}
+		this.changeOrder(this.order);
 	}
 
 	openLegend() {
@@ -224,16 +214,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	closeLegend() {
 		this.showLegend = false;
 	}
-}
 
-class MatchingAlgorithm {
-	static issuerMatcher(inputPattern: string): (badge) => boolean {
-		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
-		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
-
-		return (badge) => StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp);
-	}
-	static categoryMatcher(inputPattern: string): (badge) => boolean {
+	private badgeMatcher(inputPattern: string): (badge) => boolean {
 		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
 
