@@ -14,7 +14,7 @@ import { BaseRoutableComponent } from '../../../common/pages/base-routable.compo
 import { BadgeClass } from '../../../issuer/models/badgeclass.model';
 import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.service';
 import { StringMatchingUtil } from '../../../common/util/string-matching-util';
-import { BadgeClassCategory } from 'src/app/issuer/models/badgeclass-api.model';
+import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model';
 
 @Component({
 	selector: 'app-badge-catalog',
