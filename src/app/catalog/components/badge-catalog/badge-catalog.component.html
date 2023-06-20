@@ -6,7 +6,7 @@
 			Badges
 			<ng-template [bgAwaitPromises]="[badgesLoaded]" [showLoader]="false">
 				<span class="topbar-x-internalheading">
-					{{ badges.length | i18nPlural: plural['badges'] }}
+					{{ badges.length | i18nPlural : plural['badges'] }}
 				</span>
 			</ng-template>
 		</h2>
@@ -23,7 +23,8 @@
 					<div class="forminput-x-inputs">
 						<input
 							type="text"
-							name="forminput"changeOrder
+							name="forminput"
+							changeOrder
 							id="forminput"
 							placeholder="Badges durchsuchen"
 							[(ngModel)]="searchQuery"
@@ -37,34 +38,29 @@
 						<span class="checkbox-x-text">Nach Institution grupppieren</span>
 					</label>
 				</div>
-				<div class="viewtoggle l-actionbar-x-viewtoggle"
-				[class.viewtoggle-is-listview]="order == 'desc'">
-					<label class="viewtoggle-x-grid" (click)='changeOrder("asc")'>
+				<div class="viewtoggle l-actionbar-x-viewtoggle" [class.viewtoggle-is-listview]="order == 'desc'">
+					<label class="viewtoggle-x-grid" (click)="changeOrder('asc')">
 						<span class="visuallyhidden">name</span>
-						<input
-							name="radiobutton2"
-							id="radiobutton3"
-							type="radio"
-							value="asc"
-							[(ngModel)]="order"
-						/>
+						<input name="radiobutton2" id="radiobutton3" type="radio" value="asc" [(ngModel)]="order" />
 						<svg style="transform: rotateZ(90deg)" icon="icon_arrow"></svg>
 					</label>
-					<label class="viewtoggle-x-list" (click)='changeOrder("desc")'>
+					<label class="viewtoggle-x-list" (click)="changeOrder('desc')">
 						<span class="visuallyhidden">-name</span>
-						<input
-							type="radio"
-							name="radiobutton2"
-							id="radiobutton4"
-							value="desc"
-							[(ngModel)]="order"
-						/>
+						<input type="radio" name="radiobutton2" id="radiobutton4" value="desc" [(ngModel)]="order" />
 						<svg style="transform: rotateZ(-90deg)" icon="icon_arrow"></svg>
 					</label>
 				</div>
 			</div>
-			<div class="open-legend-button">
-				<a (click)="openLegend()">Was bedeuten die Rahmen und Farben?</a>
+			<div class="subtitle-wrapper">
+				<div class="tags-wrapper">
+					<!-- <div class="tag" *ngFor="let tag of badgeClass.tags; last as last">{{ tag }}</div> -->
+					<div class="tag tag-wrapper">test</div>
+					<div class="tag tag-wrapper">langstrumpf</div>
+					<div class="tag tag-wrapper">muffin</div>
+				</div>
+				<div class="open-legend-button">
+					<a (click)="openLegend()">Was bedeuten die Rahmen und Farben?</a>
+				</div>
 			</div>
 			<ng-container *ngIf="!groupByIssuer">
 				<div class="l-grid l-grid-large">
