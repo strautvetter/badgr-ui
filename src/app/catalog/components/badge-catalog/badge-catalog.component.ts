@@ -96,10 +96,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	constructor(
 		protected title: Title,
 		protected messageService: MessageService,
-		// protected issuerManager: IssuerManager,
 		protected configService: AppConfigService,
 		protected badgeClassService: BadgeClassManager,
-		// loginService: SessionService,
 		router: Router,
 		route: ActivatedRoute
 	) {
@@ -165,10 +163,6 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		const badgeResultsByIssuerLocal = {};
 		this.badgeResultsByCategory = [];
 		const badgeResultsByCategoryLocal = {};
-
-		// var addIssuerToResults = function(item){
-		// 	that.badgeResults.push(item);
-		// }
 
 		var addBadgeToResultsByIssuer = function (item) {
 			that.badgeResults.push(item);
