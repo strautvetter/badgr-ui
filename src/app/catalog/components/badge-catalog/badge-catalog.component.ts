@@ -14,6 +14,7 @@ import { BaseRoutableComponent } from '../../../common/pages/base-routable.compo
 import { BadgeClass } from '../../../issuer/models/badgeclass.model';
 import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.service';
 import { StringMatchingUtil } from '../../../common/util/string-matching-util';
+import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model';
 
 @Component({
 	selector: 'app-badge-catalog',
@@ -33,6 +34,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badges: BadgeClass[] = null;
 	badgeResults: BadgeClass[] = null;
 	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
+	badgeResultsByCategory: MatchingBadgeCategory[] = [];
 	order = 'asc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
@@ -66,27 +68,36 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		},
 	};
 
-	private _searchQuery = "";
-	get searchQuery() { return this._searchQuery; }
+	private _searchQuery = '';
+	get searchQuery() {
+		return this._searchQuery;
+	}
 	set searchQuery(query) {
 		this._searchQuery = query;
 		this.updateResults();
 	}
 
-	private _groupByIssuer = false;
-	get groupByIssuer() {return this._groupByIssuer;}
-	set groupByIssuer(val: boolean) {
-		this._groupByIssuer = val;
+	private _groupBy = 'Kategorie';
+	get groupBy() {
+		return this._groupBy;
+	}
+	set groupBy(val: string) {
+		this._groupBy = val;
 		this.updateResults();
 	}
+	groups = ['Kategorie', 'Issuer', '---'];
+	categoryOptions: { [key in BadgeClassCategory]: string } = {
+		membership: 'Mitgliedschaft',
+		ability: 'Metakompetenz',
+		archievement: 'Teilnahme / Erfolg',
+		skill: 'Fachliche Kompetenz',
+	};
 
 	constructor(
 		protected title: Title,
 		protected messageService: MessageService,
-		// protected issuerManager: IssuerManager,
 		protected configService: AppConfigService,
 		protected badgeClassService: BadgeClassManager,
-		// loginService: SessionService,
 		router: Router,
 		route: ActivatedRoute
 	) {
@@ -103,6 +114,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				(badges) => {
 					this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 					this.badgeResults = this.badges;
+					this.updateResults();
 					resolve(badges);
 				},
 				(error) => {
@@ -123,40 +135,43 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		super.ngOnInit();
 	}
 
-	changeOrder(order){
-		if(order === 'asc'){
-			this.badgeResults.sort((a,b) => a.name.localeCompare(b.name));
-			this.badgeResultsByIssuer.sort((a,b) => a.issuerName.localeCompare(b.issuerName))
-				.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+	changeOrder(order) {
+		this.order = order;
+		if (this.order === 'asc') {
+			this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
+			this.badgeResultsByIssuer
+				.sort((a, b) => a.issuerName.localeCompare(b.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+			this.badgeResultsByCategory
+				.sort((a, b) => this.categoryOptions[a.category].localeCompare(this.categoryOptions[b.category]))
+				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
-			this.badgeResults.sort((a,b) => b.name.localeCompare(a.name));
-			this.badgeResultsByIssuer.sort((a,b) => b.issuerName.localeCompare(a.issuerName))
-				.forEach(r => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
+			this.badgeResults.sort((a, b) => b.name.localeCompare(a.name));
+			this.badgeResultsByIssuer
+				.sort((a, b) => b.issuerName.localeCompare(a.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
+			this.badgeResultsByCategory
+				.sort((a, b) => this.categoryOptions[b.category].localeCompare(this.categoryOptions[a.category]))
+				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
 
 	private updateResults() {
-
 		let that = this;
 		// Clear Results
 		this.badgeResults = [];
 		this.badgeResultsByIssuer = [];
 		const badgeResultsByIssuerLocal = {};
+		this.badgeResultsByCategory = [];
+		const badgeResultsByCategoryLocal = {};
 
-		// var addIssuerToResults = function(item){
-		// 	that.badgeResults.push(item);
-		// }
-
-		var addBadgeToResultsByIssuer = function(item){
-
-			that.badgeResults.push(item);
-			
+		var addBadgeToResultsByIssuer = function (item) {
 			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
-			
+
 			if (!issuerResults) {
 				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingBadgeIssuer(
 					item.issuerName,
-					""
+					''
 				);
 
 				// append result to the issuerResults array bound to the view template.
@@ -166,62 +181,64 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			issuerResults.addBadge(item);
 
 			return true;
+		};
+		var addBadgeToResultsByCategory = function (item) {
+			let categoryResults = badgeResultsByCategoryLocal[item.extension['extensions:CategoryExtension'].Category];
 
-		}
-		// this.badges
-		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-		// 	.forEach(addIssuerToResults);
-		this.badges
-			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addBadgeToResultsByIssuer);
+			if (!categoryResults) {
+				categoryResults = badgeResultsByCategoryLocal[item.extension['extensions:CategoryExtension'].Category] =
+					new MatchingBadgeCategory(item.extension['extensions:CategoryExtension'].Category, '');
 
-		// this.allBadges
-		// 	.filter(MatchingAlgorithm.badgeMatcher(this._searchQuery))
-		// 	.forEach(addBadgeToResults);
+				// append result to the categoryResults array bound to the view template.
+				that.badgeResultsByCategory.push(categoryResults);
+			}
 
-		this.badgeResults.sort((a,b) => a.name.localeCompare(b.name))
-		this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+			categoryResults.addBadge(item);
+
+			return true;
+		};
+		this.badges.filter(this.badgeMatcher(this.searchQuery)).forEach((item) => {
+			that.badgeResults.push(item);
+			addBadgeToResultsByIssuer(item);
+			addBadgeToResultsByCategory(item);
+		});
+
+		this.changeOrder(this.order);
 	}
 
-	private issuerIdToSlug(issuerId) {
-		if(issuerId.startsWith("http")) {
-			let splitted = (issuerId.split(/[/.\s]/))
-			return splitted[splitted.length-1]
-		} else {
-			return issuerId
-		}
-	}
-
-	openLegend(){
+	openLegend() {
 		this.showLegend = true;
 	}
 
 	closeLegend() {
 		this.showLegend = false;
 	}
-}
 
-
-class MatchingAlgorithm {
-	static issuerMatcher(inputPattern: string): (badge) => boolean {
+	private badgeMatcher(inputPattern: string): (badge) => boolean {
 		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
 
-		return badge => (
-			StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp)
-		);
+		return (badge) => StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp);
 	}
 }
 
 class MatchingBadgeIssuer {
-	constructor(
-		public issuerName: string,
-		public badge,
-		public badges: BadgeClass[] = [],
-	) {}
+	constructor(public issuerName: string, public badge, public badges: BadgeClass[] = []) {}
 
 	async addBadge(badge) {
 		if (badge.issuerName === this.issuerName) {
+			if (this.badges.indexOf(badge) < 0) {
+				this.badges.push(badge);
+			}
+		}
+	}
+}
+
+class MatchingBadgeCategory {
+	constructor(public category: string, public badge, public badges: BadgeClass[] = []) {}
+
+	async addBadge(badge) {
+		if (badge.extension['extensions:CategoryExtension'].Category === this.category) {
 			if (this.badges.indexOf(badge) < 0) {
 				this.badges.push(badge);
 			}
