@@ -211,8 +211,9 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 	}
 
 	exportPdf() {
-		this.dialogService.exportPdfDialog.openDialog(this.badge)
-			.catch((error) => console.log(error));
+		let markdown = window.document.getElementById('recipient-earned-badge-detail-markdown-display') as HTMLElement;
+
+		this.dialogService.exportPdfDialog.openDialog(this.badge, markdown).catch((error) => console.log(error));
 	}
 }
 
