@@ -96,7 +96,7 @@ export class ExportPdfDialog extends BaseDialog {
 		this.resolveFunc();
 	}
 
-	generateSingleBadgePdf(badge: RecipientBadgeInstance, markdown: HTMLElement) {
+	async generateSingleBadgePdf(badge: RecipientBadgeInstance, markdown: HTMLElement) {
 		this.pdfError = undefined;
 		const badgeClass: ApiRecipientBadgeClass = badge.badgeClass;
 		this.doc = new jsPDF();
@@ -109,6 +109,16 @@ export class ExportPdfDialog extends BaseDialog {
 		let cutoff = pageWidth - 27;
 
 		try {
+			if (!this.profile) {
+				await this.profileManager.userProfilePromise.then(
+					(profile) => {
+						debugger;
+						this.profile = profile;
+						this.emailsLoaded = profile.emails.loadedPromise;
+					},
+					(error) => this.messageService.reportAndThrowError('Failed to load userProfile', error)
+				);
+			}
 			this.emailsLoaded.then(async () => {
 				// image
 				const canvasWidth = 100;
