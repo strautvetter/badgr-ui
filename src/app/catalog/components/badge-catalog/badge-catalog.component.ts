@@ -35,7 +35,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badgeResults: BadgeClass[] = null;
 	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
 	badgeResultsByCategory: MatchingBadgeCategory[] = [];
-	order = 'desc';
+	order = 'asc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
 	// issuersLoaded: Promise<unknown>;
