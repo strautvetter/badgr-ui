@@ -86,11 +86,12 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this.updateResults();
 	}
 	groups = ['Kategorie', 'Issuer', '---'];
-	categoryOptions: { [key in BadgeClassCategory]: string } = {
+	categoryOptions: { [key in BadgeClassCategory | 'noCategory']: string } = {
 		membership: 'Mitgliedschaft',
 		ability: 'Metakompetenz',
 		archievement: 'Teilnahme / Erfolg',
 		skill: 'Fachliche Kompetenz',
+		noCategory: 'Keine Kategorie',
 	};
 
 	constructor(
@@ -183,11 +184,17 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			return true;
 		};
 		var addBadgeToResultsByCategory = function (item) {
-			let categoryResults = badgeResultsByCategoryLocal[item.extension['extensions:CategoryExtension'].Category];
+			let itemCategory =
+				item.extension && item.extension['extensions:CategoryExtension']
+					? item.extension['extensions:CategoryExtension'].Category
+					: 'noCategory';
+			let categoryResults = badgeResultsByCategoryLocal[itemCategory];
 
 			if (!categoryResults) {
-				categoryResults = badgeResultsByCategoryLocal[item.extension['extensions:CategoryExtension'].Category] =
-					new MatchingBadgeCategory(item.extension['extensions:CategoryExtension'].Category, '');
+				categoryResults = badgeResultsByCategoryLocal[itemCategory] = new MatchingBadgeCategory(
+					itemCategory,
+					''
+				);
 
 				// append result to the categoryResults array bound to the view template.
 				that.badgeResultsByCategory.push(categoryResults);
@@ -238,7 +245,15 @@ class MatchingBadgeCategory {
 	constructor(public category: string, public badge, public badges: BadgeClass[] = []) {}
 
 	async addBadge(badge) {
-		if (badge.extension['extensions:CategoryExtension'].Category === this.category) {
+		if (
+			badge.extension &&
+			badge.extension['extensions:CategoryExtension'] &&
+			badge.extension['extensions:CategoryExtension'].Category === this.category
+		) {
+			if (this.badges.indexOf(badge) < 0) {
+				this.badges.push(badge);
+			}
+		} else if (!badge.extension['extensions:CategoryExtension'] && this.category == 'noCategory') {
 			if (this.badges.indexOf(badge) < 0) {
 				this.badges.push(badge);
 			}

@@ -197,7 +197,7 @@ export class IssuerStaffMember extends ManagedEntity<ApiIssuerStaff, IssuerStaff
 	}
 
 	static urlFromApiModel(apiStaff: ApiIssuerStaff) {
-		return apiStaff.user.email;
+		return apiStaff.user ? apiStaff.user.email : '';
 	}
 	constructor(public issuer: Issuer) {
 		super(issuer.commonManager);
