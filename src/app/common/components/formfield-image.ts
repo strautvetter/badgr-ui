@@ -54,8 +54,17 @@ import { MessageService } from '../services/message.service';
 					<img [src]="imageDataUrl" alt="" />
 					<p class="u-text-body">
 						{{ imageName }}
-						<button (click)="imageLabel.click()" type="button" class="u-text-link">andere Datei wählen</button>
-						<button *ngIf="loaderName!='basic'" (click)="$event.preventDefault(); findNounproject($event)" type="button" class="u-text-link">anderes Icon suchen</button>
+						<button (click)="imageLabel.click()" type="button" class="u-text-link">
+							andere Datei wählen
+						</button>
+						<button
+							*ngIf="loaderName != 'basic'"
+							(click)="$event.preventDefault(); findNounproject($event)"
+							type="button"
+							class="u-text-link"
+						>
+							anderes Icon suchen
+						</button>
 					</p>
 				</div>
 
@@ -64,7 +73,12 @@ import { MessageService } from '../services/message.service';
 					<p class="dropzone-x-info1">Drag & Drop</p>
 					<p class="dropzone-x-info2">oder <span class="u-text-link">aus Dateien auswählen</span></p>
 					<!-- dont let user select icon when uploading badge -->
-					<p *ngIf="loaderName!='basic'" class="dropzone-x-info2">oder <span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)">Icon suchen</span></p>
+					<p *ngIf="loaderName != 'basic'" class="dropzone-x-info2">
+						oder
+						<span class="u-text-link" (click)="$event.preventDefault(); findNounproject($event)"
+							>Icon suchen</span
+						>
+					</p>
 				</ng-container>
 			</label>
 
@@ -72,7 +86,7 @@ import { MessageService } from '../services/message.service';
 		</div>
 	`,
 })
-export class BgFormFieldImageComponent{
+export class BgFormFieldImageComponent {
 	@Input() set imageLoaderName(name: string) {
 		this.loaderName = name;
 		this.imageLoader = namedImageLoaders[name] || throwExpr(new Error(`Invalid image loader name ${name}`));
@@ -125,7 +139,7 @@ export class BgFormFieldImageComponent{
 	imageLoading = false;
 	imageProvided = false;
 	imageErrorMessage: string = null;
-	loaderName: string = "basic";
+	loaderName: string = 'basic';
 
 	imageName: string;
 
@@ -133,8 +147,8 @@ export class BgFormFieldImageComponent{
 		private elemRef: ElementRef<HTMLElement>,
 		private domSanitizer: DomSanitizer,
 		protected dialogService: CommonDialogsService,
-		protected messageService: MessageService,
-		) {}
+		protected messageService: MessageService
+	) {}
 
 	clearFileInput() {
 		(this.element.querySelector("input[type='file']") as HTMLInputElement).value = null;
@@ -209,7 +223,7 @@ export class BgFormFieldImageComponent{
 	}
 
 	private updateFile(file: File | string) {
-		this.imageName = (typeof file == "string") ? "icon" : file.name;
+		this.imageName = typeof file == 'string' ? 'icon' : file.name;
 		this.imageDataUrl = null;
 		this.imageProvided = false;
 		this.imageErrorMessage = null;
@@ -217,7 +231,7 @@ export class BgFormFieldImageComponent{
 
 		this.imageLoader(file).then(
 			(dataUrl) => {
-				if(this.type === 'badge' && !this.generated){
+				if (this.type === 'badge' && !this.generated) {
 					this.imageUploaded.emit(dataUrl);
 					this.generated = true;
 					// this.generateRandom = true;
@@ -227,7 +241,6 @@ export class BgFormFieldImageComponent{
 					this.imageDataUrl = dataUrl;
 					this.imageProvided = true;
 					this.imageLoading = false;
-
 				}
 			},
 			(error: Error) => {
@@ -239,7 +252,8 @@ export class BgFormFieldImageComponent{
 
 	findNounproject(e) {
 		e.stopPropagation();
-		this.dialogService.nounprojectDialog.openDialog()
+		this.dialogService.nounprojectDialog
+			.openDialog()
 			.then((icon: NounProjectIcon) => {
 				if (icon) {
 					this.generated = false;
@@ -254,7 +268,7 @@ export class BgFormFieldImageComponent{
 
 // file can either be file or url to a file
 export function basicImageLoader(file: File | string): Promise<string> {
-	if (typeof file == "string") {
+	if (typeof file == 'string') {
 		return loadImageURL(file)
 			.then(() => file)
 			.catch((e) => {
@@ -275,11 +289,12 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 	const maxFileSize = 1024 * 256;
 	const startingMaxDimension = 512;
 
-	if (typeof file == "string") {
+	if (typeof file == 'string') {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
 				.then((image) => {
-					image.onload = function(){
+					image.crossOrigin = 'Anonymous';
+					image.onload = function () {
 						const canvas = document.createElement('canvas');
 						let maxDimension = Math.min(Math.max(image.width, image.height), startingMaxDimension);
 						let dataURL: string;
@@ -310,7 +325,9 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 
 							// On the first try, guess a dimension based on the ratio of max pixel count to file size
 							if (maxDimension === startingMaxDimension) {
-								maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
+								maxDimension = Math.sqrt(
+									maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL))
+								);
 							}
 
 							// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
@@ -322,8 +339,8 @@ export function badgeImageLoader(file: File | string): Promise<string> {
 				})
 				.catch((e) => {
 					throw new Error(`${file} is not a valid image file`);
-				})
-			});
+				});
+		});
 	} else if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
 		return basicImageLoader(file);
 	} else {
@@ -381,56 +398,50 @@ export function issuerImageLoader(file: File | string): Promise<string> {
 	const maxFileSize = 1024 * 256;
 	const startingMaxDimension = 512;
 
-	if (typeof file == "string") {
+	if (typeof file == 'string') {
 		return new Promise((resolve, reject) => {
 			loadImageURL(file)
-			.then((image) => {
-				image.onload = function(){
-					const canvas = document.createElement('canvas');
-					let dataURL: string;
+				.then((image) => {
+					image.crossOrigin = 'Anonymous';
+					image.onload = function () {
+						const canvas = document.createElement('canvas');
+						let dataURL: string;
 
-					let maxDimension = startingMaxDimension;
+						let maxDimension = startingMaxDimension;
 
-					do {
-						const scaleFactor = Math.min(1, maxDimension / image.width, maxDimension / image.height);
+						do {
+							const scaleFactor = Math.min(1, maxDimension / image.width, maxDimension / image.height);
 
-						const scaledWidth = image.width * scaleFactor;
-						const scaledHeight = image.height * scaleFactor;
+							const scaledWidth = image.width * scaleFactor;
+							const scaledHeight = image.height * scaleFactor;
 
-						canvas.width = scaledWidth;
-						canvas.height = scaledHeight;
+							canvas.width = scaledWidth;
+							canvas.height = scaledHeight;
 
-						const context = canvas.getContext('2d');
+							const context = canvas.getContext('2d');
 
-						context.drawImage(
-							image,
-							0,
-							0,
-							image.width,
-							image.height,
-							0,
-							0,
-							scaledWidth,
-							scaledHeight);
+							context.drawImage(image, 0, 0, image.width, image.height, 0, 0, scaledWidth, scaledHeight);
 
-						dataURL = canvas.toDataURL('image/png');
+							dataURL = canvas.toDataURL('image/png');
 
-						// On the first try, guess a dimension based on the ratio of max pixel count to file size
-						if (maxDimension === startingMaxDimension) {
-							maxDimension = Math.sqrt(maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL)));
-						}
+							// On the first try, guess a dimension based on the ratio of max pixel count to file size
+							if (maxDimension === startingMaxDimension) {
+								maxDimension = Math.sqrt(
+									maxFileSize * (Math.pow(maxDimension, 2) / base64ByteSize(dataURL))
+								);
+							}
 
-						// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
-						maxDimension *= 0.95;
-					} while (base64ByteSize(dataURL) > maxFileSize);
+							// The guesses tend to be a little large, so shrink it down, and continue to shrink the size until it fits
+							maxDimension *= 0.95;
+						} while (base64ByteSize(dataURL) > maxFileSize);
 
-					resolve(dataURL);
-				}
-			})
-			.catch((e) => {
-				throw new Error(`${file} is not a valid image file`);
-			});
-		})
+						resolve(dataURL);
+					};
+				})
+				.catch((e) => {
+					throw new Error(`${file} is not a valid image file`);
+				});
+		});
 	} else if (file.type === 'image/svg+xml' && file.size <= maxFileSize) {
 		return basicImageLoader(file);
 	} else {
