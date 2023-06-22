@@ -160,8 +160,8 @@ export class ExportPdfDialog extends BaseDialog {
 						},
 						x: 20,
 						y: yPos,
-						width: cutoff, //target width in the PDF document
-						windowWidth: 650, //window width in CSS pixels
+						width: cutoff - 8, //target width in the PDF document
+						windowWidth: 550, //window width in CSS pixels
 					});
 					yPos += 55 + 10;
 					this.doc.setFillColor(255, 255, 255);
