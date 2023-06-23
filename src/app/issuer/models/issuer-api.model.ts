@@ -29,12 +29,14 @@ export interface ApiIssuer {
 	created_at: string;
 	created_by: string;
 	staff: ApiIssuerStaff[];
-	
+
 	badgeClassCount: number;
-	
+
 	json: ApiIssuerJsonld;
-	
+
 	verified: boolean;
+
+	source_url?: string;
 
 	category?: string;
 	street?: string;
@@ -44,7 +46,6 @@ export interface ApiIssuer {
 
 	lat?: number;
 	lon?: number;
-
 }
 
 export type IssuerStaffRoleSlug = 'owner' | 'editor' | 'staff';
@@ -81,7 +82,7 @@ export interface ApiIssuerForCreation {
 	city?: string;
 
 	lat?: number;
-	lon?:number;
+	lon?: number;
 }
 
 export interface ApiIssuerForEditing {
@@ -97,5 +98,5 @@ export interface ApiIssuerForEditing {
 	city?: string;
 
 	lat?: number;
-	lon?:number;
+	lon?: number;
 }

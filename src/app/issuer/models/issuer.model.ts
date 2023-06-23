@@ -87,6 +87,9 @@ export class Issuer extends ManagedEntity<ApiIssuer, IssuerRef> {
 	get lon(): number {
 		return this.apiModel.lon;
 	}
+	get sourceUrl(): string {
+		return this.apiModel.source_url;
+	}
 
 	get badgeClassCount(): number {
 		const badges = this.commonManager.badgeManager.badgesList;
