@@ -204,11 +204,14 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 			return true;
 		};
-		this.badges.filter(this.badgeMatcher(this.searchQuery)).forEach((item) => {
-			that.badgeResults.push(item);
-			addBadgeToResultsByIssuer(item);
-			addBadgeToResultsByCategory(item);
-		});
+		this.badges
+			.filter(this.badgeMatcher(this.searchQuery))
+			.filter((i) => !i.apiModel.source_url)
+			.forEach((item) => {
+				that.badgeResults.push(item);
+				addBadgeToResultsByIssuer(item);
+				addBadgeToResultsByCategory(item);
+			});
 
 		this.changeOrder(this.order);
 	}
