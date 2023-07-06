@@ -64,4 +64,5 @@ export interface ApiBadgeClass extends ApiBadgeClassForCreation {
 	created_by: string;
 
 	json: ApiBadgeClassJsonld;
+	source_url: string;
 }
