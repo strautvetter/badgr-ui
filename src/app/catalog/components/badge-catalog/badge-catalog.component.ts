@@ -40,6 +40,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badgesLoaded: Promise<unknown>;
 
 	showLegend = false;
+	tags: String[] = [];
 
 	get theme() {
 		return this.configService.theme;
@@ -66,15 +67,19 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		},
 	};
 
-	private _searchQuery = "";
-	get searchQuery() { return this._searchQuery; }
+	private _searchQuery = '';
+	get searchQuery() {
+		return this._searchQuery;
+	}
 	set searchQuery(query) {
 		this._searchQuery = query;
 		this.updateResults();
 	}
 
 	private _groupByIssuer = false;
-	get groupByIssuer() {return this._groupByIssuer;}
+	get groupByIssuer() {
+		return this._groupByIssuer;
+	}
 	set groupByIssuer(val: boolean) {
 		this._groupByIssuer = val;
 		this.updateResults();
@@ -103,6 +108,10 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				(badges) => {
 					this.badges = badges.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 					this.badgeResults = this.badges;
+					badges.forEach((badge) => {
+						this.tags = this.tags.concat(badge.tags);
+					});
+					this.tags = uniq_fast(this.tags);
 					resolve(badges);
 				},
 				(error) => {
@@ -123,20 +132,21 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		super.ngOnInit();
 	}
 
-	changeOrder(order){
-		if(order === 'asc'){
-			this.badgeResults.sort((a,b) => a.name.localeCompare(b.name));
-			this.badgeResultsByIssuer.sort((a,b) => a.issuerName.localeCompare(b.issuerName))
-				.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+	changeOrder(order) {
+		if (order === 'asc') {
+			this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
+			this.badgeResultsByIssuer
+				.sort((a, b) => a.issuerName.localeCompare(b.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
-			this.badgeResults.sort((a,b) => b.name.localeCompare(a.name));
-			this.badgeResultsByIssuer.sort((a,b) => b.issuerName.localeCompare(a.issuerName))
-				.forEach(r => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
+			this.badgeResults.sort((a, b) => b.name.localeCompare(a.name));
+			this.badgeResultsByIssuer
+				.sort((a, b) => b.issuerName.localeCompare(a.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
 
 	private updateResults() {
-
 		let that = this;
 		// Clear Results
 		this.badgeResults = [];
@@ -147,16 +157,15 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		// 	that.badgeResults.push(item);
 		// }
 
-		var addBadgeToResultsByIssuer = function(item){
-
+		var addBadgeToResultsByIssuer = function (item) {
 			that.badgeResults.push(item);
-			
+
 			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
-			
+
 			if (!issuerResults) {
 				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingBadgeIssuer(
 					item.issuerName,
-					""
+					''
 				);
 
 				// append result to the issuerResults array bound to the view template.
@@ -166,33 +175,30 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			issuerResults.addBadge(item);
 
 			return true;
-
-		}
+		};
 		// this.badges
 		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
 		// 	.forEach(addIssuerToResults);
-		this.badges
-			.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-			.forEach(addBadgeToResultsByIssuer);
+		this.badges.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery)).forEach(addBadgeToResultsByIssuer);
 
 		// this.allBadges
 		// 	.filter(MatchingAlgorithm.badgeMatcher(this._searchQuery))
 		// 	.forEach(addBadgeToResults);
 
-		this.badgeResults.sort((a,b) => a.name.localeCompare(b.name))
-		this.badgeResultsByIssuer.forEach(r => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+		this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
+		this.badgeResultsByIssuer.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 	}
 
 	private issuerIdToSlug(issuerId) {
-		if(issuerId.startsWith("http")) {
-			let splitted = (issuerId.split(/[/.\s]/))
-			return splitted[splitted.length-1]
+		if (issuerId.startsWith('http')) {
+			let splitted = issuerId.split(/[/.\s]/);
+			return splitted[splitted.length - 1];
 		} else {
-			return issuerId
+			return issuerId;
 		}
 	}
 
-	openLegend(){
+	openLegend() {
 		this.showLegend = true;
 	}
 
@@ -201,24 +207,17 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	}
 }
 
-
 class MatchingAlgorithm {
 	static issuerMatcher(inputPattern: string): (badge) => boolean {
 		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
 
-		return badge => (
-			StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp)
-		);
+		return (badge) => StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp);
 	}
 }
 
 class MatchingBadgeIssuer {
-	constructor(
-		public issuerName: string,
-		public badge,
-		public badges: BadgeClass[] = [],
-	) {}
+	constructor(public issuerName: string, public badge, public badges: BadgeClass[] = []) {}
 
 	async addBadge(badge) {
 		if (badge.issuerName === this.issuerName) {
@@ -227,4 +226,20 @@ class MatchingBadgeIssuer {
 			}
 		}
 	}
+}
+
+// reduce array to only unique values (https://stackoverflow.com/a/9229821)
+function uniq_fast(a) {
+	var seen = {};
+	var out = [];
+	var len = a.length;
+	var j = 0;
+	for (var i = 0; i < len; i++) {
+		var item = a[i];
+		if (seen[item] !== 1) {
+			seen[item] = 1;
+			out[j++] = item;
+		}
+	}
+	return out;
 }
