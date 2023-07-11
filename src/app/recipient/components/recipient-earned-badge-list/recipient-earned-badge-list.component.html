@@ -32,7 +32,6 @@
 						><svg icon="icon_file"></svg>Export to PDF</button>
 				</bg-popup-menu> -->
 			</div>
-			
 		</div>
 	</div>
 
@@ -133,7 +132,7 @@
 							[badgeIssueDate]="badgeResult?.badge?.issueDate"
 							[mostRelevantStatus]="badgeResult.badge.mostRelevantStatus"
 							[issuerTitle]="badgeResult.badge.badgeClass.issuer.name"
-							[issuerSlug]="issuerIdToSlug(badgeResult.badge.badgeClass.issuer.id)"
+							[issuerSlug]="badgeResult.badge.badgeClass.issuer.slug"
 							[badgeSlug]="badgeResult.badge.slug"
 							(shareClicked)="shareBadge(badgeResult.badge)"
 						></bg-badgecard>
@@ -183,8 +182,10 @@
 						<ng-template ngFor let-issuerGroup [ngForOf]="issuerResults" let-i="index">
 							<tr class="datatable-x-row" *ngIf="groupByIssuer">
 								<th class="datatable-x-inlineheader" scope="row" colspan="4">
-									<a class="u-text u-text-link u-text-breakword"
-									   [routerLink]="['../../public/issuers', issuerIdToSlug(issuerGroup.issuerId)]">
+									<a
+										class="u-text u-text-link u-text-breakword"
+										[routerLink]="['../../public/issuers', issuerIdToSlug(issuerGroup.issuerId)]"
+									>
 										{{ issuerGroup.issuer.name }}
 									</a>
 								</th>
@@ -203,8 +204,9 @@
 												[error-src]="badgeFailedImageUrl"
 												[loaded-src]="badge.image"
 											/>
-											<a class="u-text u-text-link u-text-breakword"
-											   [routerLink]="['../earned-badge', badge.slug]"
+											<a
+												class="u-text u-text-link u-text-breakword"
+												[routerLink]="['../earned-badge', badge.slug]"
 												>{{ badge.badgeClass.name }}</a
 											>
 											<div
@@ -220,7 +222,11 @@
 									<td class="datatable-x-cell u-text-body">
 										<a
 											class="u-text u-text-link u-text-breakword"
-											[routerLink]="['../../public/issuers', issuerIdToSlug(issuerGroup.issuerId)]">
+											[routerLink]="[
+												'../../public/issuers',
+												issuerIdToSlug(issuerGroup.issuerId)
+											]"
+										>
 											{{ issuerGroup.issuer.name }}
 										</a>
 									</td>

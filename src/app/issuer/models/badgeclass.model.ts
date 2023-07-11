@@ -85,6 +85,10 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 		this.apiModel.extensions = extensions;
 	}
 
+	get source_url() {
+		return this.apiModel.source_url;
+	}
+
 	hasExtension(extensionName: string) {
 		return this.apiModel.extensions && extensionName in this.apiModel.extensions;
 	}
@@ -134,7 +138,11 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	private static issuerSlugFromUrl(issuerUrl: string) {
 		return (issuerUrl.match(/\/public\/issuers\/([^\/]+)/) || [])[1] || null;
 	}
-	constructor(commonManager: CommonEntityManager, initialEntity: ApiBadgeClass = null, onUpdateSubscribed: () => void = undefined) {
+	constructor(
+		commonManager: CommonEntityManager,
+		initialEntity: ApiBadgeClass = null,
+		onUpdateSubscribed: () => void = undefined
+	) {
 		super(commonManager, onUpdateSubscribed);
 
 		if (initialEntity != null) {
@@ -176,7 +184,9 @@ export class BadgeClass extends ManagedEntity<ApiBadgeClass, BadgeClassRef> {
 	}
 
 	update(): Promise<this> {
-		return this.badgeManager.badgeClassApi.getBadgeForIssuerSlugAndBadgeSlug(this.issuerSlug, this.slug).then((apiBadge) => this.applyApiModel(apiBadge));
+		return this.badgeManager.badgeClassApi
+			.getBadgeForIssuerSlugAndBadgeSlug(this.issuerSlug, this.slug)
+			.then((apiBadge) => this.applyApiModel(apiBadge));
 	}
 
 	save(): Promise<this> {

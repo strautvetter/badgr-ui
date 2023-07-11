@@ -14,6 +14,7 @@ import { BaseRoutableComponent } from '../../../common/pages/base-routable.compo
 import { BadgeClass } from '../../../issuer/models/badgeclass.model';
 import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.service';
 import { StringMatchingUtil } from '../../../common/util/string-matching-util';
+import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model';
 
 @Component({
 	selector: 'app-badge-catalog',
@@ -33,6 +34,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badges: BadgeClass[] = null;
 	badgeResults: BadgeClass[] = null;
 	badgeResultsByIssuer: MatchingBadgeIssuer[] = [];
+	badgeResultsByCategory: MatchingBadgeCategory[] = [];
 	order = 'asc';
 	//issuerToBadgeInfo: {[issuerId: string]: IssuerBadgesInfo} = {};
 
@@ -77,22 +79,28 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this.updateResults();
 	}
 
-	private _groupByIssuer = false;
-	get groupByIssuer() {
-		return this._groupByIssuer;
+	private _groupBy = 'Kategorie';
+	get groupBy() {
+		return this._groupBy;
 	}
-	set groupByIssuer(val: boolean) {
-		this._groupByIssuer = val;
+	set groupBy(val: string) {
+		this._groupBy = val;
 		this.updateResults();
 	}
+	groups = ['Kategorie', 'Issuer', '---'];
+	categoryOptions: { [key in BadgeClassCategory | 'noCategory']: string } = {
+		membership: 'Mitgliedschaft',
+		ability: 'Metakompetenz',
+		archievement: 'Teilnahme / Erfolg',
+		skill: 'Fachliche Kompetenz',
+		noCategory: 'Keine Kategorie',
+	};
 
 	constructor(
 		protected title: Title,
 		protected messageService: MessageService,
-		// protected issuerManager: IssuerManager,
 		protected configService: AppConfigService,
 		protected badgeClassService: BadgeClassManager,
-		// loginService: SessionService,
 		router: Router,
 		route: ActivatedRoute
 	) {
@@ -113,6 +121,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 						this.tags = this.tags.concat(badge.tags);
 					});
 					this.tags = uniq_fast(this.tags);
+					this.updateResults();
 					resolve(badges);
 				},
 				(error) => {
@@ -134,15 +143,22 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	}
 
 	changeOrder(order) {
-		if (order === 'asc') {
+		this.order = order;
+		if (this.order === 'asc') {
 			this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
 			this.badgeResultsByIssuer
 				.sort((a, b) => a.issuerName.localeCompare(b.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
+			this.badgeResultsByCategory
+				.sort((a, b) => this.categoryOptions[a.category].localeCompare(this.categoryOptions[b.category]))
 				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
 		} else {
 			this.badgeResults.sort((a, b) => b.name.localeCompare(a.name));
 			this.badgeResultsByIssuer
 				.sort((a, b) => b.issuerName.localeCompare(a.issuerName))
+				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
+			this.badgeResultsByCategory
+				.sort((a, b) => this.categoryOptions[b.category].localeCompare(this.categoryOptions[a.category]))
 				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
 		}
 	}
@@ -153,14 +169,10 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this.badgeResults = [];
 		this.badgeResultsByIssuer = [];
 		const badgeResultsByIssuerLocal = {};
-
-		// var addIssuerToResults = function(item){
-		// 	that.badgeResults.push(item);
-		// }
+		this.badgeResultsByCategory = [];
+		const badgeResultsByCategoryLocal = {};
 
 		var addBadgeToResultsByIssuer = function (item) {
-			that.badgeResults.push(item);
-
 			let issuerResults = badgeResultsByIssuerLocal[item.issuerName];
 
 			if (!issuerResults) {
@@ -177,26 +189,37 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 			return true;
 		};
-		// this.badges
-		// 	.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery))
-		// 	.forEach(addIssuerToResults);
-		this.badges.filter(MatchingAlgorithm.issuerMatcher(this.searchQuery)).forEach(addBadgeToResultsByIssuer);
+		var addBadgeToResultsByCategory = function (item) {
+			let itemCategory =
+				item.extension && item.extension['extensions:CategoryExtension']
+					? item.extension['extensions:CategoryExtension'].Category
+					: 'noCategory';
+			let categoryResults = badgeResultsByCategoryLocal[itemCategory];
 
-		// this.allBadges
-		// 	.filter(MatchingAlgorithm.badgeMatcher(this._searchQuery))
-		// 	.forEach(addBadgeToResults);
+			if (!categoryResults) {
+				categoryResults = badgeResultsByCategoryLocal[itemCategory] = new MatchingBadgeCategory(
+					itemCategory,
+					''
+				);
 
-		this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
-		this.badgeResultsByIssuer.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
-	}
+				// append result to the categoryResults array bound to the view template.
+				that.badgeResultsByCategory.push(categoryResults);
+			}
 
-	private issuerIdToSlug(issuerId) {
-		if (issuerId.startsWith('http')) {
-			let splitted = issuerId.split(/[/.\s]/);
-			return splitted[splitted.length - 1];
-		} else {
-			return issuerId;
-		}
+			categoryResults.addBadge(item);
+
+			return true;
+		};
+		this.badges
+			.filter(this.badgeMatcher(this.searchQuery))
+			.filter((i) => !i.apiModel.source_url)
+			.forEach((item) => {
+				that.badgeResults.push(item);
+				addBadgeToResultsByIssuer(item);
+				addBadgeToResultsByCategory(item);
+			});
+
+		this.changeOrder(this.order);
 	}
 
 	openLegend() {
@@ -217,7 +240,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 }
 
 class MatchingAlgorithm {
-	static issuerMatcher(inputPattern: string): (badge) => boolean {
+	private badgeMatcher(inputPattern: string): (badge) => boolean {
 		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
 
@@ -251,4 +274,24 @@ function uniq_fast(a) {
 		}
 	}
 	return out;
+}
+
+class MatchingBadgeCategory {
+	constructor(public category: string, public badge, public badges: BadgeClass[] = []) {}
+
+	async addBadge(badge) {
+		if (
+			badge.extension &&
+			badge.extension['extensions:CategoryExtension'] &&
+			badge.extension['extensions:CategoryExtension'].Category === this.category
+		) {
+			if (this.badges.indexOf(badge) < 0) {
+				this.badges.push(badge);
+			}
+		} else if (!badge.extension['extensions:CategoryExtension'] && this.category == 'noCategory') {
+			if (this.badges.indexOf(badge) < 0) {
+				this.badges.push(badge);
+			}
+		}
+	}
 }
