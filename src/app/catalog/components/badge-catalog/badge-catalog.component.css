@@ -14,3 +14,11 @@
 	display: grid;
 	align-items: center;
 }
+.tag-button {
+	cursor: pointer;
+}
+.tag-button-pressed {
+	background-color: var(--color-link);
+	color: var(--color-light1);
+	border-color: var(--color-link);
+}

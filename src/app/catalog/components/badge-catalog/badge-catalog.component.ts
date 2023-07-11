@@ -41,6 +41,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 	showLegend = false;
 	tags: String[] = [];
+	selectedTag: String = null;
 
 	get theme() {
 		return this.configService.theme;
@@ -204,6 +205,14 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 	closeLegend() {
 		this.showLegend = false;
+	}
+
+	filterByTag(tag) {
+		if (this.selectedTag == tag) {
+			this.selectedTag = null;
+		} else {
+			this.selectedTag = tag;
+		}
 	}
 }
 
