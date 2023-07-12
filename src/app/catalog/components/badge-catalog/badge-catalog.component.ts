@@ -237,9 +237,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			this.selectedTag = tag;
 		}
 	}
-}
 
-class MatchingAlgorithm {
 	private badgeMatcher(inputPattern: string): (badge) => boolean {
 		const patternStr = StringMatchingUtil.normalizeString(inputPattern);
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
