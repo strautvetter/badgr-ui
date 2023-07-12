@@ -22,9 +22,9 @@
 	cursor: pointer;
 }
 .tag-button-pressed {
-	background-color: var(--color-link);
+	background-color: var(--color-interactive1);
 	color: var(--color-light1);
-	border-color: var(--color-link);
+	border-color: var(--color-interactive1);
 }
 #badge-catalog-select {
 	padding-top: 0px;

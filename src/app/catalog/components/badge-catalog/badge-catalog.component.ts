@@ -42,8 +42,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	badgesLoaded: Promise<unknown>;
 
 	showLegend = false;
-	tags: String[] = [];
-	selectedTag: String = null;
+	tags: string[] = [];
+	selectedTag: string = null;
 
 	get theme() {
 		return this.configService.theme;
@@ -120,7 +120,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 					badges.forEach((badge) => {
 						this.tags = this.tags.concat(badge.tags);
 					});
-					this.tags = uniq_fast(this.tags);
+					this.tags = sortUnique(this.tags);
 					this.updateResults();
 					resolve(badges);
 				},
@@ -212,6 +212,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		};
 		this.badges
 			.filter(this.badgeMatcher(this.searchQuery))
+			.filter(this.badgeTagMatcher(this.selectedTag))
 			.filter((i) => !i.apiModel.source_url)
 			.forEach((item) => {
 				that.badgeResults.push(item);
@@ -231,11 +232,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	}
 
 	filterByTag(tag) {
-		if (this.selectedTag == tag) {
-			this.selectedTag = null;
-		} else {
-			this.selectedTag = tag;
-		}
+		this.selectedTag = this.selectedTag == tag ? null : tag;
+		this.updateResults();
 	}
 
 	private badgeMatcher(inputPattern: string): (badge) => boolean {
@@ -243,6 +241,10 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		const patternExp = StringMatchingUtil.tryRegExp(patternStr);
 
 		return (badge) => StringMatchingUtil.stringMatches(badge.name, patternStr, patternExp);
+	}
+
+	private badgeTagMatcher(tag: string) {
+		return (badge) => (tag ? badge.tags.includes(tag) : true);
 	}
 }
 
@@ -258,20 +260,20 @@ class MatchingBadgeIssuer {
 	}
 }
 
-// reduce array to only unique values (https://stackoverflow.com/a/9229821)
-function uniq_fast(a) {
-	var seen = {};
-	var out = [];
-	var len = a.length;
-	var j = 0;
-	for (var i = 0; i < len; i++) {
-		var item = a[i];
-		if (seen[item] !== 1) {
-			seen[item] = 1;
-			out[j++] = item;
-		}
-	}
-	return out;
+function sortUnique(array: string[]): string[] {
+	let frequency = {};
+
+	array.forEach(function (value) {
+		frequency[value] = 0;
+	});
+
+	let uniques = array.filter(function (value) {
+		return ++frequency[value] == 1;
+	});
+
+	return uniques.sort(function (a, b) {
+		return frequency[b] - frequency[a];
+	});
 }
 
 class MatchingBadgeCategory {
