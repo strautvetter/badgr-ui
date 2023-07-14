@@ -1,5 +1,6 @@
 .open-legend-button {
 	color: var(--color-link);
+	justify-self: flex-end;
 	text-align: right;
 	width: 100%;
 	text-decoration: underline;
@@ -8,7 +9,23 @@
 .open-legend-button a {
 	cursor: pointer;
 }
-
+.tag-wrapper {
+	margin: 0 4px;
+	max-width: 30%;
+}
+.subtitle-wrapper {
+	grid-template-columns: 70% 1fr auto;
+	display: grid;
+	align-items: center;
+}
+.tag-button {
+	cursor: pointer;
+}
+.tag-button-pressed {
+	background-color: var(--color-interactive1);
+	color: var(--color-light1);
+	border-color: var(--color-interactive1);
+}
 #badge-catalog-select {
 	padding-top: 0px;
 	padding-bottom: 1px;

@@ -59,8 +59,21 @@
 					</label>
 				</div>
 			</div>
-			<div class="open-legend-button">
-				<a (click)="openLegend()">Was bedeuten die Rahmen und Farben?</a>
+			<div class="subtitle-wrapper">
+				<div class="tags-wrapper">
+					<!-- <div class="tag" *ngFor="let tag of badgeClass.tags; last as last">{{ tag }}</div> -->
+					<div
+						(click)="filterByTag(tag)"
+						class="tag tag-wrapper tag-button"
+						[class.tag-button-pressed]="selectedTag == tag"
+						*ngFor="let tag of tags | slice : 0 : 3; last as last"
+					>
+						{{ tag }}
+					</div>
+				</div>
+				<div class="open-legend-button">
+					<a (click)="openLegend()">Was bedeuten die Rahmen und Farben?</a>
+				</div>
 			</div>
 			<ng-container *ngIf="groupBy == '---'">
 				<div class="l-grid l-grid-large">
