@@ -14,10 +14,10 @@ import { UserProfileApiService } from "../../../common/services/user-profile-api
 })
 export class ImportModalComponent extends BaseDialog implements OnInit {
 
-	@ViewChild("importModalDialog", {static: false})
+	@ViewChild("importModalDialog")
 	importModalDialog: ImportModalComponent;
 	csvForm: FormGroup;
-	readonly csvUploadIconUrl = require('../../../../breakdown/static/images/csvuploadicon.svg');
+	readonly csvUploadIconUrl = '../../../../breakdown/static/images/csvuploadicon.svg';
 	files: ZipEntry[];
 	file: ZipEntry;
 	badgeUploadPromise: Promise<unknown>;

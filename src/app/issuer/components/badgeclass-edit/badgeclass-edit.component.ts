@@ -36,7 +36,7 @@ export class BadgeClassEditComponent extends BaseAuthenticatedRoutableComponent 
 	get badgeSlug() {
 		return this.route.snapshot.params[ 'badgeSlug' ];
 	}
-	readonly badgeClassPlaceholderImageUrl = require('../../../../breakdown/static/images/placeholderavatar.svg');
+	readonly badgeClassPlaceholderImageUrl = '../../../../breakdown/static/images/placeholderavatar.svg';
 
 	issuer: Issuer;
 	badgeClassEditForm: FormGroup;
@@ -49,7 +49,7 @@ export class BadgeClassEditComponent extends BaseAuthenticatedRoutableComponent 
 	issuerLoaded: Promise<unknown>;
 
 	scrolled = false;
-	@ViewChild('badgeimage', { static: false }) badgeImage;
+	@ViewChild('badgeimage') badgeImage;
 
 	editBadgeCrumbs: LinkEntry[];
 
@@ -58,10 +58,10 @@ export class BadgeClassEditComponent extends BaseAuthenticatedRoutableComponent 
 	// <li class="breadcrumb-x-current">Edit Badge Class</li>
 
 
-	@ViewChild("badgeStudio", {static: false})
+	@ViewChild("badgeStudio")
 	badgeStudio: BadgeStudioComponent;
 
-	@ViewChild("imageField", {static: false})
+	@ViewChild("imageField")
 	imageField: BgFormFieldImageComponent;
 
 	private allBadgeInstances: BadgeClassInstances;

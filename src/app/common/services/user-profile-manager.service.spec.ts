@@ -1,7 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 import {AppConfigService} from '../app-config.service';
 import {CommonEntityManager} from '../../entity-manager/services/common-entity-manager.service';
-import {expectRequestAndRespondWith, setupMockResponseReporting} from '../util/mock-response-util.spec';
+import {expectRequestAndRespondWith} from '../util/mock-response-util.spec';
 import {verifyEntitySetWhenLoaded} from '../../common/model/managed-entity-set.spec';
 
 import {MessageService} from '../../common/services/message.service';
@@ -12,29 +12,39 @@ import {ApiUserProfile, ApiUserProfileEmail, ApiUserProfileSocialAccount} from '
 import {apiProfileEmails, apiSocialAccounts, apiUserProfile, verifyUserProfile} from '../model/user-profile.model.spec';
 import {UserProfile} from '../model/user-profile.model';
 import {EventsService} from './events.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {MockBackend} from '@angular/http/testing';
-import {RequestMethod} from '@angular/http';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClient} from '@angular/common/http';
 import { RouterTestingModule } from "@angular/router/testing";
 import { CommonModule } from "@angular/common";
 import { BadgrCommonModule, COMMON_IMPORTS } from "../badgr-common.module";
 import { COMMON_MOCKS_PROVIDERS_WITH_SUBS } from "../../mocks/mocks.module.spec";
 
 xdescribe('UserProfileManager', () => {
-	beforeEach(() => TestBed.configureTestingModule({
-		declarations: [  ],
-		imports: [
-			RouterTestingModule,
-			CommonModule,
-			BadgrCommonModule,
-			...COMMON_IMPORTS,
-		],
-		providers: [
-			...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
-		],
-	}));
+    // TODO: Potentially some things still need to be adjusted here.
+    // Since the test was disabled anyway, I only adjusted it so much that it compiles; I can't guarantee it also runs correctly.
+    let httpMock: HttpClient;
+    let httpTestingController: HttpTestingController;
 
-	setupMockResponseReporting();
+	beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [  ],
+            imports: [
+                HttpClientTestingModule,
+                RouterTestingModule,
+                CommonModule,
+                // This module doesn't exist and I don't know where it comes from
+                //BRequestMethodadgrCommonModule,
+                ...COMMON_IMPORTS,
+            ],
+            providers: [
+                ...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
+            ],
+        });
+
+        httpMock = TestBed.inject(HttpClient);
+        httpTestingController = TestBed.inject(HttpTestingController);
+    });
+
 
 	beforeEach(inject([ SessionService ], (loginService: SessionService) => {
 		loginService.storeToken({ access_token: "MOCKTOKEN" });
@@ -42,10 +52,10 @@ xdescribe('UserProfileManager', () => {
 
 	it('should retrieve user profile',
 		inject(
-			[ UserProfileManager, SessionService, MockBackend ],
-			(userProfileManager: UserProfileManager, loginService: SessionService, mockBackend: MockBackend) => {
+			[ UserProfileManager, SessionService, HttpClientTestingModule ],
+			(userProfileManager: UserProfileManager, loginService: SessionService) => {
 				return Promise.all([
-					expectUserProfileRequest(mockBackend),
+					expectUserProfileRequest(httpTestingController),
 					verifyEntitySetWhenLoaded(
 						userProfileManager.userProfileSet,
 						[apiUserProfile],
@@ -58,11 +68,11 @@ xdescribe('UserProfileManager', () => {
 
 	it('should retrieve emails',
 		inject(
-			[ UserProfileManager, SessionService, MockBackend ],
-			(userProfileManager: UserProfileManager, loginService: SessionService, mockBackend: MockBackend) => {
+			[ UserProfileManager, SessionService ],
+			(userProfileManager: UserProfileManager, loginService: SessionService) => {
 				return Promise.all([
-					expectUserProfileRequest(mockBackend),
-					expectProfileEmailsRequest(mockBackend),
+					expectUserProfileRequest(httpTestingController),
+					expectProfileEmailsRequest(httpTestingController),
 					userProfileManager.userProfilePromise
 						.then(p => p.emails.loadedPromise)
 						.then(p => verifyEntitySetWhenLoaded(
@@ -77,11 +87,11 @@ xdescribe('UserProfileManager', () => {
 
 	it('should retrieve social accounts',
 		inject(
-			[ UserProfileManager, SessionService, MockBackend ],
-			(userProfileManager: UserProfileManager, loginService: SessionService, mockBackend: MockBackend) => {
+			[ UserProfileManager, SessionService ],
+			(userProfileManager: UserProfileManager, loginService: SessionService) => {
 				return Promise.all([
-					expectUserProfileRequest(mockBackend),
-					expectProfileSocialAccountsRequest(mockBackend),
+					expectUserProfileRequest(httpTestingController),
+					expectProfileSocialAccountsRequest(httpTestingController),
 					userProfileManager.userProfilePromise
 						.then(p => p.socialAccounts.loadedPromise)
 						.then(p => verifyEntitySetWhenLoaded(
@@ -96,37 +106,37 @@ xdescribe('UserProfileManager', () => {
 });
 
 function expectUserProfileRequest(
-	mockBackend: MockBackend,
+	httpTestingController: HttpTestingController,
 	apiProfile: ApiUserProfile = apiUserProfile
 ) {
 	return expectRequestAndRespondWith(
-		mockBackend,
-		RequestMethod.Get,
+		httpTestingController,
+		'GET',
 		`/v1/user/profile`,
-		apiProfile
+		JSON.stringify(apiProfile)
 	);
 }
 
 function expectProfileEmailsRequest(
-	mockBackend: MockBackend,
+	httpTestingController: HttpTestingController,
 	emails: ApiUserProfileEmail[] = apiProfileEmails
 ) {
 	return expectRequestAndRespondWith(
-		mockBackend,
-		RequestMethod.Get,
+		httpTestingController,
+		'GET',
 		`/v1/user/emails`,
-		emails
+		JSON.stringify(emails)
 	);
 }
 
 function expectProfileSocialAccountsRequest(
-	mockBackend: MockBackend,
+	httpTestingController: HttpTestingController,
 	socialAccounts: ApiUserProfileSocialAccount[] = apiSocialAccounts
 ) {
 	return expectRequestAndRespondWith(
-		mockBackend,
-		RequestMethod.Get,
+		httpTestingController,
+		'GET',
 		`/v1/user/socialaccounts`,
-		socialAccounts
+		JSON.stringify(socialAccounts)
 	);
 }

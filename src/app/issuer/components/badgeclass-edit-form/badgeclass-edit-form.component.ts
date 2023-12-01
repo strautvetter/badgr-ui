@@ -58,7 +58,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		);
 	}
 
-	readonly badgeClassPlaceholderImageUrl = require('../../../../breakdown/static/images/placeholderavatar.svg');
+	readonly badgeClassPlaceholderImageUrl = '../../../../breakdown/static/images/placeholderavatar.svg';
 
 	savePromise: Promise<BadgeClass> | null = null;
 	badgeClassForm = typedFormGroup(this.criteriaRequired.bind(this))
@@ -84,16 +84,16 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				.addControl('target_code', '')
 		);
 
-	@ViewChild('badgeStudio', {static: false})
+	@ViewChild('badgeStudio')
 	badgeStudio: BadgeStudioComponent;
 
-	@ViewChild('imageField', {static: false})
+	@ViewChild('imageField')
 	imageField: BgFormFieldImageComponent;
 
-	@ViewChild('newTagInput', {static: false})
+	@ViewChild('newTagInput')
 	newTagInput: ElementRef<HTMLInputElement>;
 
-	@ViewChild('formElem', {static: false})
+	@ViewChild('formElem')
 	formElem: ElementRef<HTMLFormElement>;
 
 	existingBadgeClass: BadgeClass | null = null;

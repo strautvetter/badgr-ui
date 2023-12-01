@@ -17,10 +17,10 @@ import { AppConfigService } from '../../../common/app-config.service';
 })
 export class IssuerListComponent extends BaseAuthenticatedRoutableComponent implements OnInit {
 	readonly issuerPlaceholderSrc = preloadImageURL(
-		require('../../../../breakdown/static/images/placeholderavatar-issuer.svg') as string
+		'../../../../breakdown/static/images/placeholderavatar-issuer.svg'
 	);
 	readonly noIssuersPlaceholderSrc =
-		require('../../../../../node_modules/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg') as string;
+		'../../../../assets/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg';
 
 	Array = Array;
 
@@ -72,7 +72,7 @@ export class IssuerListComponent extends BaseAuthenticatedRoutableComponent impl
 		// subscribe to issuer and badge class changes
 		this.issuersLoaded = this.loadIssuers();
 
-		this.badgesLoaded = new Promise((resolve, reject) => {
+		this.badgesLoaded = new Promise<void>((resolve, reject) => {
 			this.badgeClassService.badgesByIssuerUrl$.subscribe((badges) => {
 				this.issuerToBadgeInfo = {};
 
@@ -91,7 +91,7 @@ export class IssuerListComponent extends BaseAuthenticatedRoutableComponent impl
 	}
 
 	loadIssuers = () => {
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			this.issuerManager.allIssuers$.subscribe(
 				(issuers) => {
 					this.issuers = issuers.slice().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());

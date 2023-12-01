@@ -1,6 +1,7 @@
-import {AfterViewInit, ElementRef, Renderer2} from '@angular/core';
-import {HTMLDialogElement, registerDialog} from 'dialog-polyfill/dialog-polyfill';
+import {AfterViewInit, ElementRef, Renderer2, Injectable} from '@angular/core';
+import dialogPolyfill from 'dialog-polyfill';
 
+@Injectable()
 export abstract class BaseDialog implements AfterViewInit {
 	constructor(
 		protected componentElem: ElementRef<HTMLElement>,
@@ -16,7 +17,7 @@ export abstract class BaseDialog implements AfterViewInit {
 		this.renderer.listen(this.dialogElem, "cancel", () => this.onDialogCanceled());
 
 		if (!("showModal" in this.dialogElem)) {
-			registerDialog(this.dialogElem);
+			dialogPolyfill.registerDialog(this.dialogElem);
 		}
 	}
 
