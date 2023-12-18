@@ -15,6 +15,7 @@ import { BadgeClass } from '../../../issuer/models/badgeclass.model';
 import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.service';
 import { StringMatchingUtil } from '../../../common/util/string-matching-util';
 import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-badge-catalog',
@@ -22,9 +23,7 @@ import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model'
 	styleUrls: ['./badge-catalog.component.css'],
 })
 export class BadgeCatalogComponent extends BaseRoutableComponent implements OnInit {
-	readonly issuerPlaceholderSrc = preloadImageURL(
-		'../../../../breakdown/static/images/placeholderavatar-issuer.svg'
-	);
+	readonly issuerPlaceholderSrc = preloadImageURL('../../../../breakdown/static/images/placeholderavatar-issuer.svg');
 	readonly noIssuersPlaceholderSrc =
 		'../../../../assets/@concentricsky/badgr-style/dist/images/image-empty-issuer.svg';
 
@@ -54,19 +53,19 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 	plural = {
 		issuer: {
-			'=0': 'No Issuers',
-			'=1': '1 Issuer',
-			other: '# Issuers',
+			'=0': this.translate.instant('Badge.noIssuers'),
+			'=1': this.translate.instant('Badge.oneIssuer'),
+			other: this.translate.instant('Badge.multiIssuers'),
 		},
 		badges: {
-			'=0': 'No Badges',
-			'=1': '1 Badge',
-			other: '# Badges',
+			'=0': this.translate.instant('Badge.noBadges'),
+			'=1': this.translate.instant('Badge.oneBadge'),
+			other: this.translate.instant('Badge.multiBadges'),
 		},
 		recipient: {
-			'=0': 'No Recipients',
-			'=1': '1 Recipient',
-			other: '# Recipients',
+			'=0': this.translate.instant('Badge.noRecipients'),
+			'=1': this.translate.instant('Badge.oneRecipient'),
+			other: this.translate.instant('Badge.multiRecipients'),
 		},
 	};
 
@@ -79,7 +78,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this.updateResults();
 	}
 
-	private _groupBy = 'Kategorie';
+	private _groupBy = this.translate.instant('Badge.category');
 	get groupBy() {
 		return this._groupBy;
 	}
@@ -87,13 +86,13 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this._groupBy = val;
 		this.updateResults();
 	}
-	groups = ['Kategorie', 'Issuer', '---'];
+	groups = [this.translate.instant('Badge.category'), this.translate.instant('Badge.issuer'), '---'];
 	categoryOptions: { [key in BadgeClassCategory | 'noCategory']: string } = {
-		membership: 'Mitgliedschaft',
-		ability: 'Metakompetenz',
-		archievement: 'Teilnahme / Erfolg',
-		skill: 'Fachliche Kompetenz',
-		noCategory: 'Keine Kategorie',
+		membership: this.translate.instant('Badge.membership'),
+		ability: this.translate.instant('Badge.ability'),
+		archievement: this.translate.instant('Badge.archievement'),
+		skill: this.translate.instant('Badge.skill'),
+		noCategory: this.translate.instant('Badge.noCategory'),
 	};
 
 	constructor(
@@ -102,7 +101,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		protected configService: AppConfigService,
 		protected badgeClassService: BadgeClassManager,
 		router: Router,
-		route: ActivatedRoute
+		route: ActivatedRoute,
+		private translate: TranslateService,
 	) {
 		super(router, route);
 		title.setTitle(`Badges - ${this.configService.theme['serviceName'] || 'Badgr'}`);
@@ -126,7 +126,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				},
 				(error) => {
 					this.messageService.reportAndThrowError('Failed to load badges', error);
-				}
+				},
 			);
 		});
 	}
@@ -140,6 +140,40 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 	ngOnInit() {
 		super.ngOnInit();
+
+		// Translate: to update predefined text
+		this.translate.onLangChange.subscribe((event) => {
+
+			// 1. Groups
+			this.groups = [this.translate.instant('Badge.category'), this.translate.instant('Badge.issuer'), '---'];
+			// 2. Category options
+			this.categoryOptions = {
+				membership: this.translate.instant('Badge.membership'),
+				ability: this.translate.instant('Badge.ability'),
+				archievement: this.translate.instant('Badge.archievement'),
+				skill: this.translate.instant('Badge.skill'),
+				noCategory: this.translate.instant('Badge.noCategory'),
+			};
+			// 3. Plural
+			this.plural = {
+				issuer: {
+					'=0': this.translate.instant('Badge.noIssuers'),
+					'=1': this.translate.instant('Badge.oneIssuer'),
+					other: this.translate.instant('Badge.multiIssuers'),
+				},
+				badges: {
+					'=0': this.translate.instant('Badge.noBadges'),
+					'=1': this.translate.instant('Badge.oneBadge'),
+					other: this.translate.instant('Badge.multiBadges'),
+				},
+				recipient: {
+					'=0': this.translate.instant('Badge.noRecipients'),
+					'=1': this.translate.instant('Badge.oneRecipient'),
+					other: this.translate.instant('Badge.multiRecipients'),
+				},
+			};
+
+		});
 	}
 
 	changeOrder(order) {
@@ -178,7 +212,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			if (!issuerResults) {
 				issuerResults = badgeResultsByIssuerLocal[item.issuerName] = new MatchingBadgeIssuer(
 					item.issuerName,
-					''
+					'',
 				);
 
 				// append result to the issuerResults array bound to the view template.
@@ -199,7 +233,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 			if (!categoryResults) {
 				categoryResults = badgeResultsByCategoryLocal[itemCategory] = new MatchingBadgeCategory(
 					itemCategory,
-					''
+					'',
 				);
 
 				// append result to the categoryResults array bound to the view template.
@@ -249,7 +283,11 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 }
 
 class MatchingBadgeIssuer {
-	constructor(public issuerName: string, public badge, public badges: BadgeClass[] = []) {}
+	constructor(
+		public issuerName: string,
+		public badge,
+		public badges: BadgeClass[] = [],
+	) {}
 
 	async addBadge(badge) {
 		if (badge.issuerName === this.issuerName) {
@@ -277,7 +315,11 @@ function sortUnique(array: string[]): string[] {
 }
 
 class MatchingBadgeCategory {
-	constructor(public category: string, public badge, public badges: BadgeClass[] = []) {}
+	constructor(
+		public category: string,
+		public badge,
+		public badges: BadgeClass[] = [],
+	) {}
 
 	async addBadge(badge) {
 		if (
