@@ -1,5 +1,5 @@
 // tslint:disable
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { By } from '@angular/platform-browser';
@@ -31,35 +31,35 @@ describe('IssuerEditComponent', () => {
       declarations: [
         IssuerEditComponent
       ],
-			imports: [
-				RouterTestingModule,
-				CommonModule,
-				BadgrCommonModule,
-				...COMMON_IMPORTS,
-			],
-			providers: [
-				...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
-			],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      imports: [
+          RouterTestingModule,
+          CommonModule,
+          BadgrCommonModule,
+          ...COMMON_IMPORTS,
+      ],
+      providers: [
+          ...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
+      ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     }).compileComponents();
     fixture = TestBed.createComponent(IssuerEditComponent);
     component = fixture.debugElement.componentInstance;
   });
 
-  it('should create a component', async () => {
-    expect(component).toBeTruthy();
+  it('should create a component', () => {
+      expect(component).toBeTruthy();
   });
 
-  it('should run #ngOnInit()', async () => {
-    const result = component.ngOnInit();
+  it('should run #ngOnInit()', () => {
+      const result = component.ngOnInit();
   });
 
-  it('should run #onSubmit()', async () => {
-    const result = component.onSubmit();
+  it('should run #onSubmit()', () => {
+      const result = component.onSubmit();
   });
 
-  it('should run #urlBlurred()', async () => {
-    const result = component.urlBlurred(new Event('blur'));
+  it('should run #urlBlurred()', () => {
+      const result = component.urlBlurred(new Event('blur'));
   });
 
 });

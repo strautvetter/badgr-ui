@@ -11,7 +11,8 @@ import { CommonModule } from "@angular/common";
 import { BadgrCommonModule, COMMON_IMPORTS } from "../../../common/badgr-common.module";
 import { CommonEntityManagerModule } from "../../../entity-manager/entity-manager.module";
 import { RouterTestingModule } from "@angular/router/testing";
-
+import { TranslateTestingModule } from "ngx-translate-testing";
+import { RecipientModule } from "../../../recipient/recipient.module";
 
 
 describe('LoginComponent', () => {
@@ -24,7 +25,10 @@ describe('LoginComponent', () => {
 				...COMMON_IMPORTS,
 				BadgrCommonModule,
 				CommonEntityManagerModule,
-				RouterTestingModule,
+				RouterTestingModule.withRoutes(
+                    [{path: 'recipient', component: RecipientModule}]
+                ),
+                TranslateTestingModule.withTranslations('de', {}),
 			],
 			declarations: [
         LoginComponent
@@ -35,7 +39,8 @@ describe('LoginComponent', () => {
 				...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
 
 			],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      teardown: { destroyAfterEach: false },
     }).compileComponents();
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.debugElement.componentInstance;

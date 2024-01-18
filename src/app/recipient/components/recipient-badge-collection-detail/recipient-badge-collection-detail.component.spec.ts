@@ -41,9 +41,9 @@ describe('RecipientBadgeCollectionDetailComponent', () => {
 			providers: [
 				...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
 			],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      teardown: { destroyAfterEach: false },
     }).compileComponents();
-    // jasmine.createSpy('apiModel')
     fixture = TestBed.createComponent(RecipientBadgeCollectionDetailComponent);
     component = fixture.debugElement.componentInstance;
   });

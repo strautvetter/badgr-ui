@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { By } from '@angular/platform-browser';
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/add/observable/of';
-// import 'rxjs/add/observable/throw';
 
 import {SignupSuccessComponent} from './signup-success.component';
 import {Title} from '@angular/platform-browser';
@@ -21,22 +19,29 @@ describe('SignupSuccessComponent', () => {
   let fixture: ComponentFixture<SignupSuccessComponent>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-			imports: [
-				...COMMON_IMPORTS,
-				BadgrCommonModule,
-				CommonEntityManagerModule,
-				RouterTestingModule,
-			],
-			declarations: [
-        SignupSuccessComponent
-      ],
-      providers: [
-        Title,
-				...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
-      ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
-		})
+      TestBed.configureTestingModule({
+          imports: [
+              ...COMMON_IMPORTS,
+              BadgrCommonModule,
+              CommonEntityManagerModule,
+              RouterTestingModule,
+          ],
+          declarations: [
+              SignupSuccessComponent
+          ],
+          providers: [
+              Title,
+              ...COMMON_MOCKS_PROVIDERS_WITH_SUBS,
+              {
+                  provide: ActivatedRoute,
+                  useValue: {
+                      snapshot: { params: { email: btoa('mail@example.org') } }
+                  }
+              }
+          ],
+          schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+          teardown: { destroyAfterEach: false },
+      })
 		.compileComponents();
 		fixture = TestBed.createComponent(SignupSuccessComponent);
 		component = fixture.componentInstance;

@@ -25,11 +25,15 @@ interface UploadResult {
 @Component({
 	selector: 'bg-formfield-markdown',
 	host: {
-		class: 'forminput',
+		'class': 'forminput',
 		'[class.forminput-is-error]': 'isErrorState',
 		'[class.forminput-locked]': 'isLockedState',
 	},
-	template: `<md-editor (ngModelChange)="change()" [(ngModel)]="markdown_content" [upload]="doUpload"></md-editor>`,
+	template: `
+        <md-editor (ngModelChange)="change()"
+                   [(ngModel)]="markdown_content"
+                   [upload]="doUpload">
+        </md-editor>`,
 	styleUrls: ['./formfield-markdown.css'],
 	encapsulation: ViewEncapsulation.ShadowDom,
 })
@@ -113,7 +117,8 @@ export class FormFieldMarkdown implements OnChanges, AfterViewInit {
 	}
 
 	get controlErrorState() {
-		return this.control.dirty && (!this.control.valid || (this.errorGroup && !this.errorGroup.valid));
+		return this.control.dirty &&
+            (!this.control.valid || (this.errorGroup && !this.errorGroup.valid));
 	}
 
 	get isErrorState() {

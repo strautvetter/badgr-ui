@@ -18,7 +18,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { InitialLoadingIndicatorService } from "../common/services/initial-loading-indicator.service";
 import { CommonDialogsService } from "../common/services/common-dialogs.service";
 import { BadgeClassManager } from "../issuer/services/badgeclass-manager.service";
-import { Observable } from "rxjs";
+import { of, Observable } from "rxjs";
 import { SettingsService } from "../common/services/settings.service";
 import { IssuerManager } from "../issuer/services/issuer-manager.service";
 import { HttpClient, HttpHandler } from "@angular/common/http";
@@ -114,6 +114,7 @@ export class MockSessionService {
 @Injectable()
 export class MockMessageService {
 	reportHandledError = () => {};
+    reportAndThrowError = () => {};
 	dismissMessage = () => {};
 	getMessage = () => {};
 	message$ = {
@@ -130,6 +131,7 @@ export class MockAppConfigService {
 			welcomeMessage: "Badger",
 			showPoweredByBadgr: true,
 			showApiDocsLink: true,
+            showPoweredByOSL: false,
 			loadingImg: {
 				imageUrl: 'string',
 			},
@@ -139,7 +141,9 @@ export class MockAppConfigService {
 				desktop: 'string',
 			}
 		};
-	}
+	};
+
+    featuresConfig = {};
 }
 
 @Injectable()
@@ -212,6 +216,7 @@ export class MockRecipientBadgeManager {
 	recipientBadgeList = {
 		changed$: new Observable(),
 		loadedPromise: new Promise(()=>{}),
+        entityForSlug: ()=>{}
 	};
 	recipientBadgeApiService = {
 		saveInstance: new Promise(()=>{}),
@@ -237,6 +242,14 @@ export class MockBadgeClassManager {
 	badgeByIssuerSlugAndSlug = () => new Promise(() => ({name: 'badgename'}));
 	removeBadgeClass = () => {};
 	createBadgeClass = () => {};
+    get allPublicBadges$(): Observable<object[]> {
+        return of([{
+            name: 'badgename',
+            apiModel: {
+                source_url: 'source.url'
+            }
+        }]);
+    }
 }
 
 @Injectable()
@@ -255,6 +268,7 @@ export class MockBadgeInstanceManager {
 @Injectable()
 export class MockIssuerManager {
 	issuerBySlug = () => new Promise((q) => {console.log(q);});
+    getAllIssuers = () => of();
 }
 
 @Injectable()

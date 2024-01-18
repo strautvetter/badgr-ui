@@ -14,6 +14,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { COMMON_IMPORTS } from "../badgr-common.module";
 import { COMMON_MOCKS_PROVIDERS_WITH_SUBS } from "../../mocks/mocks.module.spec";
 import { BadgrButtonComponent } from "./badgr-button.component";
+import { FormControl, Validators } from '@angular/forms';
 
 describe('FormFieldText', () => {
   let fixture;
@@ -36,54 +37,56 @@ describe('FormFieldText', () => {
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
     fixture = TestBed.createComponent(FormFieldText);
+    fixture.componentInstance.control = new FormControl('', Validators.required);
+    fixture.detectChanges();
     component = fixture.debugElement.componentInstance;
   });
 
-  it('should create a component', async () => {
+  it('should create a component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should run #ngOnInit()', async () => {
+  it('should run #ngOnInit()', () => {
     const result = component.ngOnInit();
   });
 
-  it('should run #ngAfterViewInit()', async () => {
+  it('should run #ngAfterViewInit()', () => {
     const result = component.ngAfterViewInit();
   });
 
-  xit('should run #ngOnChanges()', async () => {
+  xit('should run #ngOnChanges()', () => {
     // const result = component.ngOnChanges(changes);
   });
 
-  it('should run #updateDisabled()', async () => {
+  it('should run #updateDisabled()', () => {
     const result = component.updateDisabled();
   });
 
-  it('should run #unlock()', async () => {
+  it('should run #unlock()', () => {
     const result = component.unlock();
   });
 
-  xit('should run #cacheControlState()', async () => {
+  xit('should run #cacheControlState()', () => {
     const result = component.cacheControlState();
   });
 
-  xit('should run #focus()', async () => {
+  xit('should run #focus()', () => {
     const result = component.focus();
   });
 
-  xit('should run #select()', async () => {
+  xit('should run #select()', () => {
     const result = component.select();
   });
 
-  it('should run #handleKeyPress()', async () => {
-    const result = component.handleKeyPress(event);
+  it('should run #handleKeyPress()', () => {
+    const result = component.handleKeyPress({code: "Enter"});
   });
 
-  xit('should run #handleKeyUp()', async () => {
+  xit('should run #handleKeyUp()', () => {
     const result = component.handleKeyUp(event);
   });
 
-  it('should run #postProcessInput()', async () => {
+  it('should run #postProcessInput()', () => {
     const result = component.postProcessInput();
   });
 
