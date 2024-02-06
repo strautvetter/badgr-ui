@@ -26,6 +26,10 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 	breadcrumbLinkEntries: LinkEntry[] = [];
 	scrolled = false;
 	copiedBadgeClass: BadgeClass = null;
+    /**
+     * Indicates wether the "copiedBadgeClass" is a forked copy, or a 1:1 copy
+     */
+    isForked = false;
 
 	badgesLoaded: Promise<unknown>;
 	badges: BadgeClass[] = null;
@@ -105,13 +109,27 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 
 	copyBadge() {
 		this.dialogService.copyBadgeDialog.openDialog(this.badges)
-			.then((data: any) => {
+			.then((data: BadgeClass | void) => {
 				if (data) {
 					this.copiedBadgeClass = data
+                    this.isForked = false;
 				}
 			})
 			.catch((error) => {
 				this.messageService.reportAndThrowError('Failed to load badges to copy', error);
+			});
+	}
+
+	forkBadge() {
+		this.dialogService.forkBadgeDialog.openDialog(this.badges)
+			.then((data: BadgeClass | void) => {
+				if (data) {
+					this.copiedBadgeClass = data
+                    this.isForked = true;
+				}
+			})
+			.catch((error) => {
+				this.messageService.reportAndThrowError('Failed to load badges to fork', error);
 			});
 	}
 }

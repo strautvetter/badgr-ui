@@ -7,18 +7,22 @@ import { BaseDialog } from '../base-dialog';
 import { StringMatchingUtil } from '../../util/string-matching-util';
 import { groupIntoArray, groupIntoObject } from '../../util/array-reducers';
 
+// TODO: This currently is an (almost) exact copy of the `CopyBadgeDialog`.
+// On the long term, there should probably be a base copy dialog or something,
+// that unites common features. However, since the copy function is also currently
+// being revised, this probably makes more sense after that revision.
 /**
- * The dialog used in the badge creation component to copy an existing badge.
+ * The dialog used in the badge creation component to fork an existing badge.
  *
- * @see ForkBadgeDialog, since the ForkBadgeDialog started as an (exact) duplicate
+ * @see CopyBadgeDialog, since the ForkBadgeDialog started as an (exact) duplicate
  * of this.
  */
 @Component({
-	selector: 'copy-badge-dialog',
-	templateUrl: 'copy-badge-dialog.component.html',
-	styleUrls: ['./copy-badge-dialog.component.css']
+	selector: 'fork-badge-dialog',
+	templateUrl: 'fork-badge-dialog.component.html',
+	styleUrls: ['./fork-badge-dialog.component.css']
 })
-export class CopyBadgeDialog extends BaseDialog {
+export class ForkBadgeDialog extends BaseDialog {
 	Array = Array;
 	resolveFunc: (BadgeClass) => void;
 	rejectFunc: () => void;
@@ -58,7 +62,7 @@ export class CopyBadgeDialog extends BaseDialog {
 	}
 
     /**
-     * Opens the copy badge dialog, showing it as a modal (@see showModal).
+     * Opens the fork badge dialog, showing it as a modal (@see showModal).
      *
      * @param {BadgeClass[]} badges - The badges from which to select one.
      * @returns a promise, which either resolves to the selected BadgeClass or,
@@ -91,7 +95,7 @@ export class CopyBadgeDialog extends BaseDialog {
      *
      * @param {BadgeClass} badge - The selected badge.
      */
-	copyBadge(badge) {
+	forkBadge(badge: BadgeClass) {
 		this.closeModal();
 		this.resolveFunc(badge);
 	}
@@ -178,7 +182,7 @@ class BadgeResult {
 /**
  * A collection of badges that has the same issuer.
  */
-class MatchingIssuerBadges {
+export class MatchingIssuerBadges {
 	constructor(
 		public issuerSlug: string,
 		public issuerName: string,
@@ -203,7 +207,7 @@ class MatchingIssuerBadges {
 /**
  * A matching algorithm for both issuers and badges.
  */
-class MatchingAlgorithm {
+export class MatchingAlgorithm {
     /**
      * A matcher for issuers.
      * Matches the issuer string with regular expression passed as a string.
@@ -236,3 +240,4 @@ class MatchingAlgorithm {
 		);
 	}
 }
+
