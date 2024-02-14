@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
-// import { CommonModule } from '@angular/common';
 import {RouterModule} from '@angular/router';
 
 import {BadgrCommonModule, COMMON_IMPORTS} from '../common/badgr-common.module';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {IssuerListComponent} from './components/issuer-list/issuer-list.component';
 import {IssuerCreateComponent} from './components/issuer-create/issuer-create.component';
 import {IssuerDetailComponent} from './components/issuer-detail/issuer-detail.component';
@@ -81,6 +81,7 @@ const routes = [
 @NgModule({
 	imports: [
 		...COMMON_IMPORTS,
+        AutocompleteLibModule,
 		BadgrCommonModule,
 		CommonEntityManagerModule,
 		RouterModule.forChild(routes),
