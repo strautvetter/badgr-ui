@@ -182,6 +182,7 @@
 		"editInstitution": "Edit institution",
 		"editInstitutionInfo": "Edit this institution's information.",
 		"issuerHasNoBadgesYet": "The issuer does not have any badges yet",
+		"issuerHasBadges": "has",
 		"myInstitutionsText": "Über deine Institutionen kannst du <span class='tw-text-purple tw-font-medium'> Badges erstellen und anschließend an deine Lernenden vergeben</span>.",
 		"myInstitutionsNoBadge": "hat noch keine Badges, die sie vergeben kann.",
 		"myInstitutionsCreateBadge": "Neuen Badge erstellen",
@@ -212,7 +213,8 @@
 		"participation": "Participation",
 		"competency": "Competency",
 		"title": "Title",
-		"characters": "characters"
+		"characters": "characters",
+		"createdOn": "Created on"
 	},
 	"CreateBadge": {
 		"chooseBadgeCategory": "Choose Badge-Category",

@@ -182,7 +182,8 @@
 		"awarded": "Vergeben",
 		"editInstitution": "Institution bearbeiten",
 		"editInstitutionInfo": "Bearbeite die Informationen dieser Institution.",
-		"issuerHasNoBadgesYet": "Der Issuer hat noch keine Badges",
+		"issuerHasNoBadgesYet": "hat noch keine Badges.",
+		"issuerHasBadges": "hat",
 		"myInstitutionsText": "Über deine Institutionen kannst du <span class='tw-text-purple tw-font-medium'> Badges erstellen und anschließend an deine Lernenden vergeben</span>.",
 		"myInstitutionsNoBadge": "hat noch keine Badges, die sie vergeben kann.",
 		"myInstitutionsCreateBadge": "Neuen Badge erstellen",
@@ -207,12 +208,13 @@
 		"noBadges": "Keine Badges",
 		"oneBadge": "1 Badge",
 		"multiBadges": "# Badges",
-		"noRecipients": "Keine Empfänger*in",
+		"noRecipients": "Keine Empfänger:in",
 		"oneRecipient": "1 Empfänger",
-		"multiRecipients": "# Empfänger*innen",
+		"multiRecipients": "Empfänger:innen",
 		"participation": "Teilnahme",
 		"competency": "Kompetenz",
-		"title": "Titel"
+		"title": "Titel",
+		"createdOn": "Erstellt am"
 	},
 	"CreateBadge": {
 		"chooseBadgeCategory": "Badge-Kategorie wählen",
