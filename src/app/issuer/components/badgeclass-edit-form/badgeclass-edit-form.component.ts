@@ -230,6 +230,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	@ViewChild('formElem')
 	formElem: ElementRef<HTMLFormElement>;
 
+	@ViewChild('imageSection') imageSection!: ElementRef<HTMLElement>;
+
 	existingBadgeClass: BadgeClass | null = null;
 
 	initialisedBadgeClass: BadgeClass | null = null;
@@ -765,8 +767,12 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					if (typeof firstInvalidInput['focus'] === 'function') {
 						firstInvalidInput['focus']();
 					}
-
-					firstInvalidInput.scrollIntoView({ behavior: 'smooth' });
+					if (firstInvalidInput.id == "imageTextError") {
+						this.imageSection.nativeElement.scrollIntoView(true);
+					} else {
+						
+						firstInvalidInput.scrollIntoView({ behavior: 'smooth' });
+					}
 				}
 				return;
 			}
