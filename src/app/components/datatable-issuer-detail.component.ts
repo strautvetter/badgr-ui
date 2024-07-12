@@ -38,7 +38,7 @@ import { OebButtonComponent } from './oeb-button.component';
     ],
     providers: [provideIcons({ lucideSearch })],    
 	template: `
-  <div class="tw-p-[calc(var(--gridspacing)*2)] tw-mt-8 tw-max-w-[596px]">
+  <div class="tw-p-[calc(var(--gridspacing)*2)] tw-mt-8">
     <div class="tw-flex tw-items-center tw-justify-between tw-gap-4 sm:flex-col">
       <div class="l-stack u-margin-bottom2x u-margin-top4x">
             <h3 class="md:tw-text-xl tw-text-sm tw-font-semibold tw-font-[rubik] tw-text-oebblack">
