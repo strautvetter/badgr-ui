@@ -117,6 +117,10 @@
 	background: var(--color-black);
 }
 
+.topbar {
+	background-color: white;
+}
+
 .topbar .topbar-x-heading {
 	color: var(--color-interactive1);
 }
@@ -191,6 +195,7 @@
 	}
 }
 
+
 @media (min-width: 768px) {
 	.o-container:not(.o-container-is-managed) .navbar .navbar-x-logo img {
 		max-width: 134px;
@@ -213,7 +218,9 @@
 	.u-margin-bottom2x {
 		margin-bottom: 10px;
 	}
+
 }
+
 
 #altcha_checkbox {
 	appearance: auto;
