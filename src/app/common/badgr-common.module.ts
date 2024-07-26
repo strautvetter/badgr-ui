@@ -107,6 +107,7 @@ import { OebIssuerDetailComponent } from './components/issuer/oeb-issuer-detail.
 import { DatatableComponent } from '../components/datatable-badges.component';
 
 import { OebSelectComponent } from '../components/select.component';
+import { OebCollapsibleComponent } from '../components/oeb-collapsible.component';
 
 const DIRECTIVES = [
 	BgAwaitPromises,
@@ -192,7 +193,7 @@ const GUARDS = [AuthGuard];
 
 const PIPES = [UcFirstPipe, StudyLoadPipe];
 
-export const COMMON_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule, OebInputComponent, OebInputErrorComponent, OebSelectComponent, OebButtonComponent, HlmH1Directive, HlmH2Directive, HlmH3Directive, HlmPDirective, HlmADirective, CompetencyAccordionComponent, OebCheckboxComponent, OebDialogComponent, SuccessDialogComponent, OebBackgroundComponent, OebTabsComponent, HlmIconModule, CountUpModule, HlmInputDirective, DatatableComponent];
+export const COMMON_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule, OebInputComponent, OebInputErrorComponent, OebSelectComponent, OebCollapsibleComponent, OebButtonComponent, HlmH1Directive, HlmH2Directive, HlmH3Directive, HlmPDirective, HlmADirective, CompetencyAccordionComponent, OebCheckboxComponent, OebDialogComponent, SuccessDialogComponent, OebBackgroundComponent, OebTabsComponent, HlmIconModule, CountUpModule, HlmInputDirective, DatatableComponent];
 
 
 @NgModule({
