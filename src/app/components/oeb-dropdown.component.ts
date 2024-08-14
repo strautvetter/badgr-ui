@@ -50,7 +50,7 @@ import { SharedIconsModule } from '../public/icons.module';
     </button>
 
     <ng-template  #menu>
-    <hlm-menu [size]="size" class="tw-border-[var(--color-purple)] tw-border-2" >
+    <hlm-menu [size]="size" [inset]="inset" class="tw-border-[var(--color-purple)] tw-border-2" >
     <hlm-menu-label [size]="size" *ngIf="label">{{ label }}</hlm-menu-label>
     <ng-container  *ngFor="let menuItem of menuItems" >
             <button *ngIf="menuItem.action" (click)="menuItem.action($event)" [size]="size"  hlmMenuItem>
@@ -71,6 +71,7 @@ import { SharedIconsModule } from '../public/icons.module';
 export class OebDropdownComponent {
     @Input() trigger: any;
     @Input() size: HlmMenuItemVariants['size'] = 'default';
+    @Input() inset: HlmMenuItemVariants['inset'] = false;
     @Input() triggerStyle: string = 'tw-border tw-border-solid tw-border-purple tw-px-1 tw-py-2 tw-rounded-xl';
     @Input() label?: string = '';
     @Input() class?: string = '';
@@ -83,11 +84,11 @@ export class OebDropdownComponent {
     get iconClass(): string {
         switch(this.size) {
             case 'sm':
-                return 'tw-h-4 tw-w-4';
+                return 'tw-h-4 tw-w-4 !tw-mr-3';
             case 'lg':
-                return 'tw-h-6 tw-w-6';
+                return 'tw-h-6 tw-w-6 !tw-mr-3';
             default:
-                return 'tw-h-5 tw-w-5';
+                return 'tw-h-5 tw-w-5 !tw-mr-3';
         }
     }
 }

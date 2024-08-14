@@ -28,12 +28,14 @@ import { BadgeClassCategory, BadgeClassLevel } from '../../models/badgeclass-api
 import { TranslateService } from '@ngx-translate/core';
 import { PageConfig } from '../../../common/components/badge-detail/badge-detail.component.types';
 import { PdfService } from '../../../common/services/pdf.service';
+import { QrCodeApiService } from '../../services/qrcode-api.service';
 
 @Component({
 	selector: 'badgeclass-detail',
 	template: `
 		<bg-badgedetail [config]="config" [awaitPromises]="[issuerLoaded, badgeClassLoaded]">
-			<issuer-detail-datatable
+				<qrcode-awards [awards]="qrCodeAwards" [badgeClassSlug]="badgeSlug" [issuerSlug]="issuerSlug" [routerLink]="config?.issueQrRouterLink"></qrcode-awards>
+		<issuer-detail-datatable
 				*ngIf="recipientCount > 0"
 				[recipientCount]="recipientCount"
 				[_recipients]="instanceResults"
@@ -55,6 +57,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 	get badgeSlug() {
 		return this.route.snapshot.params['badgeSlug'];
 	}
+
 
 	get confirmDialog() {
 		return this.dialogService.confirmDialog;
@@ -98,6 +101,9 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 
 	config: PageConfig;
 
+	qrCodeButtonText = "Badge über QR-Code vergeben"
+	qrCodeAwards = []
+
 	pdfSrc: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('about:blank');
 	downloadStates: boolean[] = [false];
 
@@ -121,6 +127,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 		protected badgeManager: BadgeClassManager,
 		protected issuerManager: IssuerManager,
 		protected badgeInstanceManager: BadgeInstanceManager,
+		protected qrCodeApiService: QrCodeApiService,
 		sessionService: SessionService,
 		router: Router,
 		route: ActivatedRoute,
@@ -154,6 +161,10 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 			(error) => this.messageService.reportLoadingError(`Cannot find issuer ${this.issuerSlug}`, error),
 		);
 
+		this.qrCodeApiService.getQrCodesForIssuerByBadgeClass(this.issuerSlug, this.badgeSlug).then((qrCodes) => {
+			this.qrCodeAwards = qrCodes
+		})
+
 		this.externalToolsManager.getToolLaunchpoints('issuer_assertion_action').then((launchpoints) => {
 			this.launchpoints = launchpoints;
 		});
@@ -182,9 +193,11 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 					crumbs: this.crumbs,
 					badgeTitle: this.badgeClass.name,
 					headerButton: {
-						title: 'Badge vergeben',
+						title: 'Badge direkt vergeben',
 						routerLink: ['/issuer/issuers', this.issuerSlug, 'badges', this.badgeSlug, 'issue'],
 					},
+					issueQrRouterLink: ['/issuer/issuers', this.issuerSlug, 'badges', this.badgeSlug, 'qr'],
+					qrCodeButton: true,
 					menuitems: [
 						{
 							title: 'Bearbeiten',
