@@ -58,6 +58,7 @@ export class QrCodeDatatableComponent implements OnInit {
     @Output() actionElement = new EventEmitter();
     @Output() redirectToBadgeDetail = new EventEmitter();
     @Output() deletedQRAward = new EventEmitter();
+    @Output() qrBadgeAward = new EventEmitter<void>();
     loading: Promise<unknown>;
 
     constructor(
@@ -115,6 +116,7 @@ export class QrCodeDatatableComponent implements OnInit {
                     this.requestedBadges = this.requestedBadges.filter(awardBadge => awardBadge.id != badge.id )
                     this.deletedQRAward.emit({id: badge.id, slug: this.qrCodeId, badgeclass: badge.badgeclass})
                     this.badgeRequestApiService.deleteRequest(badge.id)
+                    this.qrBadgeAward.emit();
 				},
 				(error) => {
 					this.messageService.setMessage(
