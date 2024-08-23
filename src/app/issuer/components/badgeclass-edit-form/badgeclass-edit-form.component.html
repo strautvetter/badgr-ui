@@ -103,6 +103,7 @@
 							[newDropZone]="true"
 							[generateRandom]="false"
 							[type]="'badge'"
+							[allowedFileFormats]="allowedFileFormats"
 							(generateRandomImage)="generateRandomImage()"
 							(imageUploaded)="generateUploadImage($event, badgeClassForm.value)"
 							[placeholderImage]="badgeClassPlaceholderImageUrl"
@@ -126,6 +127,7 @@
 							imageLoaderName="basic"
 							[newDropZone]="true"
 							[type]="'badge'"
+							[allowedFileFormats]="allowedFileFormatsCustom"
 							[generateRandom]="false"
 							(generateRandomImage)="generateRandomImage()"
 							(imageUploaded)="generateCustomUploadImage($event)"
@@ -135,7 +137,7 @@
 						>
 						</bg-formfield-image>
 						<span class="tw-italic tw-text-sm md:tw-flex md:tw-justify-center md:tw-items-center"
-							>{{ 'General.fileformats' | translate }}: SVG {{ 'General.and' | translate }} PNG</span
+							>{{ 'General.fileformats' | translate }}: PNG</span
 						>
 					</div>
 					<badge-studio
