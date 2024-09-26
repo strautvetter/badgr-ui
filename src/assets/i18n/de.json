@@ -285,7 +285,7 @@
 		"useOurEditor": "Unseren Editor nutzen",
 		"imageSublabel": "Wähle ein Icon/Bild, das in unseren Badge-Rahmen eingesetzt wird.",
 		"useOwnVisual": "Eigenes Visual nutzen",
-		"uploadOwnDesign": "Lade ein eigenes Badge-Design hoch.",
+		"uploadOwnDesign": "Lade ein eigenes Badge-Design hoch (max. 250 KB)",
 		"imageErrorFork": "Bitte gib dem Badge ein gültiges (bei einem Fork eindeutiges) Bild",
 		"fillWithCompetencies": "Badge mit Kompetenzen befüllen",
 		"aiAssistant": "KI-Badge-Assistent",
@@ -328,7 +328,8 @@
 		"addAnotherCompetency": "Weitere Kompetenz hinzufügen",
 		"giveBadgeTitle":"Bitte gib dem Badge einen Titel",
 		"changeBadgeTitle":"Bitte ändere den Titel",
-		"maxValue1000":"Maximalwert ist 1000"
+		"maxValue1000":"Maximalwert ist 1000",
+		"imageTooLarge": "Das Bild ist zu groß. Bitte wähle ein Bild mit einer Größe von maximal 250 KB."
 	},
 	"Signup": {
 		"youHaveAccount": "Du hast bereits einen Account?",
