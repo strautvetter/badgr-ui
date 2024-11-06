@@ -44,7 +44,6 @@ import { PdfService } from '../common/services/pdf.service';
 import { LearningPathApiService } from '../common/services/learningpath-api.service';
 import { ServerVersionService } from '../common/services/server-version.service';
 
-
 /*@Injectable()
 export class MockRouter { navigate = () => {jasmine.createSpy('navigate'); };}*/
 
