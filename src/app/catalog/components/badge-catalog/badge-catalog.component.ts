@@ -13,6 +13,7 @@ import { BadgeClassManager } from '../../../issuer/services/badgeclass-manager.s
 import { StringMatchingUtil } from '../../../common/util/string-matching-util';
 import { BadgeClassCategory } from '../../../issuer/models/badgeclass-api.model';
 import { TranslateService } from '@ngx-translate/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-badge-catalog',
@@ -39,6 +40,15 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 	issuers: string[] = [];
 	selectedTag: string = null;
 
+
+	sortControl = new FormControl('name_asc');
+
+	groupOptions = [
+		{ value: '---', label: '---' },
+		{ value: 'issuer', label: 'Issuer' },
+		{ value: 'category', label: 'Category' },
+	];
+	groupControl = new FormControl('---');
 	get theme() {
 		return this.configService.theme;
 	}
@@ -81,6 +91,11 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		this._groupBy = val;
 		this.updateResults();
 	}
+
+	trackById(index: number, item: any): any {
+		return item.id;
+	}
+
 	groups = [this.translate.instant('Badge.category'), this.translate.instant('Badge.issuer'), '---'];
 	categoryOptions: { [key in BadgeClassCategory | 'noCategory']: string } = {
 		competency: this.translate.instant('Badge.competency'),
@@ -102,6 +117,11 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 
 		// subscribe to issuer and badge class changes
 		this.badgesLoaded = this.loadBadges();
+
+
+		this.groupControl.valueChanges.subscribe((value) => {
+			this.groupBy = value;
+		});
 	}
 
 	async loadBadges() {
@@ -172,26 +192,7 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		};
 	}
 
-	changeOrder(order) {
-		this.order = order;
-		if (this.order === 'asc') {
-			this.badgeResults.sort((a, b) => a.name.localeCompare(b.name));
-			this.badgeResultsByIssuer
-				.sort((a, b) => a.issuerName.localeCompare(b.issuerName))
-				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
-			this.badgeResultsByCategory
-				.sort((a, b) => a.category.localeCompare(b.category))
-				.forEach((r) => r.badges.sort((a, b) => a.name.localeCompare(b.name)));
-		} else {
-			this.badgeResults.sort((a, b) => b.name.localeCompare(a.name));
-			this.badgeResultsByIssuer
-				.sort((a, b) => b.issuerName.localeCompare(a.issuerName))
-				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
-			this.badgeResultsByCategory
-				.sort((a, b) => b.category.localeCompare(a.category))
-				.forEach((r) => r.badges.sort((a, b) => b.name.localeCompare(a.name)));
-		}
-	}
+
 
 	private updateResults() {
 		let that = this;
@@ -249,8 +250,6 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 				addBadgeToResultsByIssuer(item);
 				addBadgeToResultsByCategory(item);
 			});
-
-		this.changeOrder(this.order);
 	}
 
 	openLegend() {

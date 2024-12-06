@@ -132,6 +132,7 @@ import { ErrorDialogComponent } from './dialogs/oeb-dialogs/error-dialog.compone
 import { GlobalErrorHandler } from '../globalErrorHandler.service';
 import { ServerErrorInterceptor } from '../ServerErrorInterceptor';
 import { CountUpDirective } from './directives/count-up.directive';
+import { OebSortSelectComponent } from '../components/oeb-sort-select.component';
 
 const DIRECTIVES = [
 	BgAwaitPromises,
@@ -187,6 +188,7 @@ export const COMMON_MODULE_COMPONENTS = [
 	IssuerCardComponent,
 	OebLearningPathDetailComponent,
 	OebIssuerCard,
+	OebSortSelectComponent
 ];
 
 const SERVICES = [
