@@ -234,6 +234,18 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			issuerSlug: '',
 		})
 		.addArray(
+			'license',
+			typedFormGroup()
+				.addControl('id', 'CC-0', Validators.required)
+				.addControl('name', 'Public Domain', Validators.required)
+				.addControl(
+					'legalCode',
+					'https://creativecommons.org/publicdomain/zero/1.0/legalcode',
+					UrlValidator.validUrl,
+				),
+			Validators.required,
+		)
+		.addArray(
 			'aiCompetencies',
 			typedFormGroup()
 				.addControl('selected', false)
@@ -436,6 +448,15 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				slug: badgeClass.slug,
 				issuerSlug: badgeClass.issuerSlug,
 			},
+			license: badgeClass.extension['extensions:LicenseExtension']
+				? [
+						{
+							id: badgeClass.extension['extensions:LicenseExtension'].id,
+							name: badgeClass.extension['extensions:LicenseExtension'].name,
+							legalCode: badgeClass.extension['extensions:LicenseExtension'].legalCode,
+						},
+					]
+				: this.badgeClassForm.controls.license.value,
 			// Note that, even though competencies might originally have been selected
 			// based on ai suggestions, they can't be separated anymore and thus will
 			// be displayed as competencies entered by hand
@@ -469,6 +490,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	ngOnInit() {
 		super.ngOnInit();
 		let that = this;
+
+		if (!that.existing) {
+			this.badgeClassForm.controls.license.addFromTemplate();
+		}
 
 		// Set badge category when editing a badge. As new select component doesn't show badge competencies
 		this.badgeCategory = this.badgeClassForm.rawControl.controls['badge_category'].value;
@@ -885,6 +910,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			const levelExtensionContextUrl = `${this.baseUrl}/static/extensions/LevelExtension/context.json`;
 			const basedOnExtensionContextUrl = `${this.baseUrl}/static/extensions/BasedOnExtension/context.json`;
 			const competencyExtensionContextUrl = `${this.baseUrl}/static/extensions/CompetencyExtension/context.json`;
+			const licenseExtensionContextUrl = `${this.baseUrl}/static/extensions/LicenseExtension/context.json`;
 			const orgImageExtensionContextUrl = `${this.baseUrl}/static/extensions/OrgImageExtension/context.json`;
 
 			const suggestions = this.aiCompetenciesSuggestions;
@@ -913,6 +939,13 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						'@context': levelExtensionContextUrl,
 						type: ['Extension', 'extensions:LevelExtension'],
 						Level: String(formState.badge_level),
+					},
+					'extensions:LicenseExtension': {
+						'@context': licenseExtensionContextUrl,
+						type: ['Extension', 'extensions:LicenseExtension'],
+						id: formState.license[0].id,
+						name: formState.license[0].name,
+						legalCode: formState.license[0].legalCode,
 					},
 					'extensions:CompetencyExtension': this.getCompetencyExtensions(
 						suggestions,
@@ -969,6 +1002,13 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 							'@context': basedOnExtensionContextUrl,
 							type: ['Extension', 'extensions:BasedOnExtension'],
 							BasedOn: formState.badge_based_on,
+						},
+						'extensions:LicenseExtension': {
+							'@context': licenseExtensionContextUrl,
+							type: ['Extension', 'extensions:LicenseExtension'],
+							id: formState.license[0].id,
+							name: formState.license[0].name,
+							legalCode: formState.license[0].legalCode,
 						},
 						'extensions:CompetencyExtension': this.getCompetencyExtensions(
 							suggestions,
