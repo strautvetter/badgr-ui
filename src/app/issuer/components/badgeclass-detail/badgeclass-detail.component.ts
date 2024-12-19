@@ -38,7 +38,7 @@ import { inject } from '@angular/core';
 	template: `
 		<bg-badgedetail [config]="config" [awaitPromises]="[issuerLoaded, badgeClassLoaded]">
 			<qrcode-awards
-				*ngIf="config.qrCodeButton"
+				*ngIf="config.qrCodeButton.show"
 				(qrBadgeAward)="onQrBadgeAward()"
 				[awards]="qrCodeAwards"
 				[badgeClass]="badgeClass"
@@ -256,7 +256,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 				};
 				if (this.badgeClass.extension['extensions:CategoryExtension']?.Category === 'learningpath') {
 					this.config.headerButton = null;
-					this.config.qrCodeButton = false;
+					this.config.qrCodeButton.show = false;
 				}
 				console.log(this.config);
 			},
@@ -386,8 +386,8 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 			}
 			else{
 				this.router.navigate(['/issuer/issuers/', issuer.slug, 'badges', badge.slug, 'issue'])
-			}	
-		})	
+			}
+		})
 	}
 
 	routeToQRCodeAward(badge, issuer){
@@ -410,7 +410,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 			else{
 				this.router.navigate(['/issuer/issuers/', issuer.slug, 'badges', badge.slug, 'qr'])
 			}
-		})	
+		})
 	}
 
 	shareInstance(instance: BadgeInstance) {
