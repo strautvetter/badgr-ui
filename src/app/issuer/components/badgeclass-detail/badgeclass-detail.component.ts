@@ -38,6 +38,7 @@ import { inject } from '@angular/core';
 	template: `
 		<bg-badgedetail [config]="config" [awaitPromises]="[issuerLoaded, badgeClassLoaded]">
 			<qrcode-awards
+				*ngIf="config.qrCodeButton"
 				(qrBadgeAward)="onQrBadgeAward()"
 				[awards]="qrCodeAwards"
 				[badgeClass]="badgeClass"
@@ -124,6 +125,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 	categoryOptions: { [key in BadgeClassCategory]: string } = {
 		competency: 'Kompetenz-Badge',
 		participation: 'Teilnahme-Badge',
+		learningpath: 'Lernpfad-Badge',
 	};
 
 	levelOptions: { [key in BadgeClassLevel]: string } = {
@@ -237,9 +239,10 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 					updatedAt: this.badgeClass.updatedAt,
 					duration: this.badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad,
 					category:
-						this.badgeClass.extension['extensions:CategoryExtension'].Category === 'competency'
-							? 'Kompetenz-Badge'
-							: 'Teilnahme-Badge',
+						this.translate.instant(`Badge.categories.${this.badgeClass.extension['extensions:CategoryExtension']?.Category || 'participation'}`),
+						// this.badgeClass.extension['extensions:CategoryExtension'].Category === 'competency'
+						// 	? 'Kompetenz-Badge'
+						// 	: 'Teilnahme-Badge',
 					tags: this.badgeClass.tags,
 					issuerName: this.badgeClass.issuerName,
 					issuerImagePlacholderUrl: this.issuerImagePlacholderUrl,
@@ -251,6 +254,10 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 					license: this.badgeClass.extension['extensions:LicenseExtension'] ? true : false,
 
 				};
+				if (this.badgeClass.extension['extensions:CategoryExtension']?.Category === 'learningpath') {
+					this.config.headerButton = null;
+					this.config.qrCodeButton = false;
+				}
 				console.log(this.config);
 			},
 			(error) => {
