@@ -24,10 +24,12 @@ import { LinkEntry } from '../../../common/components/bg-breadcrumbs/bg-breadcru
 import { BadgeInstance } from '../../../issuer/models/badgeinstance.model';
 import { Issuer } from '../../../issuer/models/issuer.model';
 import { CompetencyType, PageConfig } from '../../../common/components/badge-detail/badge-detail.component.types';
+import { ApiLearningPath } from '../../../common/model/learningpath-api.model';
+import { LearningPathApiService } from '../../../common/services/learningpath-api.service';
 
 @Component({
 	selector: 'recipient-earned-badge-detail',
-	template: `<bg-badgedetail [config]="config" [awaitPromises]="[badgesLoaded]" [badge]="badge"></bg-badgedetail>`,
+	template: `<bg-badgedetail [config]="config" [awaitPromises]="[badgesLoaded, learningPathsLoaded]" [badge]="badge"></bg-badgedetail>`,
 })
 export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutableComponent implements OnInit {
 	readonly issuerImagePlacholderUrl = preloadImageURL(
@@ -40,6 +42,8 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 	collectionSelectionDialog: RecipientBadgeCollectionSelectionDialogComponent;
 
 	badgesLoaded: Promise<unknown>;
+	learningPaths: ApiLearningPath[];
+	learningPathsLoaded: Promise<ApiLearningPath[] | void>;
 	badges: RecipientBadgeInstance[] = [];
 	competencies: object[];
 	category: object;
@@ -73,6 +77,7 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 		route: ActivatedRoute,
 		loginService: SessionService,
 		private recipientBadgeManager: RecipientBadgeManager,
+		private learningPathApiService: LearningPathApiService,
 		private title: Title,
 		private messageService: MessageService,
 		private eventService: EventsService,
@@ -105,17 +110,36 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 					},
 					menuitems: [
 						{
-							title: 'Verifizieren',
+							title: 'Badge verifizieren',
 							icon: 'lucideBadgeCheck',
 							action: () => window.open(this.verifyUrl, '_blank'),
 						},
 						{
-							title: 'PDF exportieren',
+							title: 'JSON-Datei herunterladen',
+							icon: '	lucideFileCode',
+							action: () => {
+								fetch(this.rawJsonUrl)
+									.then((response) => response.blob())
+									.then((blob) => {
+										const link = document.createElement('a');
+										const url = URL.createObjectURL(blob);
+										link.href = url;
+										link.download = `assertion-${this.badge.badgeClass.slug.trim()}.json`;
+										document.body.appendChild(link);
+										link.click();
+										document.body.removeChild(link);
+										URL.revokeObjectURL(url);
+									})
+									.catch((error) => console.error('Download failed:', error));
+							},
+						},
+						{
+							title: 'PDF-Zertifikat herunterladen',
 							icon: 'lucideFileText',
 							action: () => this.exportPdf(),
 						},
 						{
-							title: 'Löschen',
+							title: 'Badge aus Rucksack löschen',
 							icon: 'lucideTrash2',
 							action: () => this.deleteBadge(this.badge),
 						},
@@ -140,7 +164,15 @@ export class RecipientEarnedBadgeDetailComponent extends BaseAuthenticatedRoutab
 					badgeInstanceSlug: this.badgeSlug,
 				};
 			})
+			.finally(() => {
+				this.learningPathsLoaded = this.learningPathApiService.getLearningPathsForBadgeClass(this.badge.badgeClass.slug).then(lp => {
+					this.learningPaths = lp;
+					this.config.learningPaths = lp
+				})
+			})
 			.catch((e) => this.messageService.reportAndThrowError('Failed to load your badges', e));
+		
+		
 
 		this.externalToolsManager.getToolLaunchpoints('earner_assertion_action').then((launchpoints) => {
 			this.launchpoints = launchpoints;
