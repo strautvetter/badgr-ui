@@ -54,7 +54,7 @@ import { HlmPDirective } from '../components/spartan/ui-typography-helm/src/lib/
 
                 >
 										<div
-											style="width: 186px;height: 50px;"
+											class="sm:tw-w-[186px] sm:tw-min-h-[50px]"
 											*ngIf="badge.badge.extension['extensions:CategoryExtension']?.Category === 'learningpath'"
 											>
 										</div>

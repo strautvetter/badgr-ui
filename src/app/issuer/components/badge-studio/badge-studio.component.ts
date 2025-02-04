@@ -49,8 +49,6 @@ export class BadgeStudioComponent implements OnInit, OnChanges {
 					// const shapeColor = shapeColors[Math.floor(Math.random() * shapeColors.length)];
 					const shapeColor = shapeColorsTypes[this.formData.badge_category];
 
-					console.log(this.formData.badge_category);
-
 					const iconColor = '#0000000';
 					this.context2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					var shapeImage = shapeImagesTypes[this.formData.badge_category] || this.formData.badge_category['participation']
