@@ -198,12 +198,6 @@ export class PublicLearningPathComponent implements OnInit, AfterContentInit {
 		this.activeTab = tab;
 	}
 
-	requestLearningPath() {
-		this.learningPathApiService.requestLearningPath(this.learningPath.slug).then(res => {
-			this.learningPath.requested = true;
-		})
-	}
-
 	get learningPathReverseBadges() {
 		return [...this.learningPath.badges].reverse()
 	}

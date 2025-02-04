@@ -17,18 +17,6 @@
 							<span>{{ minutesTotal | hourPipe }} {{ 'LearningPath.hours' | translate }}</span>
 						</div>
 					</div>
-					<oeb-button
-						*ngIf="
-							learningPath.progress &&
-							learningPath.progress / minutesTotal === 1 &&
-							!learningPath.completed_at &&
-							!learningPath.requested
-						"
-						(click)="requestLearningPath()"
-						[text]="'Lernpfad-Badge abholen'"
-						[fontSize15]="true"
-					>
-					</oeb-button>
 
 					<div
 						*ngIf="learningPath.requested && !learningPath.completed_at"

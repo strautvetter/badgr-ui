@@ -122,7 +122,6 @@ import { LearningPathDatatableComponent } from '../components/datatable-learning
 import { LearningPathApiService } from './services/learningpath-api.service';
 import { LearningPathParticipantsDatatableComponent } from '../components/datatable-learningpath-participants.component';
 import { LearningPathGraduatesDatatableComponent } from '../components/datatable-learningpath-graduates.component';
-import { LearningPathRequestsDatatableComponent } from '../components/datatable-learningpath-requests.component';
 import { OebIssuerCard } from './components/oeb-issuercard';
 import { HourPipe } from './pipes/hourPipe';
 import { HlmBadgeDirective } from '../components/spartan/ui-badge-helm/src/lib/hlm-badge.directive';
@@ -264,7 +263,6 @@ export const COMMON_IMPORTS = [
 	LearningPathDatatableComponent,
 	LearningPathParticipantsDatatableComponent,
 	LearningPathGraduatesDatatableComponent,
-	LearningPathRequestsDatatableComponent,
 	HlmBadgeDirective,
 ];
 
