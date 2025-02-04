@@ -289,6 +289,7 @@
 		"multiRecipients": "Empfänger:innen",
 		"participation": "Teilnahme",
 		"competency": "Kompetenz",
+		"learningpath": "Lernpfad",
 		"title": "Titel",
 		"createdOn": "Erstellt am",
 		"catalogHeadline": "Alle Badges in der Übersicht",
@@ -307,7 +308,12 @@
 		"row": "Zeile",
 		"rows": "Zeilen",
 		"request": "Anfrage",
-		"requests": "Anfragen"
+		"requests": "Anfragen",
+		"categories": {
+			"competency": "Kompetenz-Badge",
+			"participation": "Teilnahme-Badge",
+			"learningpath": "Micro Degree"
+		}
 	},
 	"CreateBadge": {
 		"chooseBadgeCategory": "Badge-Kategorie wählen",
