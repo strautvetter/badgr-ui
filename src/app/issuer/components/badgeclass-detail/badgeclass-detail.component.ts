@@ -40,7 +40,7 @@ import { ApiLearningPath } from '../../../common/model/learningpath-api.model';
 	template: `
 		<bg-badgedetail [config]="config" [awaitPromises]="[issuerLoaded, badgeClassLoaded]">
 			<qrcode-awards
-				*ngIf="config.qrCodeButton"
+				*ngIf="config.qrCodeButton.show"
 				(qrBadgeAward)="onQrBadgeAward()"
 				[awards]="qrCodeAwards"
 				[badgeClass]="badgeClass"
@@ -262,7 +262,7 @@ export class BadgeClassDetailComponent extends BaseAuthenticatedRoutableComponen
 				};
 				if (this.badgeClass.extension['extensions:CategoryExtension']?.Category === 'learningpath') {
 					this.config.headerButton = null;
-					this.config.qrCodeButton = false;
+					this.config.qrCodeButton.show = false;
 				}
 				console.log(this.config);
 			},
