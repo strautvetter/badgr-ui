@@ -54,7 +54,6 @@ export class PublicBadgeClassComponent {
 	config: PageConfig
 
 	learningPaths: PublicApiLearningPath[];
-	learningPathsPromise: Promise<PublicApiLearningPath[] | void>;
 
 	userBadges: string[] = [];
 	loggedIn = false;
@@ -72,9 +71,12 @@ export class PublicBadgeClassComponent {
 	) {
 		title.setTitle(`Badge Class - ${this.configService.theme['serviceName'] || 'Badgr'}`);
 
-		this.badgeIdParam = new LoadedRouteParam(injector.get(ActivatedRoute), 'badgeId', (paramValue) => {
+		this.badgeIdParam = new LoadedRouteParam(injector.get(ActivatedRoute), 'badgeId', async (paramValue) => {
 			const service: PublicApiService = injector.get(PublicApiService);
 			const badgeClass = service.getBadgeClass(paramValue);
+			await service.getLearningPathsForBadgeClass(paramValue).then(lp => {
+				this.learningPaths = lp;
+			})
 			badgeClass.then((badge) => {
 				this.config = {
 					qrCodeButton: {
@@ -96,13 +98,10 @@ export class PublicBadgeClassComponent {
 					competencies: badge['extensions:CompetencyExtension'],
 					license: badge['extensions:LicenseExtension'] ? true : false,
 					crumbs: [{ title: 'Badges', routerLink: ['/catalog/badges'] }, { title: badge.name }],
+					learningPaths: this.learningPaths
 				}
 			})
 
-			this.learningPathsPromise = service.getLearningPathsForBadgeClass(paramValue).then(lp => {
-				this.learningPaths = lp;
-				this.config.learningPaths = lp
-			})
 			return badgeClass
 		});
 	}

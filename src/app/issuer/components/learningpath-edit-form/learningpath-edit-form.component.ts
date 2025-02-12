@@ -116,7 +116,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 	selectedBadgeUrls: string[] = [];
 	selectedBadges: any[] = [];
 	studyLoad: number = 0;
-	savePromise: Promise<ApiLearningPath> | null = null;
+	savePromise: Promise<ApiLearningPath> | Promise<void> | null  = null;
 	selectedStep = 0;
 
 	detailsForm: any;
@@ -370,7 +370,8 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 
 		}
 		else{
-			try {
+			this.savePromise = (async () => {
+			try {	
 				let imageFrame = true;
 				if (this.stepOne.lpDetailsForm.controls.badge_customImage.value && this.stepOne.lpDetailsForm.valid) {
 					imageFrame = false;
@@ -441,8 +442,10 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 
 				this.save.emit(this.savePromise);
 			} catch (e) {
+				this.savePromise = null;
 				console.log(e);
 			}
+		})();
 		}
 	}
 }
