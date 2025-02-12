@@ -102,7 +102,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 
 	existingLpBadge: BadgeClass | null = null
 
-	@Input() 
+	@Input()
 	set lpBadge(badge: BadgeClass){
 		if(this.existingLpBadge !== badge){
 			this.existingLpBadge = badge
@@ -162,7 +162,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 			this.previous = previous;
 		});
 		this.learningPathForm.setValue({
-			license: 
+			license:
 			[
 				{
 					id: 'CC-0',
@@ -337,7 +337,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 				'extensions:CategoryExtension': {
 					'@context': categoryExtensionContextUrl,
 					type: ['Extension', 'extensions:CategoryExtension'],
-					Category: 'participation',
+					Category: 'learningpath',
 				},
 				'extensions:LicenseExtension': {
 					'@context': licenseExtensionContextUrl,
@@ -349,7 +349,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 				'extensions:CompetencyExtension': []
 			}
 
-			this.existingLpBadge.save()				
+			this.existingLpBadge.save()
 
 			this.savePromise = this.learningPathApiService.updateLearningPath(this.issuerSlug, this.existingLearningPath.slug, {
 				...this.existingLearningPath,
@@ -363,11 +363,11 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 						slug: item.slug,
 						order: item.order,
 					};
-				}),			  
+				}),
 			})
 
 			this.save.emit(this.savePromise);
-				
+
 		}
 		else{
 			this.savePromise = (async () => {
@@ -377,7 +377,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 					imageFrame = false;
 					this.stepOne.lpDetailsForm.controls.badge_image.setValue(this.stepOne.lpDetailsForm.controls.badge_customImage.value);
 				}
-	
+
 				const participationBadge = await this.badgeClassService.createBadgeClass(this.issuerSlug, {
 					image: this.stepOne.lpDetailsForm.controls.badge_image.value,
 					imageFrame: imageFrame,
@@ -423,9 +423,9 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 						// ),
 					},
 				});
-	
+
 				const issuer = await this.issuerApiService.getIssuer(this.issuerSlug);
-	
+
 				this.savePromise = this.learningPathApiService.createLearningPath(this.issuerSlug, {
 					issuer_id: issuer.slug,
 					name: this.stepOne.lpDetailsForm.controls.name.value,
@@ -439,7 +439,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 					}),
 					participationBadge_id: participationBadge.slug,
 				});
-	
+
 				this.save.emit(this.savePromise);
 			} catch (e) {
 				this.savePromise = null;
