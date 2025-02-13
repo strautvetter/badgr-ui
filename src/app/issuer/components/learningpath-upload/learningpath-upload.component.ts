@@ -44,8 +44,8 @@ export class LearningPathUploadComponent extends BaseAuthenticatedRoutableCompon
 			this.breadcrumbLinkEntries = [
 				{ title: 'Meine Institutionen', routerLink: ['/issuer'] },
 				{ title: issuer.name, routerLink: ['/issuer/issuers', this.issuerSlug] },
-                { title: 'Micro-Degrees' },
-				{ title: 'Micro-Degree hochladen', routerLink: ['/issuer/issuers', this.issuerSlug, '/learningpaths/upload'] },
+                { title: 'Micro Degrees' },
+				{ title: 'Micro Degree hochladen', routerLink: ['/issuer/issuers', this.issuerSlug, '/learningpaths/upload'] },
 			];
         });
     }
@@ -68,7 +68,7 @@ export class LearningPathUploadComponent extends BaseAuthenticatedRoutableCompon
 				},
 				(error) => {
 					this.messageService.setMessage(
-						'Micro-Degree konnte nicht erstellt werden: ' + BadgrApiFailure.from(error).firstMessage,
+						'Micro Degree konnte nicht erstellt werden: ' + BadgrApiFailure.from(error).firstMessage,
 						'error',
 					);
 				},);

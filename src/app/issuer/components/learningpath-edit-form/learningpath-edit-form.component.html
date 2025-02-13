@@ -17,7 +17,7 @@
 			</oeb-step>
 
 			<cdk-step
-				label="Micro-Degree Details"
+				label="Details eingeben"
 				[stepControl]="stepOne.lpDetailsForm"
 				[optional]="false"
 				errorMessage="Bitte vollständig ausfüllen"
@@ -28,7 +28,7 @@
 				></learningpath-details>
 			</cdk-step>
 			<cdk-step
-				label="Badges auswählen"
+				label="Enthaltene Badges"
 				[stepControl]="stepTwo.lpBadgesForm"
 				[optional]="false"
 				errorMessage="Wähle mindestens 3 Badges aus"
@@ -51,7 +51,7 @@
 					></learningpath-badge-order>
 				</ng-container>
 			</cdk-step>
-			<cdk-step label="Abschliessen">
+			<cdk-step label="Abschluss">
 				<learningpath-tags
 					[learningPath]="existingLearningPath"
 					(tagsChanged)="updateTags($event)"
@@ -67,7 +67,8 @@
 		<div class="tw-mt-8 tw-clear-both">
 			<oeb-button
 				class="tw-float-left"
-				[hidden]="selectedStep === 0"
+				variant="secondary"
+				[hidden]="selectedStep < 1"
 				type="button"
 				[text]="previous"
 				(click)="previousStep()"
@@ -75,14 +76,30 @@
 			</oeb-button>
 
 			<oeb-button
+				*ngIf="selectedStep < 4"
 				class="tw-float-right"
-				[disabled]="selectedStep == 3"
 				type="button"
 				[text]="next"
 				(click)="nextStep()"
 			>
 			</oeb-button>
+
+
+			<oeb-button
+				*ngIf="selectedStep === 4"
+				class="tw-float-right"
+				type="submit"
+				width="max_content"
+				[disabled]="!!savePromise || learningPathForm.invalid || selectedBadges.length < 3"
+				[loading-promises]="[savePromise]"
+				loading-message="{{ submittingText }}"
+				text="{{
+					(existingLearningPath ? 'General.saveChanges' : 'Issuer.myInstitutionsCreateLearningPath') | translate
+				}}"
+			>
+			</oeb-button>
 		</div>
+		<!--
 		<div class="tw-flex tw-justify-end tw-flex-wrap tw-gap-4 tw-pt-8 tw-clear-both">
 			<oeb-button
 				variant="secondary"
@@ -104,5 +121,6 @@
 			>
 			</oeb-button>
 		</div>
+		-->
 	</form>
 </div>

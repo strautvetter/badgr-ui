@@ -1,6 +1,6 @@
-<div class="tw-mt-6 oeb-section tw-bg-[var(--color-lightgray)] tw-rounded-[25px] tw-p-[1.8em] tw-mb-[1.8em]">
-	<div class="tw-mx-5">
-		<h2 hlmH2 class="tw-text-purple tw-flex tw-gap-2">
+<div class="section tw-mt-6 oeb-section tw-bg-[var(--color-lightgray)] tw-rounded-[25px]">
+	<div>
+		<h2 hlmH2 class="tw-text-purple tw-flex tw-gap-2 tw-font-bold">
 			<span>{{ 'LearningPath.addTag' | translate }}</span>
 		</h2>
 		<p hlmP class="tw-italic tw-mt-1" [innerHtml]="'CreateBadge.tagInfo' | translate"></p>
@@ -88,4 +88,11 @@
 			<span>{{ lpDescription }}</span>
 		</div>
 	</div>
+</div>
+<p class="tw-italic tw-text-[24px]/[1.2em] tw-mt-12">
+	Den Abschluss-Badge <strong class="tw-text-purple">Micro Degree</strong> erhalten Lernende automatisiert per E-Mail, sobald sie alle darin enthaltenen Badges erworben haben.
+</p>
+
+<div class="tw-mt-8">
+	<p class="tw-text-end tw-text-oebblack tw-italic tw-text-lg" [innerHTML]="'CreateBadge.licenseInfo' | translate"> </p>
 </div>

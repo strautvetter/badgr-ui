@@ -92,7 +92,7 @@ export class OebIssuerDetailComponent implements OnInit {
 				component: this.badgesTemplate,
 			},
 			{
-				title: 'Micro-Degrees',
+				title: 'Micro Degrees',
 				component: this.learningPathTemplate,
 			},
 		];
@@ -198,8 +198,8 @@ export class OebIssuerDetailComponent implements OnInit {
 				delete: () => this.deleteLearningPathApi(learningPathSlug, issuer),
 				// qrCodeRequested: () => {},
 				variant: "danger",
-				text: "Möchtest du diesen Micro-Degree wirklich löschen?",
-				title: "Micro-Degree löschen"
+				text: "Möchtest du diesen Micro Degree wirklich löschen?",
+				title: "Micro Degree löschen"
 			},
 		});
 	}

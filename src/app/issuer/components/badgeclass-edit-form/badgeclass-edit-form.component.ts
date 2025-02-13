@@ -543,29 +543,33 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			});
 		}
 
-		// restore values from sessionStorage
-		const sessionValues = sessionStorage.getItem('badgeclassvalues');
-		if (sessionValues) {
-			this.badgeClassForm.rawControl.patchValue(JSON.parse(sessionValues));
-		}
 
-		// save values from sessionStorage
-		const saveableSessionValues = [
-			'badge_name', 'badge_description', 'badge_hours', 'badge_minutes', 'badge_image', 'badge_customImage',
-		];
-		const filterSessionValues = (values: Object) => {
-			const filteredValues = {};
-			for (const [k, v] of Object.entries(values)) {
-				if (saveableSessionValues.includes(k)) {
-					filteredValues[k] = v;
-				}
+		if (!this.existingBadgeClass) {
+			// restore values from sessionStorage for new badges
+			const sessionValues = sessionStorage.getItem('oeb-create-badgeclassvalues');
+			if (sessionValues) {
+				this.badgeClassForm.rawControl.patchValue(JSON.parse(sessionValues));
+			}
+			// restore values from sessionStorage
+			const saveableSessionValues = [
+				'badge_name', 'badge_description', 'badge_hours', 'badge_minutes',
+			];
+			const filterSessionValues = (values: Object) => {
+				const filteredValues = {};
+				for (const [k, v] of Object.entries(values)) {
+					if (saveableSessionValues.includes(k)) {
+						filteredValues[k] = v;
+					}
+				};
+				return filteredValues;
 			};
-			return filteredValues;
-		};
-		this.badgeClassForm.rawControl.valueChanges.subscribe(v => {
-			// console.log(this.badgeClassForm.rawControl.value);
-			sessionStorage.setItem('badgeclassvalues', JSON.stringify(filterSessionValues(this.badgeClassForm.rawControl.value)));
-		});
+			this.badgeClassForm.rawControl.valueChanges.subscribe(v => {
+				sessionStorage.setItem('oeb-create-badgeclassvalues', JSON.stringify(filterSessionValues(this.badgeClassForm.rawControl.value)));
+			});
+		} else {
+			// clear session storage when editing existing badges
+			sessionStorage.removeItem('oeb-create-badgeclassvalues');
+		}
 	}
 
 	ngAfterViewInit(): void {
@@ -1165,7 +1169,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			this.save.emit(this.savePromise);
 
 			// clear sessionStorage
-			sessionStorage.removeItem('badgeclassvalues');
+			sessionStorage.removeItem('oeb-create-badgeclassvalues');
 
 		} catch (e) {
 			console.log(e)

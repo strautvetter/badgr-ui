@@ -368,6 +368,9 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 
 			this.save.emit(this.savePromise);
 
+			// clear sessionStorage
+			sessionStorage.removeItem('oeb-create-badgeclassvalues');
+
 		}
 		else{
 			this.savePromise = (async () => {
@@ -441,6 +444,8 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 				});
 
 				this.save.emit(this.savePromise);
+				// clear sessionStorage
+				sessionStorage.removeItem('oeb-create-badgeclassvalues');
 			} catch (e) {
 				this.savePromise = null;
 				console.log(e);

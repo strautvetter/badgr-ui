@@ -231,7 +231,7 @@ export class RecipientEarnedBadgeListComponent
 				component: this.badgesCompetency,
 			},
 			{
-				title: 'Micro-Degrees',
+				title: 'Micro Degrees',
 				component: this.learningPathTemplate,
 			},
 		];
