@@ -55,6 +55,7 @@ import { LearningPathUploadComponent } from './components/learningpath-upload/le
 import { IssuerLearningPathComponent } from './components/issuer-learning-path/issuer-learning-path.component';import { IssuerEditFormComponent } from './components/issuer-edit-form/issuer-edit-form.component';
 import { Issuer } from './models/issuer.model';
 import { LearningPathEditComponent } from './components/learningpath-edit/learningpath-edit.component';
+import { BadgeClassSelectTypeComponent } from './components/badgeclass-select-type/badgeclass-select-type.component';
 
 const routes = [
 	/* Issuer */
@@ -77,6 +78,14 @@ const routes = [
 	{
 		path: 'issuers/:issuerSlug/staff',
 		component: IssuerStaffComponent,
+	},
+	{
+		path: 'issuers/:issuerSlug/badges/select',
+		component: BadgeClassSelectTypeComponent,
+	},
+	{
+		path: 'issuers/:issuerSlug/badges/create/:category',
+		component: BadgeClassCreateComponent,
 	},
 	{
 		path: 'issuers/:issuerSlug/badges/create',
@@ -149,6 +158,7 @@ const routes = [
 		CdkStepperModule
 	],
 	declarations: [
+		BadgeClassSelectTypeComponent,
 		BadgeClassCreateComponent,
 		BadgeClassEditComponent,
 		BadgeClassEditFormComponent,

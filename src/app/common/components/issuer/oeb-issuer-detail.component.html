@@ -39,7 +39,7 @@
 			<oeb-button
 				class="tw-whitespace-nowrap"
 				*ngIf="!public && activeTab == 'Badges'"
-				[routerLink]="['./badges/create']"
+				[routerLink]="['./badges/select']"
 				[disabled]="!issuer.canCreateBadge"
 				[text]="'Issuer.createBadge' | translate"
 				[class]="issuer.canCreateBadge ? '' : 'disabled'"

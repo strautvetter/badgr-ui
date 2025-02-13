@@ -1,10 +1,10 @@
-<div class="oeb">	
+<div class="oeb">
 	<form-message></form-message>
 	<app-badge-legend *ngIf="showLegend" (closed)="closeLegend()"></app-badge-legend>
-	
+
 	<form [formGroup]="badgeClassForm.rawControl" #formElem (ngSubmit)="onSubmit()" novalidate>
 		<!-- Badge Category Panel -->
-		<div class="section tw-text-oebblack">
+		<!-- <div class="section tw-text-oebblack">
 			<div class="tw-flex tw-flex-col tw-gap-2">
 				<div class="tw-flex tw-flex-col md:tw-flex-row tw-gap-4 md:tw-gap-8">
 					<h2 hlmH2 class="tw-font-bold">1. {{ 'CreateBadge.chooseBadgeCategory' | translate }}</h2>
@@ -34,9 +34,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	
-	
+		</div> -->
+
+
 		<div class="section tw-text-oebblack">
 			<div>
 				<h2 hlmH2 class="tw-font-bold">2. {{ 'CreateBadge.enterDetails' | translate }}</h2>
@@ -47,9 +47,9 @@
 						{{ 'CreateBadge.short' | translate }}&shy;{{ 'General.description' | translate }}
 						{{ 'CreateBadge.forLearners' | translate }}</span
 					>
-					<oeb-input 
-						class="tw-w-full tw-max-w-[750px]" 
-						[fieldType]="'textarea'" 
+					<oeb-input
+						class="tw-w-full tw-max-w-[750px]"
+						[fieldType]="'textarea'"
 						[control]="badgeClassForm.rawControlMap.badge_description"
 						id="badgeclass_description_input"
 						[placeholder]="summarizedDescription"
@@ -58,23 +58,23 @@
 					>
 					</oeb-input>
 				</div>
-	
+
 				<div class="tw-flex md:tw-flex-row tw-gap-3  md:tw-gap-8 tw-flex-col md:tw-items-center tw-justify-start">
 					<span class="input-label md:tw-flex-[0_0_10em]"> {{ 'RecBadgeDetail.duration' | translate }}</span>
 					<div class="tw-flex tw-gap-2 tw-items-center">
-						<oeb-input 
-							class="tw-w-20" 
-							[fieldType]="'number'" 
-							[control]="badgeClassForm.rawControlMap.badge_hours" 
+						<oeb-input
+							class="tw-w-20"
+							[fieldType]="'number'"
+							[control]="badgeClassForm.rawControlMap.badge_hours"
 							[errorMessage]="{ duration: hoursMaxError }"
 							noTopMargin="true"
 						>
 						</oeb-input>
 						<span class="tw-font-bold tw-text-purple" hlmP>:</span>
-						<oeb-input 
-							class="tw-w-20" 
-							[fieldType]="'number'" 
-							[control]="badgeClassForm.rawControlMap.badge_minutes" 
+						<oeb-input
+							class="tw-w-20"
+							[fieldType]="'number'"
+							[control]="badgeClassForm.rawControlMap.badge_minutes"
 							[errorMessage]="{ duration: minMaxError }"
 							noTopMargin="true"
 						>
@@ -82,9 +82,9 @@
 						<span class="tw-text-oebblack md:tw-text-lg">{{ 'RecBadge.hours' | translate }}</span>
 					</div>
 				</div>
-	
+
 				<p
-						hlmP 
+						hlmP
 						size="sm"
 						id="maxHoursOrMinutesError"
 						[hidden]="
@@ -97,11 +97,11 @@
 						<span *ngIf="badgeClassForm.hasError('maxMinutesError')">{{'CreateBadge.minMaxError' | translate }}</span>
 						<span *ngIf="badgeClassForm.hasError('maxHoursError')">{{'CreateBadge.hoursMaxError' | translate }}</span>
 				</p>
-	
+
 				<div class="tw-flex md:tw-flex-row tw-gap-3 md:tw-gap-8 tw-flex-col md:tw-items-center tw-justify-start">
 					<span class="input-label md:tw-flex-[0_0_10em]"> {{ 'Badge.title' | translate }}</span>
 					<div class="tw-flex tw-gap-2 tw-items-center">
-						<oeb-input 
+						<oeb-input
 								[control]="badgeClassForm.rawControlMap.badge_name"
 								noTopMargin="true"
 								[errorMessage]="{
@@ -111,7 +111,7 @@
 							>
 						</oeb-input>
 						<span class="tw-text-oebblack tw-italic">  {{max60chars}}</span>
-					</div>	
+					</div>
 				</div>
 				<div class="tw-flex md:tw-flex-row tw-gap-3 md:tw-gap-8 tw-flex-col" id="imageSection" #imageSection>
 					<span class="input-label md:tw-flex-[0_0_10em]"> Badge-{{ 'Issuer.image' | translate }}</span>
@@ -165,7 +165,7 @@
 							</bg-formfield-image>
 								<span class="tw-italic tw-text-sm md:tw-flex md:tw-justify-center md:tw-items-center"
 								>{{ 'General.fileformats' | translate }}: PNG,&nbsp; </span>
-	
+
 						</div>
 						<badge-studio
 							[scrolled]="scrolled"
@@ -175,9 +175,9 @@
 						></badge-studio>
 					</div>
 				</div>
-				
+
 				<p
-					hlmP 
+					hlmP
 					size="sm"
 					id="imageTextError"
 					[hidden]="!imageFieldDirty || !badgeClassForm.hasError('imageRequired') "
@@ -186,7 +186,7 @@
 					{{'CreateBadge.imageRequiredError' | translate }}.
 				</p>
 				<p
-					hlmP 
+					hlmP
 					size="sm"
 					[hidden]="!isCustomImageLarge"
 					class="tw-font-normal md:tw-pl-[13.5rem] u-text-error"
@@ -195,7 +195,7 @@
 				</p>
 			</div>
 		</div>
-	
+
 		<div class="section tw-text-oebblack tw-px-1" *ngIf="badgeCategory === 'competency'">
 			<h2 id="fillWithCompetencies" hlmH2 class="tw-font-bold">3. {{ 'CreateBadge.fillWithCompetencies' | translate }}</h2>
 			<p
@@ -335,7 +335,7 @@
 								'CreateBadge.addCompetenciesByHand' | translate
 							}}</span>
 						</ng-template>
-					
+
 					<div
 						class="tw-flex tw-flex-col md:tw-flex-row md:tw-gap-4 tw-gap-2 md:tw-justify-between md:tw-items-center"
 					>
@@ -345,7 +345,7 @@
 								>, {{ 'CreateBadge.tofindFittingCompetencies' | translate }}</span
 							>
 						</p>
-	
+
 						<div class="button tw-bg-[var(--color-purple)]">
 							<a
 								class="tw-text-white"
@@ -355,7 +355,7 @@
 							>
 						</div>
 					</div>
-	
+
 					<ng-container *ngFor="let competency of badgeClassForm.controls.competencies.controls; let i = index">
 						<ng-container *ngIf="competency.controls['added'].value; else competencyForm">
 							<div
@@ -383,7 +383,7 @@
 								  >
 									{{ competency.rawControlMap.hours.value | number:'2.0' }}:{{ competency.rawControlMap.minutes.value | number:'2.0' }} h
 								  </span>
-								  
+
 								</div>
 							</div>
 						</ng-container>
@@ -392,10 +392,10 @@
 								class="tw-border-[var(--color-purple)] tw-border tw-border-solid tw-rounded-md tw-p-6 tw-mt-4"
 							>
 								<div class="tw-flex tw-flex-col md:tw-flex-row md:tw-justify-between tw-gap-5 md:tw-gap-0">
-									
-									<oeb-input 
+
+									<oeb-input
 										id="{{'competencyTitle_'+i}}"
-										[fieldType]="'text'" 
+										[fieldType]="'text'"
 										[label]="competencyTitle"
 										[control]="competency.rawControlMap.name"
 										[errorMessage]="{ required: titleError }"
@@ -403,13 +403,13 @@
 										[readonly]="competency.controls['framework_identifier'].value ? true : false"
 									>
 									</oeb-input>
-	
+
 									<div class="tw-flex tw-flex-col">
 										<span class="tw-font-semibold tw-text-[14px] md:tw-text-[20px] tw-leading-4 md:tw-leading-6 tw-font-[rubik] tw-pb-[5px] tw-pl-[3px]">{{ competencyDuration }}</span>
-	
+
 										<div class="tw-flex tw-gap-2 tw-items-center">
 											<oeb-input
-												id="{{'competencyDurationHour_'+i}}" 
+												id="{{'competencyDurationHour_'+i}}"
 												[fieldType]="'number'"
 												class="tw-max-w-24"
 												[control]="competency.rawControlMap.hours"
@@ -421,8 +421,8 @@
 											>
 											</oeb-input>
 											:
-											<oeb-input 
-												id="{{'competencyDurationMinutes_'+i}}" 
+											<oeb-input
+												id="{{'competencyDurationMinutes_'+i}}"
 												[fieldType]="'number'"
 												class="tw-max-w-24"
 												[control]="competency.rawControlMap.minutes"
@@ -433,13 +433,13 @@
 												[readonly]="competency.controls['framework_identifier'].value ? true : false"
 											>
 											</oeb-input>
-	
+
 											<span class="tw-text-oebblack">h</span>
 										</div>
 									</div>
-									
+
 									<oeb-select
-										id="{{'competencyCategory_'+i}}" 
+										id="{{'competencyCategory_'+i}}"
 										ariaLabel="Wähle eine Kompetenz-Kategorie"
 										[control]="competency.rawControlMap.category"
 										[label]="competencyCategory"
@@ -451,21 +451,21 @@
 										noTopMargin="true"
 										[disabled]="competency.controls['framework_identifier'].value ? true : false"
 									></oeb-select>
-	
+
 								</div>
-	
+
 								<oeb-input
 									id="{{'competencyDescriptionInput_'+i}}"
-									[fieldType]="'textarea'" 
+									[fieldType]="'textarea'"
 									[label]="competencyDescription"
 									[control]="competency.rawControlMap.description"
 									[errorMessage]="{ required: enterDescription }"
 									[readonly]="competency.controls['framework_identifier'].value ? true : false"
 								>
 								</oeb-input>
-	
+
 								<oeb-input
-									id="{{'escoIdentifierInput_'+i}}" 
+									id="{{'escoIdentifierInput_'+i}}"
 									*ngIf="competency.rawControlMap['framework_identifier'].value"
 									label="Framework-Identifier"
 									[control]="competency.rawControlMap['framework_identifier']"
@@ -473,7 +473,7 @@
 									placeholder="z.B. http://data.europa.eu/esco/skill/7de3b70e-2568-420a-8528-69523d323e7a"
 								>
 								</oeb-input>
-	
+
 								<div class="tw-flex tw-justify-between tw-flex-wrap sm:tw-flex-nowrap tw-gap-2 tw-mt-8">
 									<oeb-button
 										*ngIf="badgeClassForm.controls.competencies.controls.length > 0"
@@ -484,7 +484,7 @@
 										(click)="removeCompetency(competency)"
 										text="{{ 'General.remove' | translate }}"
 									></oeb-button>
-							
+
 									<oeb-button
 										id="{{'addCompetencyBtn_'+i}}"
 										size="sm"
@@ -498,7 +498,7 @@
 							</div>
 						</ng-template>
 					</ng-container>
-	
+
 					<div class="tw-w-full tw-flex tw-justify-end">
 						<oeb-button
 							size="sm"
@@ -506,8 +506,8 @@
 							class="tw-mt-2"
 							(click)="addAnotherCompetency()"
 							text="{{
-								(badgeClassForm.controls.competencies.controls.length > 0		
-								? 'CreateBadge.addAnotherCompetency'		
+								(badgeClassForm.controls.competencies.controls.length > 0
+								? 'CreateBadge.addAnotherCompetency'
 								: 'General.add') | translate}}"
 								icon="lucidePlus"
 						>
@@ -524,7 +524,7 @@
 				{{ 'CreateBadge.duplicateCompetencyError' | translate }} '{{ checkDuplicateCompetency() }}'
 			</p>
 		</div>
-	
+
 		<div class="section tw-text-oebblack">
 			<h2 hlmH2 class="tw-font-bold"><ng-container>{{ badgeCategory === 'competency' ? '4.' : '3.'}}</ng-container> Badge-{{ 'RecBadgeDetail.criteria' | translate }}</h2>
 			<div class="md:tw-mx-6">
@@ -539,7 +539,7 @@
 						>
 							{{ 'CreateBadge.criteriaError' | translate }}
 						</p>
-	
+
 						<bg-formfield-markdown
 							[control]="badgeClassForm.rawControlMap.badge_criteria_text"
 							label=" Wie bekommt man dieses Badge?"
@@ -576,9 +576,9 @@
 									</ng-container>
 								</ul>
 							</div>
-						</div> 
+						</div>
 					</div>
-	
+
 					<!-- <div class="forminput u-margin-bottom2x md:tw-items-center tw-flex tw-gap-2 md:tw-flex-row tw-flex-col">
 						<span class="tw-font-bold tw-whitespace-nowrap">URL (optional)</span>
 						<bg-formfield-text
@@ -592,18 +592,18 @@
 				</div>
 			</div>
 		</div>
-	
+
 		<!-- add options -->
 		<div class="section formsection formsection-nohelp tw-text-oebblack">
 			<oeb-collapsible [trigger]="collapseDetailsTrigger" [id]="'optional-details'">
 				<ng-template #collapseDetailsTrigger>
 					<h2 class="tw-pt-1 tw-px-1 tw-text-xl tw-text-[var(--color-purple)] tw-mr-auto">{{'CreateBadge.optionalBadgeDetails' | translate }}</h2>
 				</ng-template>
-			
+
 			<div class="formsection-x-body">
 				<div class="tw-flex tw-gap-4 tw-items-center tw-mb-2">
 					<span class="tw-font-semibold tw-text-lg tw-text-oebblack tw-uppercase"> Tag</span>
-	
+
 					<div class="ng-autocomplete">
 						<ng-autocomplete
 							name="addtag"
@@ -619,21 +619,21 @@
 							[notFoundTemplate]="notFoundTemplate"
 						>
 						</ng-autocomplete>
-	
+
 						<ng-template #itemTemplate let-item>
 							<a [innerHTML]="item.name"></a>
 						</ng-template>
-	
+
 						<ng-template #notFoundTemplate let-notFound>
 							<div>{{ 'CreateBadge.tagDoesNotExist' | translate }}</div>
 						</ng-template>
 					</div>
-						
+
 					<oeb-button
-						[id]="'add-tag-btn'" 
+						[id]="'add-tag-btn'"
 						size="sm"
-						type="button" 
-						(click)="addTag()" 
+						type="button"
+						(click)="addTag()"
 						text="{{ 'General.add' | translate }}">
 					</oeb-button>
 				</div>
@@ -642,13 +642,13 @@
 						class="tw-flex tw-items-center  tw-rounded-full tw-py-1 tw-mb-2"
 						*ngFor="let tag of tags"
 					>
-						<oeb-button 
+						<oeb-button
 						variant="secondary"
 						size="xxs"
-						(click)="removeTag(tag)" 
+						(click)="removeTag(tag)"
 						icon="lucideCircleX"
 						text="{{ tag }}">
-	
+
 						</oeb-button>
 					</div>
 				</div>
@@ -677,7 +677,7 @@
 									<span class="visuallyhidden">Close</span>
 								</button>
 							</div>
-	
+
 							<div class="formsection-x-help">
 								<h3 class="u-text-body-bold">
 									{{ 'CreateBadge.whatIsThe' | translate }} {{ 'RecBadgeDetail.alignment' | translate }}?
@@ -711,7 +711,7 @@
 												[errorMessage]="{ required: alignmentNameError }"
 												id="alignment_name_{{ i }}"
 											></oeb-input>
-	
+
 											<oeb-input
 												[control]="alignment.rawControlMap.target_url"
 												label="URL"
@@ -719,14 +719,14 @@
 												[urlField]="true"
 												id="alignment_url_{{ i }}"
 											></oeb-input>
-	
+
 											<oeb-input
 												[control]="alignment.rawControlMap.target_description"
 												[label]="shortDescription"
 												[multiline]="true"
 												id="alignment_description_{{ i }}"
 											></oeb-input>
-	
+
 											<button
 												id="link-more-options-btn"
 												*ngIf="!showAdvanced[i]"
@@ -737,7 +737,7 @@
 												{{ 'General.show' | translate }}
 												{{ 'CreateBadge.additionalOptions' | translate }}
 											</button>
-	
+
 											<ng-template [ngIf]="showAdvanced[i]">
 												<button
 													(click)="showAdvanced[i] = false"
@@ -747,19 +747,19 @@
 													{{ 'General.hide' | translate }}
 													{{ 'CreateBadge.additionalOptions' | translate }}
 												</button>
-	
+
 												<label class="forminput-x-label u-margin-top2x" for="forminput2">{{
 													'CreateBadge.frame' | translate
 												}}</label>
 												<input type="text" id="forminput2" name="forminput2" />
-	
+
 												<label class="forminput-x-label u-margin-top2x" for="url">Code</label>
 												<input type="text" id="url" name="url" />
 											</ng-template>
 										</div>
 									</div>
 								</ng-container>
-	
+
 								<div class="l-stack">
 									<button (click)="addAlignment()" type="button" class="button button-secondary">
 										{{ 'CreateBadge.addAlignment' | translate }}
@@ -789,7 +789,7 @@
 									<span class="visuallyhidden">Schliessen</span>
 								</button>
 							</div>
-	
+
 							<div class="formsection-x-help">
 								<h3 class="u-text-body-bold">
 									{{ 'CreateBadge.whatIsThe' | translate }} {{ 'CreateBadge.expiration' | translate }}?
@@ -827,22 +827,22 @@
 			</div>
 		</oeb-collapsible>
 		</div>
-		
+
 		<div>
 			<p class="tw-text-end tw-text-oebblack tw-italic tw-text-lg" [innerHTML]="'CreateBadge.licenseInfo' | translate"> </p>
 		</div>
-	
+
 		<div class="tw-flex tw-justify-between md:tw-justify-end tw-flex-wrap sm:tw-flex-nowrap tw-gap-2 tw-mt-8">
 			<oeb-button
 				class="tw-mr-4"
 				variant="secondary"
 				(click)="cancelClicked()"
 				[disabled]="!!savePromise"
-				[class.disabled]="!!savePromise"	
+				[class.disabled]="!!savePromise"
 				[disabled-when-requesting]="true"
 				text="{{ 'General.cancel' | translate }}"
 			></oeb-button>
-	
+
 			<oeb-button
 				id="create-badge-btn"
 				type="submit"

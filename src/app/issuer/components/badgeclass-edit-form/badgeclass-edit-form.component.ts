@@ -322,6 +322,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	issuerSlug: string;
 
 	@Input()
+	category: string;
+
+	@Input()
 	submitText: string;
 
 	@Input()
@@ -499,6 +502,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		}
 
 		// Set badge category when editing a badge. As new select component doesn't show badge competencies
+		if (this.category && this.categoryOptions.hasOwnProperty(this.category)) {
+			this.badgeClassForm.rawControl.controls['badge_category'].setValue(this.category);
+		}
 		this.badgeCategory = this.badgeClassForm.rawControl.controls['badge_category'].value;
 		if (this.badgeCategory === 'competency') {
 			this.badgeClassForm.controls.competencies.addFromTemplate();

@@ -1,0 +1,36 @@
+<div class="oeb">
+<div class="page-padding">
+	<div class="oeb-breadcrumbs">
+		<bg-breadcrumbs [linkentries]="breadcrumbLinkEntries"></bg-breadcrumbs>
+	</div>
+	<div class="oeb-section-sm">
+		<div class="oeb-headline-container-sm">
+			<h1 hlmH1 class="tw-text-purple">
+				{{ 'Issuer.createBadge' | translate }}
+			</h1>
+		</div>
+		<div class="tw-flex tw-flex-col tw-text-oebblack">
+			<p hlmP class="tw-font-normal md:!tw-leading-[31.2px]">
+				Wir helfen dir, in wenigen Schritten deinen Badge zu erstellen.<br>
+				<strong>Los geht's!</strong>
+			</p>
+
+			<br>
+			<br>
+
+			<oeb-button
+				[routerLink]="['/issuer/issuers', issuerSlug, 'badges', 'create', 'participation']"
+				text="Teilnahmebadge"
+			/><br>
+			<oeb-button
+				[routerLink]="['/issuer/issuers', issuerSlug, 'badges', 'create', 'competency']"
+				text="Kompetenzbadge"
+			/><br>
+			<oeb-button
+				[routerLink]="['/issuer/issuers', issuerSlug, 'learningpaths', 'create']"
+				text="Micro-Degree"
+			/>
+		</div>
+	</div>
+</div>
+</div>
