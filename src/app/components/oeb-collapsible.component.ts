@@ -53,7 +53,7 @@ import { NgIf, NgFor, NgTemplateOutlet, NgClass } from '@angular/common';
 					<hlm-icon
 						size="xl"
 						class="tw-text-purple"
-						[ngClass]="{ 'tw-rotate-90': open }"
+						[ngClass]="{ 'tw-rotate-90': collapsible.state() == 'open' }"
 						name="lucideChevronRight"
 					/>
 				</div>
@@ -71,8 +71,6 @@ export class OebCollapsibleComponent implements AfterViewInit {
 	@Input() closeable: boolean = true;
 
 	@ViewChild('collapsible') collapsible: BrnCollapsibleComponent;
-
-	open = false;
 
 	ngAfterViewInit() {
 		if (this.defaultOpen) {
