@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit, AfterViewInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit, AfterViewInit, SimpleChanges, isDevMode } from '@angular/core';
 import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/stepper';
 import { StepComponent } from './step.component';
 
@@ -41,6 +41,15 @@ export class StepperComponent extends CdkStepper implements OnInit {
 		if ((step as StepComponent).route) {
 			window.location.pathname = (step as StepComponent).route;
 		} else {
+			// prevent skipping non-completed steps if linear, exception for easier form debugging
+			if (this.linear && !isDevMode()) {
+				for (let i = 0; i < index; i += 1) {
+					const s = this.steps.get(i);
+					if (s && !s.completed) {
+						return;
+					}
+				}
+			}
 			this.selectedIndex = index;
 		}
   }
@@ -53,7 +62,7 @@ export class StepperComponent extends CdkStepper implements OnInit {
 
 	// initialstep changes after init depending on how it's calculated
 	ngOnChanges(changes: SimpleChanges) {
-		if(changes.initialStep.currentValue != changes.initialStep.previousValue) {
+		if (changes.initialStep.currentValue != changes.initialStep.previousValue) {
       this.selectedIndex = this.initialStep;
     }
 	}
