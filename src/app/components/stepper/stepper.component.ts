@@ -4,23 +4,6 @@ import { StepComponent } from './step.component';
 import { Router } from '@angular/router';
 import { Directionality } from '@angular/cdk/bidi';
 
-
-// @Component({
-// 	selector: 'oeb-step',
-//   template: '<ng-template><ng-content/></ng-template>',
-// 	providers: [{
-// 		provide: CdkStep, useExisting: StepComponent
-// 	}, {
-//     provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
-//   }]
-// })
-// export class StepComponent extends CdkStep implements OnInit {
-//		alternativeUrl: string;
-
-//   ngOnInit() {
-//   }
-// }
-
 @Component({
   selector: 'oeb-stepper',
   templateUrl: './stepper.component.html',

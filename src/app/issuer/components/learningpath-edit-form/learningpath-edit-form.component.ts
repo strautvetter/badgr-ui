@@ -268,7 +268,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 				this.lpImage = this.stepOne.lpDetailsForm.rawControl.value.badge_customImage;
 			}
 			this.selectedStep = event.selectedIndex;
-			if (this.selectedStep === 2) {
+			if (this.selectedStep === 3) {
 				this.step3Loaded = true;
 			} else {
 				this.step3Loaded = false;

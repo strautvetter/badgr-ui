@@ -8,6 +8,7 @@ import {
 	OnInit,
 	Output,
 	ViewChild,
+	isDevMode,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors, FormControl } from '@angular/forms';
@@ -61,6 +62,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	badgeCategory: string;
 
 	selectedAiCompetencies: Skill[] = []
+	isDevMode: boolean = isDevMode();
 
 	// Translation
 	selectFromMyFiles = this.translate.instant('RecBadge.selectFromMyFiles');
@@ -393,26 +395,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	next: string
 	previous: string;
 
-	nextStep(): void {
-		this.badgeClassForm.markTreeDirtyAndValidate();
-		this.stepper.next();
-	}
-
-	previousStep(): void {
-		this.stepper.previous();
-	}
-
-	lastStep(): boolean {
-		if (
-			(this.category === 'participation' && this.selectedStep == 3) ||
-			(this.category === 'competency' && this.selectedStep == 4)
-		) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	constructor(
 		sessionService: SessionService,
 		router: Router,
@@ -560,6 +542,30 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				this.checkDuplicateCompetency();
 			});
 		}
+
+		// restore values from sessionStorage
+		const sessionValues = sessionStorage.getItem('badgeclassvalues');
+		if (sessionValues) {
+			this.badgeClassForm.rawControl.patchValue(JSON.parse(sessionValues));
+		}
+
+		// save values from sessionStorage
+		const saveableSessionValues = [
+			'badge_name', 'badge_description', 'badge_hours', 'badge_minutes', 'badge_image', 'badge_customImage',
+		];
+		const filterSessionValues = (values: Object) => {
+			const filteredValues = {};
+			for (const [k, v] of Object.entries(values)) {
+				if (saveableSessionValues.includes(k)) {
+					filteredValues[k] = v;
+				}
+			};
+			return filteredValues;
+		};
+		this.badgeClassForm.rawControl.valueChanges.subscribe(v => {
+			// console.log(this.badgeClassForm.rawControl.value);
+			sessionStorage.setItem('badgeclassvalues', JSON.stringify(filterSessionValues(this.badgeClassForm.rawControl.value)));
+		});
 	}
 
 	ngAfterViewInit(): void {
@@ -750,8 +756,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					aiCompetencies.removeAt(i);
 				}
 				this.aiCompetenciesSuggestions = [
-					...this.selectedAiCompetencies, 
-					...skills.filter(skill => 
+					...this.selectedAiCompetencies,
+					...skills.filter(skill =>
 					  !this.selectedAiCompetencies.some(
 						existing => existing.concept_uri === skill.concept_uri
 					  )
@@ -1157,6 +1163,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			}
 
 			this.save.emit(this.savePromise);
+
+			// clear sessionStorage
+			sessionStorage.removeItem('badgeclassvalues');
+
 		} catch (e) {
 			console.log(e)
 		}
@@ -1321,9 +1331,33 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		this.showLegend = true;
 	}
 
+	// Stepper functions
+	nextStep(): void {
+		this.badgeClassForm.markTreeDirty();
+		this.stepper.next();
+	}
+
+	previousStep(): void {
+		this.stepper.previous();
+	}
+
+	lastStep(): boolean {
+		if (
+			(this.category === 'participation' && this.selectedStep == 3) ||
+			(this.category === 'competency' && this.selectedStep == 4)
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	validateFields(fields: string[]) {
-		// FIXME DEBUG
-		return true;
+		// console.log(this.badgeClassForm.dirty);
 		return fields.every(c => this.badgeClassForm.controls[c].valid);
+	}
+
+	dirtyFields(fields: string[]) {
+		return fields.every(c => this.badgeClassForm.controls[c].dirty);
 	}
 }
