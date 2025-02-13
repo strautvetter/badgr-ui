@@ -193,7 +193,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 	updateSelectedBadges({ badges, studyLoad }: { badges: BadgeClass[] , studyLoad: number }) {
 		this.selectedBadges = badges;
 		this.studyLoad = studyLoad;
-	  
+
 		const badgeList = this.selectedBadges.map((badge, index) => ({
 		  id: badge.slug,
 		  name: badge.name,
@@ -203,7 +203,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 		  issuerName: badge.issuerName,
 		  order: index
 		}));
-	  
+
 		this.updateBadgeList(badgeList);
 	  }
 
@@ -371,7 +371,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 		}
 		else{
 			this.savePromise = (async () => {
-			try {	
+			try {
 				let imageFrame = true;
 				if (this.stepOne.lpDetailsForm.controls.badge_customImage.value && this.stepOne.lpDetailsForm.valid) {
 					imageFrame = false;
