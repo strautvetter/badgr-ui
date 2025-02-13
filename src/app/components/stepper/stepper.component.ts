@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit, AfterViewInit, SimpleChanges, isDevMode } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit, AfterViewInit, SimpleChanges, isDevMode, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/stepper';
 import { StepComponent } from './step.component';
+import { Router } from '@angular/router';
+import { Directionality } from '@angular/cdk/bidi';
 
 
 // @Component({
@@ -36,10 +38,17 @@ export class StepperComponent extends CdkStepper implements OnInit {
 	@Input()
 	initialStep: number = 0;
 
+	router: Router;
+
+	constructor(dir: Directionality, changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, router: Router) {
+    super(dir, changeDetectorRef, elementRef);
+		this.router = router;
+  }
+
   onClick(index: number): void {
 		const step = this.steps.get(index);
 		if ((step as StepComponent).route) {
-			window.location.pathname = (step as StepComponent).route;
+			this.router.navigate((step as StepComponent).route)
 		} else {
 			// prevent skipping non-completed steps if linear, exception for easier form debugging
 			if (this.linear && !isDevMode()) {

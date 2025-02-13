@@ -11,6 +11,6 @@ import { CdkStep } from '@angular/cdk/stepper';
 export class StepComponent extends CdkStep {
 
 	@Input()
-	route: string;
+	route: string[];
 
 }
