@@ -9,7 +9,7 @@
 			<oeb-stepper
 				[linear]="existingBadgeClass ? false : true"
 				[altRoutes]="['/issuer/issuers/' + issuerSlug + '/badges' + '/select']"
-				[initialStep]="1"
+				[initialStep]="existingBadgeClass ? 0 : 1"
 			>
 				<oeb-step
 					label="Kategorie wählen"
@@ -17,6 +17,7 @@
 					[route]="['/issuer/issuers/' + issuerSlug + '/badges' + '/select']"
 					errorMessage="Bitte Kategorie wählen"
 					[completed]="true"
+					*ngIf="!existingBadgeClass"
 				>
 				</oeb-step>
 
@@ -24,6 +25,7 @@
 					label="Details eingeben"
 					[optional]="false"
 					errorMessage="Bitte vollständig ausfüllen"
+					[completed]="validateFields(['badge_description', 'badge_hours', 'badge_name']) && imageFieldDirty"
 				>
 
 					<div class="section tw-text-oebblack tw-mt-6">
@@ -779,12 +781,12 @@
 							</p>
 							<div class="mdeditor">
 								<div class="mdeditor-x-editor">
-									<p
+									<!-- <p
 										[hidden]="!alignmentFieldDirty || !badgeClassForm.hasError('criteriaRequired')"
 										class="u-text u-margin-bottom2x u-text-error"
 									>
 										{{ 'CreateBadge.criteriaError' | translate }}
-									</p>
+									</p> -->
 
 									<bg-formfield-markdown
 										[control]="badgeClassForm.rawControlMap.badge_criteria_text"

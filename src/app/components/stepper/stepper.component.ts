@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit, AfterViewInit, SimpleChanges } from '@angular/core';
 import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/stepper';
 import { StepComponent } from './step.component';
 
@@ -50,5 +50,12 @@ export class StepperComponent extends CdkStepper implements OnInit {
 			this.selectedIndex = this.initialStep;
 		}
   }
+
+	// initialstep changes after init depending on how it's calculated
+	ngOnChanges(changes: SimpleChanges) {
+		if(changes.initialStep.currentValue != changes.initialStep.previousValue) {
+      this.selectedIndex = this.initialStep;
+    }
+	}
 
 }

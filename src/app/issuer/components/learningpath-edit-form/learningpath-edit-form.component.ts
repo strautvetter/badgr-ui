@@ -65,7 +65,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 	@ViewChild('stepFour') stepFour!: LearningPathTagsComponent;
 
 	nextStep(): void {
-		this.learningPathForm.markTreeDirtyAndValidate();
+		// this.learningPathForm.markTreeDirtyAndValidate();
 		this.stepper.next();
 	}
 
@@ -281,7 +281,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 	}
 
 	onStepChange(event: any): void {
-		this.learningPathForm.markTreeDirtyAndValidate();
+		// this.learningPathForm.markTreeDirtyAndValidate();
 	}
 
 	getErrorMessage() {

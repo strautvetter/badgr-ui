@@ -394,7 +394,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	previous: string;
 
 	nextStep(): void {
-		// this.badgeClassForm.markTreeDirty();
+		this.badgeClassForm.markTreeDirtyAndValidate();
 		this.stepper.next();
 	}
 
@@ -555,9 +555,11 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		});
 
 		// To check duplicate competencies only when one is selected
-		this.badgeClassForm.controls.aiCompetencies.controls['selected'].statusChanges.subscribe((res) => {
-			this.checkDuplicateCompetency();
-		});
+		if (this.badgeClassForm.controls.aiCompetencies.controls['selected']) {
+			this.badgeClassForm.controls.aiCompetencies.controls['selected'].statusChanges.subscribe((res) => {
+				this.checkDuplicateCompetency();
+			});
+		}
 	}
 
 	ngAfterViewInit(): void {
@@ -848,6 +850,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	criteriaRequired(): { [id: string]: boolean } | null {
 		if (!this.badgeClassForm) return null;
+
+		if (this.badgeClassForm.rawControl.controls.badge_category.value !== 'competency') {
+			return null;
+		}
 
 		const value = this.badgeClassForm.value;
 
@@ -1313,5 +1319,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	openLegend() {
 		this.showLegend = true;
+	}
+
+	validateFields(fields: string[]) {
+		return fields.every(c => this.badgeClassForm.controls[c].valid);
 	}
 }
