@@ -2,7 +2,89 @@
 	<form-message></form-message>
 	<app-badge-legend *ngIf="showLegend" (closed)="closeLegend()"></app-badge-legend>
 
+	<ng-container [formGroup]="badgeClassForm.rawControl">
+		<oeb-stepper
+			[linear]="existingBadgeClass ? false : true"
+			[altRoutes]="['/issuer/issuers/' + issuerSlug + '/badges' + '/select']"
+			[initialStep]="1"
+		>
+			<cdk-step
+				label="Kategorie wählen"
+				[optional]="false"
+				errorMessage="Bitte Kategorie wählen"
+				[completed]="true"
+			>
+			</cdk-step>
+
+			<cdk-step
+				label="Details eingeben"
+				[stepControl]="stepTwo.badgeClassForm"
+				[optional]="false"
+				errorMessage="Bitte vollständig ausfüllen"
+			>
+				<!-- <badgeclass-details
+					#stepTwo
+					[badgeClass]="existingBadgeClass"
+				></badgeclass-details> -->
+			</cdk-step>
+
+			<cdk-step
+				label="Erhaltene Kompetenzen"
+				[optional]="true"
+				errorMessage="Bitte Koompetenzen hinzufügen"
+				*ngIf="category === 'competency'"
+			>
+			</cdk-step>
+
+			<cdk-step
+				label="Tags"
+				[optional]="true"
+				errorMessage="Bitte Tags auswählen"
+			>
+			</cdk-step>
+
+			<cdk-step
+				label="Abschluss"
+			>
+			</cdk-step>
+		</oeb-stepper>
+	</ng-container>
+
 	<form [formGroup]="badgeClassForm.rawControl" #formElem (ngSubmit)="onSubmit()" novalidate>
+		<div class="tw-flex tw-justify-between md:tw-justify-end tw-flex-wrap sm:tw-flex-nowrap tw-gap-2 tw-mt-8">
+			<oeb-button
+				class="tw-mr-4"
+				variant="secondary"
+				(click)="cancelClicked()"
+				[disabled]="!!savePromise"
+				[class.disabled]="!!savePromise"
+				[disabled-when-requesting]="true"
+				text="{{ 'General.cancel' | translate }}"
+			></oeb-button>
+
+			<oeb-button
+				class="tw-float-right"
+				*ngIf="!lastStep()"
+				type="button"
+				[text]="next"
+				(click)="nextStep()"
+			>
+			</oeb-button>
+
+			<oeb-button
+				id="create-badge-btn"
+				*ngIf="lastStep()"
+				type="submit"
+				width="max_content"
+				[disabled]="!!savePromise"
+				[loading-promises]="[savePromise]"
+				loading-message="{{ submittingText }}"
+				text="{{ (category === 'competency' ? 'Issuer.createCompetencyBadge' : 'Issuer.createParticipationBadge') | translate }}"
+			>
+			</oeb-button>
+		</div>
+
+
 		<!-- Badge Category Panel -->
 		<!-- <div class="section tw-text-oebblack">
 			<div class="tw-flex tw-flex-col tw-gap-2">

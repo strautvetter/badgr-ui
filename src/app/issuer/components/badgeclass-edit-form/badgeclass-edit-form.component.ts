@@ -46,6 +46,9 @@ import { base64ByteSize } from '../../../common/util/file-util';
 import { HlmDialogService } from '../../../components/spartan/ui-dialog-helm/src/lib/hlm-dialog.service';
 import { ErrorDialogComponent } from '../../../common/dialogs/oeb-dialogs/error-dialog.component';
 
+import { StepperComponent } from '../../../components/stepper/stepper.component';
+import { BadgeClassDetailsComponent } from '../badgeclass-create-steps/badgeclass-details/badgeclass-details.component';
+
 @Component({
 	selector: 'badgeclass-edit-form',
 	templateUrl: './badgeclass-edit-form.component.html',
@@ -382,6 +385,34 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	existing = false;
 	showLegend = false;
 
+	@ViewChild(StepperComponent) stepper: StepperComponent;
+
+	@ViewChild('stepTwo') stepTwo!: BadgeClassDetailsComponent;
+
+	selectedStep = 0;
+	next: string
+	previous: string;
+
+	nextStep(): void {
+		// this.badgeClassForm.markTreeDirty();
+		this.stepper.next();
+	}
+
+	previousStep(): void {
+		this.stepper.previous();
+	}
+
+	lastStep(): boolean {
+		if (
+			(this.category === 'participation' && this.selectedStep == 3) ||
+			(this.category === 'competency' && this.selectedStep == 4)
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	constructor(
 		sessionService: SessionService,
 		router: Router,
@@ -495,6 +526,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	ngOnInit() {
 		super.ngOnInit();
+
+		this.translate.get('General.next').subscribe((next) => {
+			this.next = next;
+		});
+		this.translate.get('General.previous').subscribe((previous) => {
+			this.previous = previous;
+		});
+
 		let that = this;
 
 		if (!that.existing) {
@@ -530,6 +569,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			if (this.customImageField.control.value != null) this.imageField.control.reset();
 		});
 		this.fetchTags();
+
+		this.stepper.selectionChange.subscribe((event) => {
+			this.selectedStep = event.selectedIndex;
+		});
 	}
 
 	clearCompetencies() {

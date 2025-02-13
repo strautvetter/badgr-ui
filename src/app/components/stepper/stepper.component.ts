@@ -1,6 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { CdkStepper, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, OnInit, Input } from '@angular/core';
+import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/stepper';
 
+
+// @Component({
+// 	selector: 'oeb-step',
+//   template: '<ng-template><ng-content/></ng-template>',
+// 	providers: [{
+// 		provide: CdkStep, useExisting: StepComponent
+// 	}, {
+//     provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
+//   }]
+// })
+// export class StepComponent extends CdkStep implements OnInit {
+//		alternativeUrl: string;
+
+//   ngOnInit() {
+//   }
+// }
 
 @Component({
   selector: 'oeb-stepper',
@@ -16,11 +32,24 @@ import { CdkStepper, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 })
 export class StepperComponent extends CdkStepper implements OnInit {
 
+	@Input()
+	altRoutes: [];
+
+	@Input()
+	initialStep: number = 0;
+
   onClick(index: number): void {
-    this.selectedIndex = index;
+		if (typeof this.altRoutes[index] === 'undefined') {
+			this.selectedIndex = index;
+		} else {
+			window.location.pathname = this.altRoutes[index];
+		}
   }
 
   ngOnInit() {
+		if (this.initialStep !== 0) {
+			this.selectedIndex = this.initialStep;
+		}
   }
 
 }

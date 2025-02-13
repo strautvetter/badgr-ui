@@ -157,6 +157,8 @@
 		"visitWebsite": "Website besuchen",
 		"nichtVerified": "Dieser Issuer wurde noch nicht verifiziert",
 		"createBadge": "Badge erstellen",
+		"createParticipationBadge": "Teilnahme-Badge erstellen",
+		"createCompetencyBadge": "Kompetenz-Badge erstellen",
 		"createLearningPath": "Lernpfad hochladen",
 		"contactInstitution": "Institution kontaktieren",
 		"jsonView": "JSON ansehen",

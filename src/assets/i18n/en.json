@@ -150,6 +150,8 @@
 		"visitWebsite": "Visit website",
 		"nichtVerified": "This issuer has not been verified yet",
 		"createBadge": "Create badge",
+		"createParticipationBadge": "Create participation badge",
+		"createCompetencyBadge": "Create competency badge",
 		"contactInstitution": "Contact institution",
 		"jsonView": "View JSON",
 		"viewOriginal": "View original",
