@@ -37,7 +37,7 @@ import { NgIf, NgFor, NgTemplateOutlet, NgClass } from '@angular/common';
 				hlmBtn
 				variant="ghost"
 				size="sm"
-				class="tw-p-0"
+				class="!tw-p-0"
 			>
 				<ngTemplateOutlet
 					*ngIf="isTemplate; else stringTrigger"

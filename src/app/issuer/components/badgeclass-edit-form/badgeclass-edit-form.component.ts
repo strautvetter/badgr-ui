@@ -1322,6 +1322,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	validateFields(fields: string[]) {
+		// FIXME DEBUG
+		return true;
 		return fields.every(c => this.badgeClassForm.controls[c].valid);
 	}
 }

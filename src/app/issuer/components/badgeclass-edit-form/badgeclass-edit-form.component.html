@@ -4,11 +4,9 @@
 
 
 	<form [formGroup]="badgeClassForm.rawControl" #formElem (ngSubmit)="onSubmit()" novalidate>
-			<oeb-step>yolo</oeb-step>
 		<ng-container [formGroup]="badgeClassForm.rawControl">
 			<oeb-stepper
 				[linear]="existingBadgeClass ? false : true"
-				[altRoutes]="['/issuer/issuers/' + issuerSlug + '/badges' + '/select']"
 				[initialStep]="existingBadgeClass ? 0 : 1"
 			>
 				<oeb-step
@@ -33,11 +31,72 @@
 							<h2 hlmH2 class="tw-font-bold">2. {{ 'CreateBadge.enterDetails' | translate }}</h2>
 						</div>
 						<div class="tw-flex tw-flex-col md:tw-mx-10 tw-justify-center tw-gap-7">
-							<div class="tw-flex tw-flex-col md:tw-flex-row tw-gap-3 md:tw-gap-8 md:tw-items-center tw-mt-6">
+
+							<div class="tw-mt-6">
+								<span class="input-label md:tw-flex-[0_0_10em]"> {{ 'Badge.title' | translate }}</span>
+								<span class="tw-text-oebblack tw-italic">  {{max60chars}}</span>
+								<div class="tw-flex tw-gap-2 tw-items-center">
+									<oeb-input
+											class="tw-w-full"
+											[control]="badgeClassForm.rawControlMap.badge_name"
+											noTopMargin="true"
+											[errorMessage]="{
+												required: giveBadgeTitle,
+												mustChange: changeBadgeTitle
+											}"
+										>
+									</oeb-input>
+								</div>
+							</div>
+
+							<div class="">
+								<span class="input-label md:tw-flex-[0_0_10em]">{{ 'RecBadgeDetail.duration_create' | translate }}</span>
+								<div class="tw-flex tw-gap-2 tw-items-center">
+									<oeb-input
+										class="tw-w-16"
+										[fieldType]="'number'"
+										[control]="badgeClassForm.rawControlMap.badge_hours"
+										[errorMessage]="{ duration: hoursMaxError }"
+										noTopMargin="true"
+									>
+									</oeb-input>
+									<span class="tw-text-oebblack md:tw-text-lg">{{ 'General.hours' | translate }}</span>
+									<oeb-input
+										class="tw-w-16"
+										[fieldType]="'number'"
+										[control]="badgeClassForm.rawControlMap.badge_minutes"
+										[errorMessage]="{ duration: minMaxError }"
+										noTopMargin="true"
+									>
+									</oeb-input>
+									<span class="tw-text-oebblack md:tw-text-lg">{{ 'General.minutes' | translate }}</span>
+								</div>
+							</div>
+
+							<p
+									hlmP
+									size="sm"
+									id="maxHoursOrMinutesError"
+									[hidden]="
+									!badgeClassForm.hasError('hoursAndMinutesError') &&
+									(!badgeStudyLoadDirty ||
+										(!badgeClassForm.hasError('maxHoursError') && !badgeClassForm.hasError('maxMinutesError')))
+								" class="tw-font-normal u-text-error"
+								>
+									<span *ngIf="badgeClassForm.hasError('hoursAndMinutesError')">{{ 'CreateBadge.hoursAndMinutesError' | translate }}</span>
+									<span *ngIf="badgeClassForm.hasError('maxMinutesError')">{{'CreateBadge.minMaxError' | translate }}</span>
+									<span *ngIf="badgeClassForm.hasError('maxHoursError')">{{'CreateBadge.hoursMaxError' | translate }}</span>
+							</p>
+
+
+							<div class="">
 								<span class="input-label tw-break-words md:tw-flex-[0_0_10em]">
 									{{ 'CreateBadge.short' | translate }}&shy;{{ 'General.description' | translate }}
-									{{ 'CreateBadge.forLearners' | translate }}</span
-								>
+									{{ 'CreateBadge.forLearners' | translate }}
+								</span>
+								<span class="tw-text-oebblack tw-italic">
+									(max. 700 {{'General.characters' | translate }})
+								</span>
 								<oeb-input
 									class="tw-w-full tw-max-w-[750px]"
 									[fieldType]="'textarea'"
@@ -50,66 +109,12 @@
 								</oeb-input>
 							</div>
 
-							<div class="tw-flex md:tw-flex-row tw-gap-3  md:tw-gap-8 tw-flex-col md:tw-items-center tw-justify-start">
-								<span class="input-label md:tw-flex-[0_0_10em]"> {{ 'RecBadgeDetail.duration' | translate }}</span>
-								<div class="tw-flex tw-gap-2 tw-items-center">
-									<oeb-input
-										class="tw-w-20"
-										[fieldType]="'number'"
-										[control]="badgeClassForm.rawControlMap.badge_hours"
-										[errorMessage]="{ duration: hoursMaxError }"
-										noTopMargin="true"
-									>
-									</oeb-input>
-									<span class="tw-font-bold tw-text-purple" hlmP>:</span>
-									<oeb-input
-										class="tw-w-20"
-										[fieldType]="'number'"
-										[control]="badgeClassForm.rawControlMap.badge_minutes"
-										[errorMessage]="{ duration: minMaxError }"
-										noTopMargin="true"
-									>
-									</oeb-input>
-									<span class="tw-text-oebblack md:tw-text-lg">{{ 'RecBadge.hours' | translate }}</span>
-								</div>
-							</div>
-
-							<p
-									hlmP
-									size="sm"
-									id="maxHoursOrMinutesError"
-									[hidden]="
-									!badgeClassForm.hasError('hoursAndMinutesError') &&
-									(!badgeStudyLoadDirty ||
-										(!badgeClassForm.hasError('maxHoursError') && !badgeClassForm.hasError('maxMinutesError')))
-								" class="tw-font-normal md:tw-pl-[13.5rem] u-text-error"
-								>
-									<span *ngIf="badgeClassForm.hasError('hoursAndMinutesError')">{{ 'CreateBadge.hoursAndMinutesError' | translate }}</span>
-									<span *ngIf="badgeClassForm.hasError('maxMinutesError')">{{'CreateBadge.minMaxError' | translate }}</span>
-									<span *ngIf="badgeClassForm.hasError('maxHoursError')">{{'CreateBadge.hoursMaxError' | translate }}</span>
-							</p>
-
-							<div class="tw-flex md:tw-flex-row tw-gap-3 md:tw-gap-8 tw-flex-col md:tw-items-center tw-justify-start">
-								<span class="input-label md:tw-flex-[0_0_10em]"> {{ 'Badge.title' | translate }}</span>
-								<div class="tw-flex tw-gap-2 tw-items-center">
-									<oeb-input
-											[control]="badgeClassForm.rawControlMap.badge_name"
-											noTopMargin="true"
-											[errorMessage]="{
-												required: giveBadgeTitle,
-												mustChange: changeBadgeTitle
-											}"
-										>
-									</oeb-input>
-									<span class="tw-text-oebblack tw-italic">  {{max60chars}}</span>
-								</div>
-							</div>
-							<div class="tw-flex md:tw-flex-row tw-gap-3 md:tw-gap-8 tw-flex-col" id="imageSection" #imageSection>
+							<div class="" id="imageSection" #imageSection>
 								<span class="input-label md:tw-flex-[0_0_10em]"> Badge-{{ 'Issuer.image' | translate }}</span>
 								<div
-									class="tw-flex tw-flex-col tw-gap-4 md:tw-flex-row tw-bg-[var(--color-lightgreen)] tw-p-8 tw-justify-evenly tw-items-center tw-mr-auto tw-rounded-2xl"
+									class="tw-flex tw-flex-col tw-gap-4 md:tw-flex-row tw-bg-white tw-border tw-border-solid tw-border-[var(--color-purple)] tw-p-8 tw-justify-evenly tw-items-center tw-mr-auto tw-rounded-[10px]"
 								>
-									<div class="tw-w-full">
+									<div class="tw-w-full tw-bg-[var(--color-lightgreen)] tw-rounded-[10px] tw-py-[16px] tw-px-[32px]">
 										<bg-formfield-image
 											#imageField
 											[label]="useOurEditor"
@@ -133,10 +138,11 @@
 											>{{ 'General.fileformats' | translate }}: SVG {{ 'General.and' | translate }} PNG</span
 										>
 									</div>
-									<hr
+									<!-- <hr
 										class="md:tw-hidden tw-my-8 tw-w-full tw-border tw-border-[var(--color-purple)] tw-border-dashed"
-									/>
-									<div class="tw-w-full">
+									/> -->
+									<div class="tw-italic tw-self-start tw-mt-6 tw-text-[24px]">{{ 'General.or' | translate }}</div>
+									<div class="tw-w-full tw-bg-[var(--color-lightgreen)] tw-rounded-[10px] tw-py-[16px] tw-px-[32px]">
 										<bg-formfield-image
 											#customImageField
 											[label]="useOwnVisual"
@@ -330,12 +336,11 @@
 									</div>
 								</div>
 							<hr class="tw-my-8 tw-border tw-border-[var(--color-purple)] tw-border-dashed" />
-								<oeb-collapsible [id]="'competencies-by-hand-section'" [trigger]="collapseCompetenciesTrigger" [defaultOpen]="collapsedCompetenciesOpen">
-									<ng-template #collapseCompetenciesTrigger>
-										<span class="tw-list-item tw-text-3xl tw-font-normal tw-text-[var(--color-purple)] tw-mr-auto">{{
-											'CreateBadge.addCompetenciesByHand' | translate
-										}}</span>
-									</ng-template>
+							<oeb-collapsible [id]="'competencies-by-hand-section'" [trigger]="collapseCompetenciesTrigger" [defaultOpen]="collapsedCompetenciesOpen"
+							 [closeable]="badgeClassForm.controls.competencies.controls.length == 0">
+								<ng-template #collapseCompetenciesTrigger>
+									<span class="tw-text-3xl tw-font-normal tw-text-[var(--color-purple)] tw-mr-auto" [innerHTML]="'CreateBadge.addCompetenciesByHand' | translate"></span>
+								</ng-template>
 
 								<div
 									class="tw-flex tw-flex-col md:tw-flex-row md:tw-gap-4 tw-gap-2 md:tw-justify-between md:tw-items-center"
@@ -605,7 +610,7 @@
 					<div class="section tw-text-oebblack tw-mt-6">
 						<oeb-collapsible [trigger]="collapseDetailsTrigger" [id]="'optional-details'" [closeable]="!alignmentsEnabled && !expirationEnabled">
 							<ng-template #collapseDetailsTrigger>
-								<h2 class="tw-pt-1 tw-px-1 tw-text-xl tw-text-[var(--color-purple)] tw-mr-auto">{{'CreateBadge.optionalBadgeDetails' | translate }}</h2>
+								<h2 class="tw-pt-1 tw-px-1 tw-font-normal tw-text-[30px] tw-text-[var(--color-purple)] tw-mr-auto">{{'CreateBadge.optionalBadgeDetails' | translate }}</h2>
 							</ng-template>
 							<ul class="tw-mt-4">
 								<li>

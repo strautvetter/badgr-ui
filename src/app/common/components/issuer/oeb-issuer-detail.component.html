@@ -47,15 +47,6 @@
 			</oeb-button>
 			<oeb-button
 				class="tw-whitespace-nowrap"
-				*ngIf="!public && activeTab == 'Lernpfade'"
-				[routerLink]="['./learningpaths/create']"
-				[disabled]="!issuer.canCreateBadge"
-				[text]="'Issuer.myInstitutionsCreateLearningPath' | translate"
-				[class]="issuer.canCreateBadge ? '' : 'disabled'"
-			>
-			</oeb-button>
-			<oeb-button
-				class="tw-whitespace-nowrap"
 				*ngIf="public"
 				(click)="routeToUrl(issuer.url)"
 				[text]="'Issuer.visitWebsite' | translate"

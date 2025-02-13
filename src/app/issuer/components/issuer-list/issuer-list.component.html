@@ -106,17 +106,6 @@
 								size="mediumText"
 							>
 							</oeb-button>
-							<oeb-button
-								[class.disabled]="!issuer.canCreateBadge"
-								class="tw-whitespace-nowrap tw-flex-grow"
-								[routerLink]="['/issuer/issuers/', issuer.slug, 'learningpaths', 'create']"
-								[disabled]="!issuer.canCreateBadge"
-								[text]="'Issuer.myInstitutionsCreateLearningPath' | translate"
-								variant="secondary"
-								width="full_width"
-								size="mediumText"
-							>
-						</oeb-button>
 					</div>
 				</div>
 			</div>

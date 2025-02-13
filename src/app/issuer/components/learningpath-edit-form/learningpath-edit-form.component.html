@@ -1,6 +1,20 @@
 <form-message></form-message>
 <ng-container [formGroup]="learningPathForm.rawControl">
-	<oeb-stepper [linear]="existingLearningPath ? false : true">
+	<oeb-stepper
+		[linear]="existingLearningPath ? false : true"
+		[initialStep]="existingLearningPath ? 0 : 1"
+	>
+
+		<oeb-step
+			label="Kategorie wählen"
+			[optional]="false"
+			[route]="['/issuer/issuers/' + issuerSlug + '/badges' + '/select']"
+			errorMessage="Bitte Kategorie wählen"
+			[completed]="true"
+			*ngIf="!existingLearningPath"
+		>
+		</oeb-step>
+
 		<cdk-step
 			label="Lernpfad Details"
 			[stepControl]="stepOne.lpDetailsForm"

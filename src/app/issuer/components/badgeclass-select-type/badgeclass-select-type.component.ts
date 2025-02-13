@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	templateUrl: 'badgeclass-select-type.component.html',
+	styleUrls: ['./badgeclass-select-type.component.scss'],
 })
 export class BadgeClassSelectTypeComponent extends BaseAuthenticatedRoutableComponent implements OnInit {
 	issuerSlug: string;
