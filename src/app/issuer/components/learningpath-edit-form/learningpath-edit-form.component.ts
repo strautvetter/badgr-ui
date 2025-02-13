@@ -82,6 +82,9 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 	@Output()
 	save = new EventEmitter<Promise<ApiLearningPath>>();
 
+	@Output()
+	cancel = new EventEmitter<void>();
+
 	@Input()
 	submittingText: string;
 
@@ -300,7 +303,7 @@ export class LearningPathEditFormComponent extends BaseAuthenticatedRoutableComp
 
 
 	cancelClicked() {
-		// this.cancel.emit();
+		this.cancel.emit();
 	}
 
 	async onSubmit() {
