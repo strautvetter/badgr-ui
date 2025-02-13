@@ -6,6 +6,7 @@
 			<div class="steps-wrapper">
 				<button
 					class="step"
+					type="button"
 					*ngFor="let step of steps; let i = index"
 					[ngClass]="{
 						active: selectedIndex === i,

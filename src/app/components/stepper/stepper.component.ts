@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, AfterContentChecked, AfterContentInit } from '@angular/core';
 import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/stepper';
+import { StepComponent } from './step.component';
 
 
 // @Component({
@@ -33,16 +34,14 @@ import { CdkStepper, STEPPER_GLOBAL_OPTIONS, CdkStep } from '@angular/cdk/steppe
 export class StepperComponent extends CdkStepper implements OnInit {
 
 	@Input()
-	altRoutes: [];
-
-	@Input()
 	initialStep: number = 0;
 
   onClick(index: number): void {
-		if (typeof this.altRoutes[index] === 'undefined') {
-			this.selectedIndex = index;
+		const step = this.steps.get(index);
+		if ((step as StepComponent).route) {
+			window.location.pathname = (step as StepComponent).route;
 		} else {
-			window.location.pathname = this.altRoutes[index];
+			this.selectedIndex = index;
 		}
   }
 

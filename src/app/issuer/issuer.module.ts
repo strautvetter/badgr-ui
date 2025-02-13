@@ -47,6 +47,7 @@ import { LearningPathManager } from './services/learningpath-manager.service';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { StepperComponent } from '../components/stepper/stepper.component';
+import { StepComponent } from '../components/stepper/step.component';
 import { LearningPathDetailsComponent } from './components/learningpath-create-steps/learningpath-details/learningpath-details.component';
 import { LearningPathBadgesComponent } from './components/learningpath-create-steps/learningpath-badges/learningpath-badges.component';
 import { LearningPathBadgeOrderComponent } from './components/learningpath-create-steps/learningpath-badge-order/learningpath-badge-order.component';
@@ -197,6 +198,7 @@ const routes = [
 		IssuerStaffCreateDialogComponent,
 		IssuerLearningPathComponent,
 		StepperComponent,
+		StepComponent,
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	exports: [],
