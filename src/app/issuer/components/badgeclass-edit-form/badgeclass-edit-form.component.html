@@ -592,6 +592,21 @@
 								</div>
 							</div>
 							<span class="tw-italic">{{ 'CreateBadge.tagInfo' | translate }}</span>
+						</div>
+					</div>
+
+
+				</cdk-step>
+
+				<cdk-step
+					label="Abschluss"
+				>
+
+					<div class="section tw-text-oebblack tw-mt-6">
+						<oeb-collapsible [trigger]="collapseDetailsTrigger" [id]="'optional-details'" [closeable]="!alignmentsEnabled && !expirationEnabled">
+							<ng-template #collapseDetailsTrigger>
+								<h2 class="tw-pt-1 tw-px-1 tw-text-xl tw-text-[var(--color-purple)] tw-mr-auto">{{'CreateBadge.optionalBadgeDetails' | translate }}</h2>
+							</ng-template>
 							<ul class="tw-mt-4">
 								<li>
 									<button
@@ -763,18 +778,11 @@
 									</div>
 								</li>
 							</ul>
-						</div>
+						</oeb-collapsible>
 					</div>
 
-
-				</cdk-step>
-
-				<cdk-step
-					label="Abschluss"
-				>
-
 					<div class="section tw-text-oebblack tw-mt-6">
-						<h2 hlmH2 class="tw-font-bold"><ng-container>{{ badgeCategory === 'competency' ? '4.' : '3.'}}</ng-container> Badge-{{ 'RecBadgeDetail.criteria' | translate }}</h2>
+						<h2 hlmH2 class="tw-font-bold">Badge-{{ 'RecBadgeDetail.criteria' | translate }}</h2>
 						<div class="md:tw-mx-6">
 							<p class="tw-my-2 tw-italic tw-font-semibold">
 								{{ 'CreateBadge.criteriaInfo' | translate }}

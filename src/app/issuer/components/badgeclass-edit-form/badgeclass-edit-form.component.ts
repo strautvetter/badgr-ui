@@ -429,8 +429,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		private translate: TranslateService,
 		private navService: NavigationService,
 	) {
+
 		super(router, route, sessionService);
-		title.setTitle(`Create Badge - ${this.configService.theme['serviceName'] || 'Badgr'}`);
 
 		this.baseUrl = this.configService.apiConfig.baseUrl;
 	}
