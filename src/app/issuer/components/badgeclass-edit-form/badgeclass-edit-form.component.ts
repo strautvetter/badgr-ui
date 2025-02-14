@@ -62,7 +62,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	badgeCategory: string;
 
 	selectedAiCompetencies: Skill[] = []
-	isDevMode: boolean = isDevMode();
+	isDevMode: boolean = false && isDevMode(); // DEBUG: enable to skip steps
 
 	// Translation
 	selectFromMyFiles = this.translate.instant('RecBadge.selectFromMyFiles');
