@@ -441,6 +441,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			return { ...comp, hours: Math.floor(comp.studyLoad / 60), minutes: comp.studyLoad % 60 };
 		});
 
+		this.category = badgeClass.extension['extensions:CategoryExtension'] ? badgeClass.extension['extensions:CategoryExtension'].Category : 'participation';
+
 		this.badgeClassForm.setValue({
 			badge_name: badgeClass.name,
 			badge_image: this.existing && badgeClass.imageFrame ? badgeClass.image : null,
@@ -457,9 +459,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			badge_study_load: badgeClass.extension['extensions:StudyLoadExtension']
 				? badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad
 				: null,
-			badge_category: badgeClass.extension['extensions:CategoryExtension']
-				? badgeClass.extension['extensions:CategoryExtension'].Category
-				: null,
+			badge_category: this.category,
 			badge_level: badgeClass.extension['extensions:LevelExtension']
 				? badgeClass.extension['extensions:LevelExtension'].Level
 				: null,
@@ -523,6 +523,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		}
 
 		// Set badge category when editing a badge. As new select component doesn't show badge competencies
+		// FIXME: only runs when initializing the component via button click, not when refreshing the url
+		// maybe combine this with initFormFromExisting?
 		if (this.category && this.categoryOptions.hasOwnProperty(this.category)) {
 			this.badgeClassForm.rawControl.controls['badge_category'].setValue(this.category);
 		}
