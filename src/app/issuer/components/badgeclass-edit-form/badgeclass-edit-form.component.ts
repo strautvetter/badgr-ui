@@ -63,7 +63,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	aiCompetenciesLoading = false;
 	selectedAiCompetencies: Skill[] = []
-	isDevMode: boolean = true && isDevMode(); // DEBUG: enable to skip steps
+	isDevMode: boolean = false && isDevMode(); // DEBUG: enable to skip steps
 
 	// Translation
 	selectFromMyFiles = this.translate.instant('RecBadge.selectFromMyFiles');
@@ -530,9 +530,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			this.badgeClassForm.rawControl.controls['badge_category'].setValue(this.category);
 		}
 		this.badgeCategory = this.badgeClassForm.rawControl.controls['badge_category'].value;
-		if (this.badgeCategory === 'competency') {
-			this.badgeClassForm.controls.competencies.addFromTemplate();
-		}
 
 		// update badge frame when a category is selected, unless no-hexagon-frame checkbox is checked
 		this.badgeClassForm.rawControl.controls['badge_category'].statusChanges.subscribe((res) => {

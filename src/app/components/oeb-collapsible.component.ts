@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, AfterViewInit, SimpleChanges } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, AfterViewInit, SimpleChanges, Output, EventEmitter, effect } from '@angular/core';
 import { HlmButtonDirective } from './spartan/ui-button-helm/src';
 import { HlmIconModule } from './spartan/ui-icon-helm/src';
 import { HlmIconComponent } from './spartan/ui-icon-helm/src';
@@ -69,8 +69,15 @@ export class OebCollapsibleComponent implements AfterViewInit {
 	@Input() defaultOpen: boolean = false;
 	@Input() id: string = null;
 	@Input() closeable: boolean = true;
+	@Output() toggled = new EventEmitter<boolean>()
 
 	@ViewChild('collapsible') collapsible: BrnCollapsibleComponent;
+
+	constructor() {
+		effect(() => {
+			this.toggled.emit(this.collapsible.state() == 'open');
+		});
+	}
 
 	ngAfterViewInit() {
 		if (this.defaultOpen) {
@@ -86,6 +93,7 @@ export class OebCollapsibleComponent implements AfterViewInit {
 		if (changes.closeable.currentValue != changes.closeable.previousValue) {
 			this.closeable = changes.closeable.currentValue;
 		}
+
 	}
 
 	// disable if open and not closeable
