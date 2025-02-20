@@ -394,7 +394,7 @@
 								</ng-template>
 
 								<div
-									class="tw-flex tw-flex-col md:tw-flex-row md:tw-gap-4 tw-gap-2 md:tw-justify-between md:tw-items-center"
+									class="tw-bg-white tw-p-4 tw-rounded-2xl"
 								>
 									<p class="tw-text-oebblack tw-text-lg tw-leading-6">
 										{{ 'CreateBadge.addCompetenciesByHandInfo' | translate }}
@@ -402,172 +402,277 @@
 											>, {{ 'CreateBadge.tofindFittingCompetencies' | translate }}</span>
 									</p>
 
-									<div class="button tw-bg-[var(--color-purple)]">
-										<a
-											class="tw-text-white"
-											href="https://esco.ec.europa.eu/de/classification/skill_main"
-											target="_blank"
-											>{{ 'CreateBadge.toEscoSearch' | translate }}</a
-										>
-									</div>
-								</div>
+									<h2 class="tw-font-bold tw-text-xl">1. ESCO-Kompetenz</h2>
+									<p>
+										Damit unsere Badges inhaltlich standardisiert und vergleichbar sind, nutzt der KI-Assistent
+										<a href="https://esco.ec.europa.eu/de/about-esco" target_="_blank">die Europäische Klassifizierung für Kompetenzen (ESCO)</a>.
+										Du kannst auch selbst händisch in ESCO nach passenden Kompetenzen suchen und sie einfach hier per URL hinzufügen:
+									</p>
 
-								<ng-container *ngFor="let competency of badgeClassForm.controls.competencies.controls; let i = index">
-									<ng-container *ngIf="competency.controls['added'].value; else competencyForm">
-										<div
-											class="tw-bg-[var(--color-lightgray)] tw-rounded-2xl tw-border tw-border-solid tw-border-[var(--color-purple)] tw-p-4 tw-mt-2"
-										>
-											<div class="tw-flex tw-justify-between">
-												<h2 class="tw-whitespace-pre-wrap tw-text-oebblack tw-font-bold">
-													{{ competency.rawControlMap.name.value }}
-												</h2>
-												<oeb-checkbox class="tw-border-[var(--color-purple)]" name="competency$i" id="competency$i"
-																[control]="competency.rawControlMap.added"
-												></oeb-checkbox>
-											</div>
-											<p
-												class="tw-w-full tw-text-oebblack tw-mt-2 tw-italic tw-whitespace-pre-wrap tw-line-clamp-3"
+									<h3 class="tw-mt-4 tw-font-bold">ESCO-Datenbank durchsuchen</h3>
+
+									<div class="tw-flex tw-gap-4 tw-items-center">
+										<div class="tw-relative">
+											<input
+												id="ai-competencies-keywords"
+												#aiKeywordsInput="ngModel"
+												class="tw-bg-white tw-border tw-border-solid tw-border-[var(--color-purple)] tw-mt-2 tw-rounded-md tw-shadow-sm tw-p-2 tw-resize-none tw-text-sm tw-text-gray-700 tw-w-full tw-max-w-[400px]"
+												[(ngModel)]="aiCompetenciesKeywords"
+												[ngModelOptions]="{ standalone: true }"
+												placeholder="Stichwort eingeben"
+												(focus)="keywordCompetenciesShowResults = true"
+												(focusout)="keywordCompetenciesInputFocusOut()"
 											>
-												{{ competency.rawControlMap.description.value }}
-											</p>
-											<div class="tw-flex tw-gap-2 tw-items-center tw-mt-4 ">
-												<label class="tw-text-oebblack tw-font-bold" for="studyLoad$i">
-													{{ 'RecBadgeDetail.duration' | translate }}:
-												</label>
-												<span
-												class="tw-flex tw-rounded-md tw-bg-white tw-border tw-border-solid tw-border-black tw-h-8 tw-w-20 tw-min-w-fit tw-items-center tw-justify-center"
-												>
-												{{ competency.rawControlMap.hours.value | number:'2.0' }}:{{ competency.rawControlMap.minutes.value | number:'2.0' }} h
-												</span>
-
+											<div
+												*ngIf="keywordCompetenciesShowResults"
+												class="tw-absolute tw-z-10 tw-bg-white tw-rounded-md tw-shadow-sm tw-border tw-border-solid tw-border-gray-700 tw-w-full tw-max-w-[400px] tw-overflow-hidden">
+												<ul>
+														<li
+															class="tw-p-2 hover:tw-bg-[var(--color-lightpurple)]"
+															*ngFor="let skill of keywordCompetenciesResult"
+															(click)="addKeywordCompetenciesResult(skill)"
+														>
+															{{skill.preferred_label}}
+														</li>
+														<li
+															*ngIf="keywordCompetenciesResult.length == 0 && !keywordCompetenciesLoading"
+															class="tw-p-2 tw-text-gray-500"
+														>
+															Keine Ergebnisse
+														</li>
+												</ul>
 											</div>
 										</div>
-									</ng-container>
-									<ng-template #competencyForm>
-										<div
-											class="tw-border-[var(--color-purple)] tw-border tw-border-solid tw-rounded-md tw-p-6 tw-mt-4"
+										<div class="forminput">
+											<div class="forminput-x-inputs tw-flex tw-gap-2 tw-items-center">
+												<span>Ergebnisse auf</span>
+												<select class="tw-p-2" [(ngModel)]="keywordCompetenciesLanguage" [ngModelOptions]="{standalone: true}">
+													<option value="de">Deutsch</option>
+													<option value="en">Englisch</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="tw-mt-6 md:tw-mt-8 tw-w-full" *ngIf="selectedKeywordCompetencies.length != 0">
+										<ng-container
+											*ngFor="
+												let keywordCompetency of badgeClassForm.controls.keywordCompetencies.controls;
+												let i = index
+											"
 										>
-											<div class="tw-flex tw-flex-col md:tw-flex-row md:tw-justify-between tw-gap-5 md:tw-gap-0">
+											<div
+												class="tw-bg-[var(--color-lightgreen)] tw-rounded-md md:tw-w-2/3 tw-mx-auto md:tw-ml-0 tw-p-6 tw-mt-2"
+											>
+												<div class="tw-flex tw-justify-between">
+													<h2 class="tw-whitespace-pre-wrap tw-text-sm tw-text-oebblack tw-font-bold">
+														{{ selectedKeywordCompetencies[i].preferred_label }} <a href="http://data.europa.eu/{{selectedKeywordCompetencies[i].concept_uri}}" target="_blank" class="tw-ml-2 !tw-text-[var(--color-link)]]"> <span class="tw-text-[var(--color-link)] tw-underline tw-font-normal">(E)</span></a>
+													</h2>
+												</div>
+												<hr class="tw-text-[var(--color-grayinteractive)] tw-my-1 tw-border-solid tw-border" />
+												<p class="tw-w-full tw-my-2 tw-text-sm tw-text-oebblack tw-whitespace-pre-wrap">
+													{{ selectedKeywordCompetencies[i].description }}
+												</p>
+												<span class="tw-text-sm tw-text-[#6B6B6B] tw-font-light">{{ 'Badge.category' | translate}}: {{ selectedKeywordCompetencies[i].type.includes('skill') ? ('Badge.skill' | translate) : ('Badge.knowledge' | translate) }} </span>
+												<div class="tw-flex tw-gap-2 tw-items-center">
+													<oeb-input
+														class="tw-w-20"
+														[fieldType]="'number'"
+														[control]="keywordCompetency.rawControlMap.hours"
+														[errorMessage]="{ duration: requiredError }"
+														noTopMargin="true"
+													>
+													</oeb-input>
+													<span class="tw-font-bold tw-text-purple" hlmP>:</span>
+													<oeb-input
+														class="tw-w-20"
+														[fieldType]="'number'"
+														[control]="keywordCompetency.rawControlMap.minutes"
+														[errorMessage]="{ duration: requiredError }"
+														noTopMargin="true"
+													>
+													</oeb-input>
+													<span class="tw-text-oebblack md:tw-text-lg">{{
+														'RecBadge.hours' | translate
+													}}</span>
+
+													<oeb-button
+														size="sm"
+														type="button"
+														width="max_content"
+														(click)="removeKeywordCompetenciesResult(i)"
+														variant="secondary"
+														text="Löschen"
+														class="tw-ml-auto"
+													>
+													</oeb-button>
+												</div>
+											</div>
+										</ng-container>
+									</div>
+
+
+									<h2 class="tw-font-bold tw-text-xl tw-mt-12">2. Eigene Kompetenz</h2>
+									<p>
+										Falls die ESCO-Suche dir keine passende Kompetenz liefert, kannst du hier händisch eine selbst definierte Kompetenz ergänzen:
+									</p>
+
+									<ng-container *ngFor="let competency of badgeClassForm.controls.competencies.controls; let i = index">
+										<ng-container *ngIf="competency.controls['added'].value; else competencyForm">
+											<div
+												class="tw-bg-[var(--color-lightgray)] tw-rounded-2xl tw-border tw-border-solid tw-border-[var(--color-purple)] tw-p-4 tw-mt-2"
+											>
+												<div class="tw-flex tw-justify-between">
+													<h2 class="tw-whitespace-pre-wrap tw-text-oebblack tw-font-bold">
+														{{ competency.rawControlMap.name.value }}
+													</h2>
+													<oeb-checkbox class="tw-border-[var(--color-purple)]" name="competency$i" id="competency$i"
+																	[control]="competency.rawControlMap.added"
+													></oeb-checkbox>
+												</div>
+												<p
+													class="tw-w-full tw-text-oebblack tw-mt-2 tw-italic tw-whitespace-pre-wrap tw-line-clamp-3"
+												>
+													{{ competency.rawControlMap.description.value }}
+												</p>
+												<div class="tw-flex tw-gap-2 tw-items-center tw-mt-4 ">
+													<label class="tw-text-oebblack tw-font-bold" for="studyLoad$i">
+														{{ 'RecBadgeDetail.duration' | translate }}:
+													</label>
+													<span
+													class="tw-flex tw-rounded-md tw-bg-white tw-border tw-border-solid tw-border-black tw-h-8 tw-w-20 tw-min-w-fit tw-items-center tw-justify-center"
+													>
+													{{ competency.rawControlMap.hours.value | number:'2.0' }}:{{ competency.rawControlMap.minutes.value | number:'2.0' }} h
+													</span>
+
+												</div>
+											</div>
+										</ng-container>
+										<ng-template #competencyForm>
+											<div
+												class="tw-border-[var(--color-purple)] tw-border tw-border-solid tw-rounded-md tw-p-6 tw-mt-4"
+											>
+												<div class="tw-flex tw-flex-col md:tw-flex-row md:tw-justify-between tw-gap-5 md:tw-gap-0">
+
+													<oeb-input
+														id="{{'competencyTitle_'+i}}"
+														[fieldType]="'text'"
+														[label]="competencyTitle"
+														[control]="competency.rawControlMap.name"
+														[errorMessage]="{ required: titleError }"
+														noTopMargin="true"
+														[readonly]="competency.controls['framework_identifier'].value ? true : false"
+													>
+													</oeb-input>
+
+													<div class="tw-flex tw-flex-col">
+														<span class="tw-font-semibold tw-text-[14px] md:tw-text-[20px] tw-leading-4 md:tw-leading-6 tw-font-[rubik] tw-pb-[5px] tw-pl-[3px]">{{ competencyDuration }}</span>
+
+														<div class="tw-flex tw-gap-2 tw-items-center">
+															<oeb-input
+																id="{{'competencyDurationHour_'+i}}"
+																[fieldType]="'number'"
+																class="tw-max-w-24"
+																[control]="competency.rawControlMap.hours"
+																[errorMessage]="{
+																	duration: requiredError
+																}"
+																noTopMargin="true"
+																[readonly]="competency.controls['framework_identifier'].value ? true : false"
+															>
+															</oeb-input>
+															:
+															<oeb-input
+																id="{{'competencyDurationMinutes_'+i}}"
+																[fieldType]="'number'"
+																class="tw-max-w-24"
+																[control]="competency.rawControlMap.minutes"
+																[errorMessage]="{
+																	duration: requiredError
+																}"
+																noTopMargin="true"
+																[readonly]="competency.controls['framework_identifier'].value ? true : false"
+															>
+															</oeb-input>
+
+															<span class="tw-text-oebblack">h</span>
+														</div>
+													</div>
+
+													<oeb-select
+														id="{{'competencyCategory_'+i}}"
+														ariaLabel="Wähle eine Kompetenz-Kategorie"
+														[control]="competency.rawControlMap.category"
+														[label]="competencyCategory"
+														[placeholder]="'Kategorie wählen'"
+														[optionMap]="competencyCategoryOptions"
+														[errorMessage]="{
+															required: competencyCategoryError
+														}"
+														noTopMargin="true"
+														[disabled]="competency.controls['framework_identifier'].value ? true : false"
+													></oeb-select>
+
+												</div>
 
 												<oeb-input
-													id="{{'competencyTitle_'+i}}"
-													[fieldType]="'text'"
-													[label]="competencyTitle"
-													[control]="competency.rawControlMap.name"
-													[errorMessage]="{ required: titleError }"
-													noTopMargin="true"
+													id="{{'competencyDescriptionInput_'+i}}"
+													[fieldType]="'textarea'"
+													[label]="competencyDescription"
+													[control]="competency.rawControlMap.description"
+													[errorMessage]="{ required: enterDescription }"
 													[readonly]="competency.controls['framework_identifier'].value ? true : false"
 												>
 												</oeb-input>
 
-												<div class="tw-flex tw-flex-col">
-													<span class="tw-font-semibold tw-text-[14px] md:tw-text-[20px] tw-leading-4 md:tw-leading-6 tw-font-[rubik] tw-pb-[5px] tw-pl-[3px]">{{ competencyDuration }}</span>
-
-													<div class="tw-flex tw-gap-2 tw-items-center">
-														<oeb-input
-															id="{{'competencyDurationHour_'+i}}"
-															[fieldType]="'number'"
-															class="tw-max-w-24"
-															[control]="competency.rawControlMap.hours"
-															[errorMessage]="{
-																duration: requiredError
-															}"
-															noTopMargin="true"
-															[readonly]="competency.controls['framework_identifier'].value ? true : false"
-														>
-														</oeb-input>
-														:
-														<oeb-input
-															id="{{'competencyDurationMinutes_'+i}}"
-															[fieldType]="'number'"
-															class="tw-max-w-24"
-															[control]="competency.rawControlMap.minutes"
-															[errorMessage]="{
-																duration: requiredError
-															}"
-															noTopMargin="true"
-															[readonly]="competency.controls['framework_identifier'].value ? true : false"
-														>
-														</oeb-input>
-
-														<span class="tw-text-oebblack">h</span>
-													</div>
-												</div>
-
-												<oeb-select
-													id="{{'competencyCategory_'+i}}"
-													ariaLabel="Wähle eine Kompetenz-Kategorie"
-													[control]="competency.rawControlMap.category"
-													[label]="competencyCategory"
-													[placeholder]="'Kategorie wählen'"
-													[optionMap]="competencyCategoryOptions"
-													[errorMessage]="{
-														required: competencyCategoryError
-													}"
-													noTopMargin="true"
-													[disabled]="competency.controls['framework_identifier'].value ? true : false"
-												></oeb-select>
-
-											</div>
-
-											<oeb-input
-												id="{{'competencyDescriptionInput_'+i}}"
-												[fieldType]="'textarea'"
-												[label]="competencyDescription"
-												[control]="competency.rawControlMap.description"
-												[errorMessage]="{ required: enterDescription }"
-												[readonly]="competency.controls['framework_identifier'].value ? true : false"
-											>
-											</oeb-input>
-
-											<oeb-input
-												id="{{'escoIdentifierInput_'+i}}"
-												*ngIf="competency.rawControlMap['framework_identifier'].value"
-												label="Framework-Identifier"
-												[control]="competency.rawControlMap['framework_identifier']"
-												[readonly]="true"
-												placeholder="z.B. http://data.europa.eu/esco/skill/7de3b70e-2568-420a-8528-69523d323e7a"
-											>
-											</oeb-input>
-
-											<div class="tw-flex tw-justify-between tw-flex-wrap sm:tw-flex-nowrap tw-gap-2 tw-mt-8">
-												<oeb-button
-													*ngIf="badgeClassForm.controls.competencies.controls.length > 0"
-													class="tw-mr-4"
-													variant="secondary"
-													size="sm"
-													type="button"
-													(click)="removeCompetency(competency)"
-													text="{{ 'General.remove' | translate }}"
-												></oeb-button>
-
-												<oeb-button
-													id="{{'addCompetencyBtn_'+i}}"
-													size="sm"
-													type="button"
-													width="max_content"
-													(click)="addCompetency(competency)"
-													text="{{ 'General.add' | translate }}"
+												<oeb-input
+													id="{{'escoIdentifierInput_'+i}}"
+													*ngIf="competency.rawControlMap['framework_identifier'].value"
+													label="Framework-Identifier"
+													[control]="competency.rawControlMap['framework_identifier']"
+													[readonly]="true"
+													placeholder="z.B. http://data.europa.eu/esco/skill/7de3b70e-2568-420a-8528-69523d323e7a"
 												>
-												</oeb-button>
-											</div>
-										</div>
-									</ng-template>
-								</ng-container>
+												</oeb-input>
 
-								<div class="tw-w-full tw-flex tw-justify-end">
-									<oeb-button
-										size="sm"
-										type="button"
-										class="tw-mt-2"
-										(click)="addAnotherCompetency()"
-										text="{{
-											(badgeClassForm.controls.competencies.controls.length > 0
-											? 'CreateBadge.addAnotherCompetency'
-											: 'General.add') | translate}}"
-											icon="lucidePlus"
-									>
-									</oeb-button>
+												<div class="tw-flex tw-justify-between tw-flex-wrap sm:tw-flex-nowrap tw-gap-2 tw-mt-8">
+													<oeb-button
+														*ngIf="badgeClassForm.controls.competencies.controls.length > 0"
+														class="tw-mr-4"
+														variant="secondary"
+														size="sm"
+														type="button"
+														(click)="removeCompetency(competency)"
+														text="{{ 'General.remove' | translate }}"
+													></oeb-button>
+
+													<oeb-button
+														id="{{'addCompetencyBtn_'+i}}"
+														size="sm"
+														type="button"
+														width="max_content"
+														(click)="addCompetency(competency)"
+														text="{{ 'General.add' | translate }}"
+													>
+													</oeb-button>
+												</div>
+											</div>
+										</ng-template>
+									</ng-container>
+
+									<div class="tw-w-full tw-flex tw-justify-end">
+										<oeb-button
+											size="sm"
+											type="button"
+											class="tw-mt-2"
+											(click)="addAnotherCompetency()"
+											text="{{
+												(badgeClassForm.controls.competencies.controls.length > 0
+												? 'CreateBadge.addAnotherCompetency'
+												: 'General.add') | translate}}"
+												icon="lucidePlus"
+										>
+										</oeb-button>
+									</div>
 								</div>
 							</oeb-collapsible>
 						</ul>

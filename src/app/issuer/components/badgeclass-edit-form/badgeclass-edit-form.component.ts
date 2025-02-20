@@ -49,6 +49,7 @@ import { ErrorDialogComponent } from '../../../common/dialogs/oeb-dialogs/error-
 
 import { StepperComponent } from '../../../components/stepper/stepper.component';
 import { BadgeClassDetailsComponent } from '../badgeclass-create-steps/badgeclass-details/badgeclass-details.component';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'badgeclass-edit-form',
@@ -63,6 +64,12 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	aiCompetenciesLoading = false;
 	selectedAiCompetencies: Skill[] = []
+	selectedKeywordCompetencies: Skill[] = []
+	keywordCompetenciesResult: Skill[] = []
+	keywordCompetenciesLanguage = 'de';
+	keywordCompetenciesShowResults = false;
+	keywordCompetenciesLoading = false;
+
 	isDevMode: boolean = false && isDevMode(); // DEBUG: enable to skip steps
 
 	// Translation
@@ -207,6 +214,17 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	aiCompetenciesSuggestions: Skill[] = [];
 
 	/**
+	 * The query for the ESCO Skill search for the AI tool
+	 */
+	aiCompetenciesKeywords: string = '';
+
+	/**
+	 * The resulting competency skills for
+	 * the search query (@see aiCompetenciesKeywords)
+	 */
+	aiCompetenciesKeywordSuggestions: Skill[] = [];
+
+	/**
 	 * The descriptions of suggested competencies which are shown
 	 * in the view (@see aiCompetenciesSuggestions)
 	 */
@@ -265,6 +283,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				.addControl('framework', 'esco', Validators.required)
 		)
 		.addArray(
+			'keywordCompetencies',
+			typedFormGroup()
+				.addControl('studyLoad', 60, [Validators.required, this.positiveInteger])
+				.addControl('hours', 1, [this.positiveIntegerOrNull, Validators.max(999)])
+				.addControl('minutes', 0, [this.positiveIntegerOrNull, Validators.max(59)])
+				.addControl('framework', 'esco', Validators.required)
+		)
+		.addArray(
 			'competencies',
 			typedFormGroup()
 				.addControl('added', false)
@@ -304,6 +330,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	formElem: ElementRef<HTMLFormElement>;
 
 	@ViewChild('imageSection') imageSection!: ElementRef<HTMLElement>;
+
+	@ViewChild('aiKeywordsInput') aiKeywordsInput: any;
 
 	existingBadgeClass: BadgeClass | null = null;
 
@@ -479,6 +507,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			// based on ai suggestions, they can't be separated anymore and thus will
 			// be displayed as competencies entered by hand
 			aiCompetencies: [],
+			keywordCompetencies: [],
 			competencies: badgeClass.extension['extensions:CompetencyExtension'] ? competencies : [],
 			alignments: this.badgeClass.alignments.map((alignment) => ({
 				target_name: alignment.target_name,
@@ -583,6 +612,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		this.stepper.selectionChange.subscribe((event) => {
 			this.selectedStep = event.selectedIndex;
 		});
+
+		// debounce ai competencies keyword search input
+		this.aiKeywordsInput.valueChanges
+			.pipe(debounceTime(500))
+			.pipe(distinctUntilChanged())
+			.subscribe(() =>{
+				this.aiCompetenciesKeywordsChange();
+			});
 	}
 
 	clearCompetencies() {
@@ -766,8 +803,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				this.aiCompetenciesSuggestions.forEach((skill, i) => {
 					aiCompetencies.addFromTemplate();
 					if(this.selectedAiCompetencies.includes(skill)){
-						this.badgeClassForm.controls.aiCompetencies.controls[i]
-						.setValue({...this.badgeClassForm.controls.aiCompetencies.controls[i].value, selected: true});
+						this.badgeClassForm.controls.aiCompetencies.controls[i].setValue({
+							...this.badgeClassForm.controls.aiCompetencies.controls[i].value,
+							selected: true
+						});
 					}
 				});
 				this.aiCompetenciesLoading = false;
@@ -776,6 +815,37 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				this.aiCompetenciesLoading = false;
 				this.messageService.reportAndThrowError(`Failed to obtain ai skills: ${error.message}`, error);
 			});
+	}
+
+	async aiCompetenciesKeywordsChange() {
+		if (this.aiCompetenciesKeywords.length >= 3) {
+			try {
+				this.keywordCompetenciesResult = await this.aiSkillsService.getAiKeywordSkills(this.aiCompetenciesKeywords, this.keywordCompetenciesLanguage);
+			} catch(error) {
+				this.messageService.reportAndThrowError(`Failed to obtain ai skills: ${error.message}`, error);
+			}
+		}
+	}
+
+	keywordCompetenciesInputFocusOut() {
+		// delay hiding for click event
+		setTimeout(() => {
+			this.keywordCompetenciesShowResults = false;
+		}, 200);
+	}
+
+	addKeywordCompetenciesResult(skill: Skill) {
+		const existing = this.selectedKeywordCompetencies.find((s) => {
+			return s.concept_uri == skill.concept_uri;
+		});
+		if (!existing) {
+			this.selectedKeywordCompetencies.push(skill);
+			this.badgeClassForm.controls.keywordCompetencies.addFromTemplate();
+		}
+	}
+	removeKeywordCompetenciesResult(index: number) {
+		this.selectedKeywordCompetencies.splice(index, 1);
+		this.badgeClassForm.controls.keywordCompetencies.removeAt(index);
 	}
 
 	async disableAlignments() {
@@ -983,9 +1053,15 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				})
 				.join('');
 
+			let keywordCompetenciesText = this.badgeClassForm.controls.keywordCompetencies.controls
+				.map((_keywordCompetency, index) => {
+					return `- ${this.selectedKeywordCompetencies[index].preferred_label} \n`;
+				})
+				.join('');
+
 			if (this.badgeCategory === 'competency') {
 				this.badgeClassForm.controls.badge_criteria_text.setValue(
-					criteriaText + participationText + competenciesTextCaption + competenciesText + aiCompetenciesText,
+					criteriaText + participationText + competenciesTextCaption + competenciesText + aiCompetenciesText + keywordCompetenciesText,
 				);
 			} else {
 				this.badgeClassForm.controls.badge_criteria_text.setValue(criteriaText + participationText);
@@ -1039,7 +1115,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			const licenseExtensionContextUrl = `${this.baseUrl}/static/extensions/LicenseExtension/context.json`;
 			const orgImageExtensionContextUrl = `${this.baseUrl}/static/extensions/OrgImageExtension/context.json`;
 
-			const suggestions = this.aiCompetenciesSuggestions;
+			const aiCompetenciesSuggestions = this.aiCompetenciesSuggestions;
+			const keywordCompetenciesResults = this.selectedKeywordCompetencies;
 
 			if (this.existingBadgeClass) {
 				this.existingBadgeClass.name = formState.badge_name;
@@ -1075,7 +1152,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						legalCode: formState.license[0].legalCode,
 					},
 					'extensions:CompetencyExtension': this.getCompetencyExtensions(
-						suggestions,
+						aiCompetenciesSuggestions,
+						keywordCompetenciesResults,
 						formState,
 						competencyExtensionContextUrl,
 					),
@@ -1138,7 +1216,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 							legalCode: formState.license[0].legalCode,
 						},
 						'extensions:CompetencyExtension': this.getCompetencyExtensions(
-							suggestions,
+							aiCompetenciesSuggestions,
+							keywordCompetenciesResults,
 							formState,
 							competencyExtensionContextUrl,
 						),
@@ -1178,7 +1257,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	 * and the ones that were suggested by the ai tool and selected (@see formState.aiCompetencies).
 	 */
 	getCompetencyExtensions(
-		suggestions: Skill[],
+		aiCompetenciesSuggestions: Skill[],
+		keywordCompetenciesResults: Skill[],
 		formState,
 		competencyExtensionContextUrl: string,
 	): {
@@ -1211,17 +1291,33 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 					.map((aiCompetency, index) => ({
 						'@context': competencyExtensionContextUrl,
 						type: ['Extension', 'extensions:CompetencyExtension'],
-						name: suggestions[index].preferred_label,
-						description: suggestions[index].description,
-						'framework_identifier': 'http://data.europa.eu' + suggestions[index].concept_uri,
+						name: aiCompetenciesSuggestions[index].preferred_label,
+						description: aiCompetenciesSuggestions[index].description,
+						'framework_identifier': 'http://data.europa.eu' + aiCompetenciesSuggestions[index].concept_uri,
 						studyLoad: Number(aiCompetency.hours * 60) + Number(aiCompetency.minutes),
 						hours: Number(aiCompetency.hours),
 						minutes: Number(aiCompetency.minutes),
-						category: suggestions[index].type.includes('skill') ? 'skill' : 'knowledge',
+						category: aiCompetenciesSuggestions[index].type.includes('skill') ? 'skill' : 'knowledge',
 						source: 'ai',
 						framework: 'esco',
 					}))
 					.filter((_, index) => formState.aiCompetencies[index].selected),
+			)
+			.concat(
+				formState.keywordCompetencies
+					.map((keywordCompetency, index) => ({
+						'@context': competencyExtensionContextUrl,
+						type: ['Extension', 'extensions:CompetencyExtension'],
+						name: keywordCompetenciesResults[index].preferred_label,
+						description: keywordCompetenciesResults[index].description,
+						'framework_identifier': 'http://data.europa.eu' + keywordCompetenciesResults[index].concept_uri,
+						studyLoad: Number(keywordCompetency.hours * 60) + Number(keywordCompetency.minutes),
+						hours: Number(keywordCompetency.hours),
+						minutes: Number(keywordCompetency.minutes),
+						category: keywordCompetenciesResults[index].type.includes('skill') ? 'skill' : 'knowledge',
+						source: 'ai',
+						framework: 'esco',
+					}))
 			);
 	}
 
