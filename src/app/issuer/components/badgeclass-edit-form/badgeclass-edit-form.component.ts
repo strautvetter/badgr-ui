@@ -63,7 +63,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	badgeCategory: string;
 
 	aiCompetenciesLoading = false;
-	selectedAiCompetencies: Skill[] = []
 	selectedKeywordCompetencies: Skill[] = []
 	keywordCompetenciesResult: Skill[] = []
 	keywordCompetenciesLanguage = 'de';
@@ -786,14 +785,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			.getAiSkills(this.aiCompetenciesDescription)
 			.then((skills) => {
 				let aiCompetencies = this.badgeClassForm.controls.aiCompetencies;
-				this.selectedAiCompetencies = aiCompetencies.value.map((c, i) => c.selected ? this.aiCompetenciesSuggestions[i] : null).filter(Boolean)
+				const selectedAiCompetencies = aiCompetencies.value.map((c, i) => c.selected ? this.aiCompetenciesSuggestions[i] : null).filter(Boolean)
 				for (let i = aiCompetencies.length - 1; i >= 0; i--) {
 					aiCompetencies.removeAt(i);
 				}
 				this.aiCompetenciesSuggestions = [
-					...this.selectedAiCompetencies,
+					...selectedAiCompetencies,
 					...skills.filter(skill =>
-					  !this.selectedAiCompetencies.some(
+					  !selectedAiCompetencies.some(
 						existing => existing.concept_uri === skill.concept_uri
 					  )
 					)
@@ -801,7 +800,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 				this.aiCompetenciesSuggestions.forEach((skill, i) => {
 					aiCompetencies.addFromTemplate();
-					if(this.selectedAiCompetencies.includes(skill)){
+					if(selectedAiCompetencies.includes(skill)){
 						this.badgeClassForm.controls.aiCompetencies.controls[i].setValue({
 							...this.badgeClassForm.controls.aiCompetencies.controls[i].value,
 							selected: true
@@ -814,6 +813,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				this.aiCompetenciesLoading = false;
 				this.messageService.reportAndThrowError(`Failed to obtain ai skills: ${error.message}`, error);
 			});
+	}
+
+	getSelectedAiCompetencies() {
+		return this.badgeClassForm.controls.aiCompetencies.value.filter((c, i) => c.selected);
 	}
 
 	async keywordCompetenciesKeywordsChange() {

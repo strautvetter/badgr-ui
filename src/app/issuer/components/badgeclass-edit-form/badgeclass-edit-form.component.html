@@ -205,7 +205,9 @@
 					[optional]="false"
 					errorMessage="Bitte Kompetenzen hinzufügen"
 					*ngIf="category === 'competency'"
-					[completed]="badgeClassForm.controls.aiCompetencies.valid && badgeClassForm.controls.competencies.valid && !badgeClassForm.hasError('competenceHoursMinutesZero')"
+					[completed]="
+						(getSelectedAiCompetencies().length > 0 || selectedKeywordCompetencies.length > 0 || badgeClassForm.controls.competencies.controls.length > 0)
+						&& (badgeClassForm.controls.aiCompetencies.valid && badgeClassForm.controls.competencies.valid && !badgeClassForm.hasError('competenceHoursMinutesZero'))"
 					[hasError]="!badgeClassForm.controls.aiCompetencies.valid || !badgeClassForm.controls.competencies.valid || badgeClassForm.hasError('competenceHoursMinutesZero')"
 				>
 
@@ -388,7 +390,6 @@
 									[trigger]="collapseCompetenciesTrigger"
 									[defaultOpen]="collapsedCompetenciesOpen"
 									[closeable]="badgeClassForm.controls.competencies.controls.length == 0 && badgeClassForm.controls.keywordCompetencies.controls.length == 0"
-									(toggled)="$event && badgeClassForm.controls.competencies.addFromTemplate()"
 								>
 								<ng-template #collapseCompetenciesTrigger>
 									<span class="tw-text-3xl tw-font-normal tw-text-[var(--color-purple)] tw-mr-auto" [innerHTML]="'CreateBadge.addCompetenciesByHand' | translate"></span>
