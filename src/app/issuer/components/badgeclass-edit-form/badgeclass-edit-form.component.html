@@ -297,7 +297,7 @@
 									</div>
 									<div class="tw-mt-6 md:tw-mt-8 tw-w-full" *ngIf="aiCompetenciesSuggestions.length != 0">
 										<h2 class="tw-font-bold tw-text-[22px] tw-mb-2">
-											{{ 'CreateBadge.fitting' | translate }} {{ 'RecBadgeDetail.competencies' | translate }}
+											{{ 'CreateBadge.fitting' | translate }} {{ 'CreateBadge.competencies' | translate }}
 										</h2>
 										<p class="tw-text-purple tw-italic tw-mb-4">
 											Wähle Kompetenzen durch Anklicken aus, um sie deinem Badge hinzuzufügen.
@@ -372,6 +372,9 @@
 													</div>
 												</div>
 											</div>
+											<p class="tw-italic tw-mt-4">
+												Hinweis: KI-Unterstützung – der Badge-Assistent kann Fehler machen. Überprüfe daher die Vorschläge und melde dich bei fehlerhaften Ergebnissen gerne per <a href="mailto:hallo@openbadges.education">E-Mail</a>. <a href="https://openbadges.education/public/privacy" target="_blank">Datenschutz bei OEB</a>.
+											</p>
 										</ng-container>
 									</div>
 								</div>
@@ -585,7 +588,10 @@
 							<h2 *ngIf="badgeCategory !== 'competency'" hlmH2 class="tw-font-bold">3. Tags hinzufügen</h2>
 							<h2 *ngIf="badgeCategory === 'competency'" hlmH2 class="tw-font-bold">4. Tags hinzufügen</h2>
 						</div>
-						<div class="formsection-x-body tw-mt-8">
+						<p class="tw-italic tw-text-purple tw-mt-2">
+							{{ 'CreateBadge.tagInfo' | translate }}
+						</p>
+						<div class="formsection-x-body tw-mt-4">
 							<div class="tw-flex tw-gap-4 tw-items-center tw-mb-2">
 								<span class="tw-font-semibold tw-text-lg tw-text-oebblack tw-uppercase"> Tag</span>
 
@@ -637,7 +643,6 @@
 									</oeb-button>
 								</div>
 							</div>
-							<span class="tw-italic">{{ 'CreateBadge.tagInfo' | translate }}</span>
 						</div>
 					</div>
 
