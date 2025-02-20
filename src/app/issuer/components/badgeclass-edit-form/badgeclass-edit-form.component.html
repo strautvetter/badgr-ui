@@ -240,7 +240,7 @@
 								</span>
 								<p class="tw-my-2 tw-mb-0 tw-italic tw-text-[var(--color-purple)]">{{ 'CreateBadge.NoPersonalInformation' | translate }}</p>
 
-								<hr class="tw-my-6 tw-w-full tw-border tw-border-dashed tw-border-[1px] tw-border-white" />
+								<hr class="tw-my-6 tw-w-full tw-border-solid tw-border-top-[1px] tw-border-white" />
 
 								<div class="">
 										<h2 class="tw-font-bold tw-inline-block">
@@ -582,7 +582,8 @@
 
 					<div class="section tw-text-oebblack tw-mt-6">
 						<div>
-							<h2 hlmH2 class="tw-font-bold">3. Tags</h2>
+							<h2 *ngIf="badgeCategory !== 'competency'" hlmH2 class="tw-font-bold">3. Tags hinzufügen</h2>
+							<h2 *ngIf="badgeCategory === 'competency'" hlmH2 class="tw-font-bold">4. Tags hinzufügen</h2>
 						</div>
 						<div class="formsection-x-body tw-mt-8">
 							<div class="tw-flex tw-gap-4 tw-items-center tw-mb-2">
