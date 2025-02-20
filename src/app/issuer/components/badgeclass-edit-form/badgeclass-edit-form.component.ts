@@ -61,8 +61,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	baseUrl: string;
 	badgeCategory: string;
 
+	aiCompetenciesLoading = false;
 	selectedAiCompetencies: Skill[] = []
-	isDevMode: boolean = false && isDevMode(); // DEBUG: enable to skip steps
+	isDevMode: boolean = true && isDevMode(); // DEBUG: enable to skip steps
 
 	// Translation
 	selectFromMyFiles = this.translate.instant('RecBadge.selectFromMyFiles');
@@ -85,7 +86,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	imageErrorFork = this.translate.instant('CreateBadge.imageErrorFork');
 
 	detailedDescription = this.translate.instant('CreateBadge.detailedDescription');
-	competencyTitle = this.translate.instant('Badge.competency') + '-' + this.translate.instant('Badge.title');
+	competencyTitle = this.translate.instant('Badge.competency') + '-' + this.translate.instant('General.title');
 	titleError = this.translate.instant('CreateBadge.titleError');
 	requiredError = this.translate.instant('CreateBadge.requiredError');
 	competencyDuration = this.translate.instant('CreateBadge.competencyDuration');
@@ -750,9 +751,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	 * (@see badgeClassForm.controls.aiCompetencies) (and removes the old ones).
 	 */
 	suggestCompetencies() {
-		if (this.aiCompetenciesDescription.length == 0) {
+		if (this.aiCompetenciesDescription.length < 70) {
 			return;
 		}
+		this.aiCompetenciesLoading = true;
 		this.aiSkillsService
 			.getAiSkills(this.aiCompetenciesDescription)
 			.then((skills) => {
@@ -777,8 +779,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 						.setValue({...this.badgeClassForm.controls.aiCompetencies.controls[i].value, selected: true});
 					}
 				});
+				this.aiCompetenciesLoading = false;
 			})
 			.catch((error) => {
+				this.aiCompetenciesLoading = false;
 				this.messageService.reportAndThrowError(`Failed to obtain ai skills: ${error.message}`, error);
 			});
 	}

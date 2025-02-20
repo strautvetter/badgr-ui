@@ -110,9 +110,9 @@
 }
 
 
-li::marker {
+/* li::marker {
 	color: var(--color-purple);
-}
+} */
 
 .ng-autocomplete {
 	width:100%;
