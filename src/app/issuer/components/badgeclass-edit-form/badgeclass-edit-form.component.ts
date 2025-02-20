@@ -69,6 +69,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	keywordCompetenciesLanguage = 'de';
 	keywordCompetenciesShowResults = false;
 	keywordCompetenciesLoading = false;
+	keywordCompetenciesLoaded = false;
 
 	isDevMode: boolean = false && isDevMode(); // DEBUG: enable to skip steps
 
@@ -216,18 +217,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	/**
 	 * The query for the ESCO Skill search for the AI tool
 	 */
-	aiCompetenciesKeywords: string = '';
-
-	/**
-	 * The resulting competency skills for
-	 * the search query (@see aiCompetenciesKeywords)
-	 */
-	aiCompetenciesKeywordSuggestions: Skill[] = [];
-
-	/**
-	 * The descriptions of suggested competencies which are shown
-	 * in the view (@see aiCompetenciesSuggestions)
-	 */
+	keywordCompetenciesKeywords: string = '';
 
 	savePromise: Promise<BadgeClass> | null = null;
 	badgeClassForm = typedFormGroup([
@@ -331,7 +321,9 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 	@ViewChild('imageSection') imageSection!: ElementRef<HTMLElement>;
 
-	@ViewChild('aiKeywordsInput') aiKeywordsInput: any;
+	@ViewChild('keywordCompetenciesInput') keywordCompetenciesInput: ElementRef<HTMLInputElement>;
+	@ViewChild('keywordCompetenciesInputModel') keywordCompetenciesInputModel: any;
+	@ViewChild('keywordCompetenciesLanguageSelectModel') keywordCompetenciesLanguageSelectModel: any;
 
 	existingBadgeClass: BadgeClass | null = null;
 
@@ -614,11 +606,18 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 		});
 
 		// debounce ai competencies keyword search input
-		this.aiKeywordsInput.valueChanges
+		this.keywordCompetenciesInputModel.valueChanges
 			.pipe(debounceTime(500))
 			.pipe(distinctUntilChanged())
 			.subscribe(() =>{
-				this.aiCompetenciesKeywordsChange();
+				this.keywordCompetenciesKeywordsChange();
+			});
+
+			this.keywordCompetenciesLanguageSelectModel.valueChanges.subscribe((val: string) => {
+				// valueChanges is triggered before the value has been set, so we set it manually
+				this.keywordCompetenciesLanguage = val;
+				this.keywordCompetenciesInput.nativeElement.focus();
+				this.keywordCompetenciesKeywordsChange();
 			});
 	}
 
@@ -817,13 +816,17 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			});
 	}
 
-	async aiCompetenciesKeywordsChange() {
-		if (this.aiCompetenciesKeywords.length >= 3) {
+	async keywordCompetenciesKeywordsChange() {
+		if (this.keywordCompetenciesKeywords.length >= 3) {
+			this.keywordCompetenciesLoading = true;
 			try {
-				this.keywordCompetenciesResult = await this.aiSkillsService.getAiKeywordSkills(this.aiCompetenciesKeywords, this.keywordCompetenciesLanguage);
+				this.keywordCompetenciesResult = [];
+				this.keywordCompetenciesResult = await this.aiSkillsService.getAiKeywordSkills(this.keywordCompetenciesKeywords, this.keywordCompetenciesLanguage);
 			} catch(error) {
 				this.messageService.reportAndThrowError(`Failed to obtain ai skills: ${error.message}`, error);
 			}
+			this.keywordCompetenciesLoading = false;
+			this.keywordCompetenciesLoaded = true;
 		}
 	}
 
@@ -846,6 +849,14 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	removeKeywordCompetenciesResult(index: number) {
 		this.selectedKeywordCompetencies.splice(index, 1);
 		this.badgeClassForm.controls.keywordCompetencies.removeAt(index);
+	}
+
+	getFilteredkeywordCompetenciesResult() {
+		return this.keywordCompetenciesResult.filter((result: Skill) => {
+			return !this.selectedKeywordCompetencies.find((s) => {
+				return s.concept_uri == result.concept_uri;
+			});
+		});
 	}
 
 	async disableAlignments() {
