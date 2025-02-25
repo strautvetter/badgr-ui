@@ -1464,4 +1464,23 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	dirtyFields(fields: string[]) {
 		return fields.every(c => this.badgeClassForm.controls[c].dirty);
 	}
+
+	// FIXME: calculates keywordCompeteniesSuggestions dropdown position and max height,
+	// maybe move into its own component in the future
+	calculateDropdownMaxHeight(el: HTMLElement, minHeight = 100) {
+		const rect = el.getBoundingClientRect();
+		let maxHeight = Math.ceil(window.innerHeight - rect.top - rect.height - 20);
+		if (maxHeight < minHeight) {
+			maxHeight = Math.ceil(rect.top - 20);
+		}
+		return maxHeight;
+	}
+	calculateDropdownBottom(el: HTMLElement, minHeight = 100) {
+		const rect = el.getBoundingClientRect();
+		const maxHeight = Math.ceil(window.innerHeight - rect.top - rect.height - 20);
+		if (maxHeight < minHeight) {
+			return rect.height + 2;
+		}
+		return null;
+	}
 }
