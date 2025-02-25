@@ -1446,6 +1446,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	nextStep(): void {
 		this.badgeClassForm.markTreeDirty();
 		this.stepper.next();
+		window.scrollTo({top: this.formElem.nativeElement.offsetTop, behavior: 'smooth'});
 	}
 
 	previousStep(): void {
