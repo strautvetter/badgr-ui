@@ -461,9 +461,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				? badgeClass.extension['extensions:StudyLoadExtension'].StudyLoad
 				: null,
 			badge_category: this.category,
-			badge_level: badgeClass.extension['extensions:LevelExtension']
-				? badgeClass.extension['extensions:LevelExtension'].Level
-				: null,
+			badge_level: badgeClass.extension['extensions:LevelExtension']?.Level || 'a1',	// a1 is default in formcontrol
 			badge_based_on: {
 				slug: badgeClass.slug,
 				issuerSlug: badgeClass.issuerSlug,
@@ -1349,14 +1347,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	lastStep(): boolean {
-		if (
-			(this.category === 'participation' && this.selectedStep == 3) ||
-			(this.category === 'competency' && this.selectedStep == 4)
-		) {
-			return true;
-		} else {
-			return false;
-		}
+		return this.stepper?.selectedIndex == this.stepper?.steps.length - 1;
 	}
 
 	validateFields(fields: string[]) {

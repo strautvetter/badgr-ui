@@ -940,7 +940,7 @@
 				[disabled]="!!savePromise"
 				[loading-promises]="[savePromise]"
 				loading-message="{{ submittingText }}"
-				text="{{ (category === 'competency' ? 'Issuer.createCompetencyBadge' : 'Issuer.createParticipationBadge') | translate }}"
+				text="{{ (!existingBadgeClass ? (category === 'competency' ? 'Issuer.createCompetencyBadge' : 'Issuer.createParticipationBadge') : 'General.save') | translate }}"
 			>
 			</oeb-button>
 		</div>
