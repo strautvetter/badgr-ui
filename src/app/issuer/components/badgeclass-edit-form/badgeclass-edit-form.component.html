@@ -387,7 +387,7 @@
 									[trigger]="collapseCompetenciesTrigger"
 									[defaultOpen]="collapsedCompetenciesOpen"
 									[closeable]="badgeClassForm.controls.competencies.controls.length == 0"
-									(toggled)="$event && badgeClassForm.controls.competencies.addFromTemplate()"
+									(toggled)="$event && badgeClassForm.controls.competencies.value.length == 0 && badgeClassForm.controls.competencies.addFromTemplate()"
 								>
 								<ng-template #collapseCompetenciesTrigger>
 									<span class="tw-text-3xl tw-font-normal tw-text-[var(--color-purple)] tw-mr-auto" [innerHTML]="'CreateBadge.addCompetenciesByHand' | translate"></span>

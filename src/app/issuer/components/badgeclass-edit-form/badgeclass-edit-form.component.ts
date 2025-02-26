@@ -615,9 +615,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				return;
 			}
 		}
-		if (currentBadgeCategory === 'competency') {
-			this.badgeClassForm.controls.competencies.addFromTemplate();
-		}
 		this.badgeCategory = currentBadgeCategory;
 
 		// To update badge-frame when badge-category is changed
@@ -733,7 +730,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			return;
 		}
 		competency.controls['added'].setValue(true);
-		// this.badgeClassForm.controls.competencies.addFromTemplate();
 	}
 
 	addAnotherCompetency() {
