@@ -264,8 +264,8 @@ export class BadgeCatalogComponent extends BaseRoutableComponent implements OnIn
 		};
 		this.badges
 			.filter(this.badgeMatcher(this.searchQuery))
-			// .filter(this.badgeTagMatcher(this.selectedTag))
-			.filter((badge) => !this.tagsControl.value?.length || this.tagsControl.value.every(tag => badge.tags.includes(tag))) //badge.tags.includes(this.tagsControl.value))
+			// .filter((badge) => !this.tagsControl.value?.length || this.tagsControl.value.every(tag => badge.tags.includes(tag))) // badges have to match all tags
+			.filter((badge) => !this.tagsControl.value?.length || this.tagsControl.value.some(tag => badge.tags.includes(tag))) // badges have to match at least one tag
 			.filter((i) => !i.apiModel.source_url)
 			.forEach((item) => {
 				that.badgeResults.push(item);

@@ -160,6 +160,16 @@
 						</div>
 					</ng-container>
 				</ng-container>
+				<p
+					*ngIf="!badgeResults.length"
+					class="
+						tw-m-auto tw-max-w-[300px] tw-p-4
+						tw-border-solid tw-border-[1px] tw-border-[var(--color-blue)] tw-rounded-lg
+						tw-bg-[var(--color-lightpurple)] tw-text-center
+					"
+				>
+					{{ 'General.noResults' | translate }}
+				</p>
 			</section>
 		</div>
 	</ng-template>

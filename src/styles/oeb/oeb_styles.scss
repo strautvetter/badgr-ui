@@ -253,3 +253,16 @@ html {
 		}
 	}
 }
+
+// override brn-select default styles to display scrollbars
+[data-brn-select-viewport] {
+	scrollbar-width: thin !important;
+
+	&::-webkit-scrollbar {
+		display: initial!important;
+	}
+
+	hlm-option {
+		box-sizing: border-box;
+	}
+}

@@ -132,7 +132,7 @@ import { FormControl } from '@angular/forms';
 				</ng-container>
 			</div>
 		</div>
-		<ul *ngIf="tags && tags.length" class="tw-mt-2 tw-leading-[0px]"><li class="tag tw-mt-2 tw-mr-2" *ngFor="let tag of tags">{{tag}}</li></ul>
+		<!--<ul *ngIf="tags && tags.length" class="tw-mt-2 tw-leading-[0px]"><li class="tag tw-mt-2 tw-mr-2" *ngFor="let tag of tags">{{tag}}</li></ul>-->
 	`,
 })
 export class BgBadgecard {
