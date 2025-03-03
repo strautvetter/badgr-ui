@@ -11,7 +11,7 @@ import {
 	isDevMode,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors, FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, ValidatorFn, ValidationErrors, FormControl, NgModel } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -321,8 +321,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	@ViewChild('imageSection') imageSection!: ElementRef<HTMLElement>;
 
 	@ViewChild('keywordCompetenciesInput') keywordCompetenciesInput: ElementRef<HTMLInputElement>;
-	@ViewChild('keywordCompetenciesInputModel') keywordCompetenciesInputModel: any;
-	@ViewChild('keywordCompetenciesLanguageSelectModel') keywordCompetenciesLanguageSelectModel: any;
+	@ViewChild('keywordCompetenciesInputModel') keywordCompetenciesInputModel: NgModel;
+	@ViewChild('keywordCompetenciesLanguageSelectModel') keywordCompetenciesLanguageSelectModel: NgModel;
 
 	existingBadgeClass: BadgeClass | null = null;
 
