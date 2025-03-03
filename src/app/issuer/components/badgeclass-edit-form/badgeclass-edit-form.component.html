@@ -7,7 +7,7 @@
 		<ng-container [formGroup]="badgeClassForm.rawControl">
 			<oeb-stepper
 				[linear]="existingBadgeClass ? false : true"
-				[initialStep]="existingBadgeClass ? 0 : 1"
+				[initialStep]="existingBadgeClass ? 0 : 2"
 			>
 				<oeb-step
 					label="Kategorie wählen"
@@ -429,9 +429,14 @@
 												(focus)="keywordCompetenciesShowResults = true"
 												(focusout)="keywordCompetenciesInputFocusOut()"
 											>
-											<img
+											<!-- <img
 												class="tw-absolute tw-top-2 tw-right-2 tw-w-6 tw-h-6 tw-pointer-events-none"
 												src="assets/oeb/images/badge/icon-magnifier.svg"
+											/> -->
+											<hlm-icon
+												size="lg"
+												class="tw-absolute tw-top-[3px] tw-right-1 tw-w-6 tw-h-6 tw-pointer-events-none tw-text-purple"
+												name="lucideSearch"
 											/>
 											<div
 												*ngIf="keywordCompetenciesShowResults && (keywordCompetenciesLoading || keywordCompetenciesResult.length || keywordCompetenciesLoaded)"
@@ -518,7 +523,7 @@
 														variant="secondary"
 														text="{{ 'General.delete' | translate }}"
 														class="tw-ml-auto"
-														img="assets/oeb/images/badge/icon-delete.svg"
+														icon="lucideTrash2"
 													>
 													</oeb-button>
 												</div>
@@ -658,7 +663,7 @@
 														type="button"
 														(click)="removeCompetency(competency)"
 														text="{{ 'General.delete' | translate }}"
-														img="assets/oeb/images/badge/icon-delete.svg"
+														icon="lucideTrash2"
 													></oeb-button>
 
 												</div>
