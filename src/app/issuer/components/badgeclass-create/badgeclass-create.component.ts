@@ -56,6 +56,14 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 		this.issuerSlug = this.route.snapshot.params['issuerSlug'];
 		this.category = this.route.snapshot.params['category'];
 
+		const state = this.router.getCurrentNavigation().extras.state;
+		if (state && state.copybadgeid) {
+			this.badgeClassService.issuerBadgeById(state.copybadgeid).then((badge) => {
+				this.category = 'competency';
+				this.copiedBadgeClass = badge;
+			})
+		}
+
 		this.issuerLoaded = this.issuerManager.issuerBySlug(this.issuerSlug).then((issuer) => {
 			this.issuer = issuer;
 			this.breadcrumbLinkEntries = [
@@ -64,18 +72,18 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 				{ title: 'Create Badge' },
 			];
 
-			this.badgesLoaded = new Promise<void>((resolve, reject) => {
-				this.badgeClassService.allPublicBadges$.subscribe(
-					(publicBadges) => {
-						this.badges = publicBadges;
-						resolve();
-					},
-					(error) => {
-						this.messageService.reportAndThrowError(`Failed to load badges`, error);
-						resolve();
-					},
-				);
-			});
+			// this.badgesLoaded = new Promise<void>((resolve, reject) => {
+			// 	this.badgeClassService.allPublicBadges$.subscribe(
+			// 		(publicBadges) => {
+			// 			this.badges = publicBadges;
+			// 			resolve();
+			// 		},
+			// 		(error) => {
+			// 			this.messageService.reportAndThrowError(`Failed to load badges`, error);
+			// 			resolve();
+			// 		},
+			// 	);
+			// });
 		});
 	}
 
@@ -103,31 +111,31 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 		this.scrolled = this.badgeImage && top > this.badgeImage.componentElem.nativeElement.offsetTop;
 	}
 
-	copyBadge() {
-		this.dialogService.copyBadgeDialog
-			.openDialog(this.badges)
-			.then((data: BadgeClass | void) => {
-				if (data) {
-					this.copiedBadgeClass = data;
-					this.isForked = false;
-				}
-			})
-			.catch((error) => {
-				this.messageService.reportAndThrowError('Failed to load badges to copy', error);
-			});
-	}
+	// copyBadge() {
+	// 	this.dialogService.copyBadgeDialog
+	// 		.openDialog(this.badges)
+	// 		.then((data: BadgeClass | void) => {
+	// 			if (data) {
+	// 				this.copiedBadgeClass = data;
+	// 				this.isForked = false;
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			this.messageService.reportAndThrowError('Failed to load badges to copy', error);
+	// 		});
+	// }
 
-	forkBadge() {
-		this.dialogService.forkBadgeDialog
-			.openDialog(this.badges)
-			.then((data: BadgeClass | void) => {
-				if (data) {
-					this.copiedBadgeClass = data;
-					this.isForked = true;
-				}
-			})
-			.catch((error) => {
-				this.messageService.reportAndThrowError('Failed to load badges to fork', error);
-			});
-	}
+	// forkBadge() {
+	// 	this.dialogService.forkBadgeDialog
+	// 		.openDialog(this.badges)
+	// 		.then((data: BadgeClass | void) => {
+	// 			if (data) {
+	// 				this.copiedBadgeClass = data;
+	// 				this.isForked = true;
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			this.messageService.reportAndThrowError('Failed to load badges to fork', error);
+	// 		});
+	// }
 }
