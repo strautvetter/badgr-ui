@@ -52,39 +52,36 @@ export class BadgeClassCreateComponent extends BaseAuthenticatedRoutableComponen
 		private translate: TranslateService,
 	) {
 		super(router, route, sessionService);
-		title.setTitle(`Create Badge - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+		this.translate.get('Issuer.createBadge').subscribe((str) => {
+			title.setTitle(`${str} - ${this.configService.theme['serviceName'] || 'Badgr'}`);
+		});
+
 		this.issuerSlug = this.route.snapshot.params['issuerSlug'];
 		this.category = this.route.snapshot.params['category'];
 
-		const state = this.router.getCurrentNavigation().extras.state;
-		if (state && state.copybadgeid) {
-			this.badgeClassService.issuerBadgeById(state.copybadgeid).then((badge) => {
-				this.category = 'competency';
-				this.copiedBadgeClass = badge;
-			})
-		}
-
+		const breadcrumbPromises: Promise<unknown>[] = [];
 		this.issuerLoaded = this.issuerManager.issuerBySlug(this.issuerSlug).then((issuer) => {
 			this.issuer = issuer;
+		});
+		breadcrumbPromises.push(this.issuerLoaded);
+
+		const state = this.router.getCurrentNavigation().extras.state;
+		if (state && state.copybadgeid) {
+			breadcrumbPromises.push(
+				this.badgeClassService.issuerBadgeById(state.copybadgeid).then((badge) => {
+					this.category = 'competency';
+					this.copiedBadgeClass = badge;
+				})
+			)
+		}
+
+		Promise.all(breadcrumbPromises).then(() => {
 			this.breadcrumbLinkEntries = [
 				{ title: 'Issuers', routerLink: ['/issuer'] },
-				{ title: issuer.name, routerLink: ['/issuer/issuers', this.issuerSlug] },
-				{ title: 'Create Badge' },
+				{ title: this.issuer.name, routerLink: ['/issuer/issuers', this.issuerSlug] },
+				{ title: this.copiedBadgeClass ? this.translate.instant('Badge.copyBadge') : this.translate.instant('Issuer.createBadge') },
 			];
-
-			// this.badgesLoaded = new Promise<void>((resolve, reject) => {
-			// 	this.badgeClassService.allPublicBadges$.subscribe(
-			// 		(publicBadges) => {
-			// 			this.badges = publicBadges;
-			// 			resolve();
-			// 		},
-			// 		(error) => {
-			// 			this.messageService.reportAndThrowError(`Failed to load badges`, error);
-			// 			resolve();
-			// 		},
-			// 	);
-			// });
-		});
+		})
 	}
 
 	ngOnInit() {
