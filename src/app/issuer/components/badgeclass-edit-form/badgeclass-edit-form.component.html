@@ -148,7 +148,7 @@
 											</div> -->
 											<div class="tw-w-full tw-bg-white tw-p-4 tw-rounded-[10px] tw-mt-4">
 												<span class="tw-text-sm tw-text-oebblack tw-italic">
-													{{ 'CreateBadge.issuerImageInBadgeImageInfo' | translate}}	
+													{{ 'CreateBadge.issuerImageInBadgeImageInfo' | translate}}
 												</span>
 											</div>
 										<!-- </div> -->
@@ -179,7 +179,7 @@
 											>{{ 'General.fileformats' | translate }}: PNG&nbsp; </span>
 											<!-- <div class="tw-w-full tw-bg-white tw-p-4 tw-rounded-[10px] tw-mt-4">
 												<oeb-checkbox class="tw-mx-auto tw-min-w-[300px]" name="addIssuerLogo" id="addIssuerLogo"
-													[control]="badgeClassForm.rawControlMap.useIssuerImageInBadge" 
+													[control]="badgeClassForm.rawControlMap.useIssuerImageInBadge"
 													[text]="'<span class=\'tw-text-sm tw-font-bold\'>Institutions-Logo ergänzen</span>'"
 												></oeb-checkbox>
 											</div> -->
@@ -1017,8 +1017,18 @@
 														</span>
 													</li>
 												</ng-container>
+												<ng-container
+													*ngFor="
+														let keywordCompetency of badgeClassForm.controls.keywordCompetencies.controls;
+														let i = index
+													"
+												>
+													<li class="tw-mx-6">
+														<span class="tw-text-lg">{{ selectedKeywordCompetencies[i].preferred_label }}</span>
+													</li>
+												</ng-container>
 												<ng-container *ngFor="let competency of badgeClassForm.controls.competencies.controls">
-													<li *ngIf="competency.rawControlMap.added.value && competency.rawControlMap.name.value" class="tw-mx-6">
+													<li *ngIf="competency.rawControlMap.name.value" class="tw-mx-6">
 														<span class="tw-text-lg">{{ competency.rawControlMap.name.value }}</span>
 													</li>
 												</ng-container>
