@@ -134,6 +134,12 @@ import { QrCodeApiService } from '../issuer/services/qrcode-api.service';
 import { serverErrorInterceptorFactory } from '../server-error-interceptor.factory';
 import { AltchaComponent } from '../components/altcha.component';
 import { SortPipe } from './pipes/sortPipe';
+import { ShadowDomComponent } from './components/shadow-dom.component';
+import { CmsApiService } from './services/cms-api.service';
+import { CmsContentComponent } from './components/cms/cms-content.component';
+import { CmsPageComponent } from './components/cms/cms-page.component';
+import { CmsPostListComponent } from './components/cms/cms-post-list.component';
+import { CmsManager } from './services/cms-manager.service';
 
 const DIRECTIVES = [
 	BgAwaitPromises,
@@ -191,6 +197,10 @@ export const COMMON_MODULE_COMPONENTS = [
 	OebLearningPathDetailComponent,
 	OebIssuerCard,
 	OebSortSelectComponent,
+	ShadowDomComponent,
+	CmsContentComponent,
+	CmsPageComponent,
+	CmsPostListComponent,
 ];
 
 const SERVICES = [
@@ -221,7 +231,9 @@ const SERVICES = [
 	ZipService,
 	ApplicationCredentialsService,
 	LearningPathApiService,
-	QrCodeApiService
+	QrCodeApiService,
+	CmsApiService,
+	CmsManager
 ];
 
 const GUARDS = [AuthGuard];
