@@ -1055,6 +1055,19 @@
 						</div>
 					</div>
 
+					<div class="section tw-text-oebblack tw-mt-6">
+						<h2 hlmH2 class="tw-font-bold">Kopier-Status auswählen</h2>
+						<p class="tw-text-purple tw-italic">
+							Innerhalb der eigenen Institution können Badges immer kopiert werden.<br>Den Kopier-Status für <strong>andere</strong> Institutionen kannst du später jederzeit über das Menü auf der Badge-Detail-Seite aktualisieren.
+						</p>
+						<div class="tw-mt-2 tw-mb-2">
+							<oeb-checkbox
+								[control]="badgeClassForm.rawControlMap.copy_permissions_allow_others"
+								[text]="'Der Badge darf von <strong>anderen</strong> Institutionen kopiert werden.'"
+							/>
+						</div>
+					</div>
+
 				</cdk-step>
 			</oeb-stepper>
 		</ng-container>
