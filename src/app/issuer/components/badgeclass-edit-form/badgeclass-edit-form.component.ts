@@ -477,8 +477,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 
 		this.badgeClassForm.setValue({
 			badge_name: badgeClass.name,
-			badge_image: this.existing && badgeClass.imageFrame ? badgeClass.image : null,
-			badge_customImage: this.existing && !badgeClass.imageFrame ? badgeClass.image : null,
+			badge_image: badgeClass.imageFrame ? badgeClass.image : null,
+			badge_customImage: !badgeClass.imageFrame ? badgeClass.image : null,
 			useIssuerImageInBadge: this.badgeClassForm.value.useIssuerImageInBadge,
 			badge_description: badgeClass.description,
 			badge_criteria_url: badgeClass.criteria_url,
@@ -520,7 +520,7 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 				target_framework: alignment.target_framework,
 				target_code: alignment.target_code,
 			})),
-			copy_permissions_allow_others: badgeClass.canCopy('others'),
+			copy_permissions_allow_others: this.existing ? badgeClass.canCopy('others') : false,
 		});
 
 		if (this.badgeClassForm.controls.competencies.controls.length > 0) {
