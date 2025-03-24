@@ -86,7 +86,6 @@ export class PublicBadgeClassComponent {
 		protected userProfileManager: UserProfileManager,
 	) {
 		title.setTitle(`Badge Class - ${this.configService.theme['serviceName'] || 'Badgr'}`);
-		console.log(this.dialogService);
 
 		this.badgeIdParam = new LoadedRouteParam(injector.get(ActivatedRoute), 'badgeId', async (paramValue) => {
 			const service: PublicApiService = injector.get(PublicApiService);
@@ -211,12 +210,9 @@ export class PublicBadgeClassComponent {
 	copyBadge() {
 		if (this.userIssuers.length == 1) {
 			// copy
-			this.router.navigate(['/issuer/issuers', this.userIssuers[0].slug, 'badges', 'create'], { state: { 'badgeid' : this.badgeClass.id } });
+			this.router.navigate(['/issuer/issuers', this.userIssuers[0].slug, 'badges', 'create'], { state: { 'copybadgeid' : this.badgeClass.id } });
 		} else if (this.userIssuers.length > 1) {
 			// select issuer
-			// TODO:
-			//   edge case: badge copy permissions set to issuer only, user is in multiple issuers
-			//   => user can copy to different issuer
 			this.dialogService.selectIssuerDialog
 				.openDialog()
 				.then((issuer: Issuer | void) => {
