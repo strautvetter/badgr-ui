@@ -81,10 +81,10 @@ const routes: Routes = [
 	],
 	providers: [
 		// UserProfileService,
-		AppIntegrationApiService,
-		AppIntegrationManager,
+		// AppIntegrationApiService,
+		// AppIntegrationManager,
 		UserProfileApiService,
-		UserProfileManager,
+		// UserProfileManager,
 	],
 	exports: [],
 })
