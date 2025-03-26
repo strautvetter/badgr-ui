@@ -10,25 +10,23 @@ import {
 } from '@spartan-ng/ui-collapsible-brain';
 import { provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
-import { NgIf, NgFor, NgTemplateOutlet, NgClass } from '@angular/common';
+import { NgIf, NgTemplateOutlet, NgClass } from '@angular/common';
 
 @Component({
-	selector: 'oeb-collapsible',
-	providers: [provideIcons({ lucideChevronRight })],
-	standalone: true,
-	imports: [
-		BrnCollapsibleComponent,
-		BrnCollapsibleTriggerDirective,
-		HlmButtonDirective,
-		BrnCollapsibleContentComponent,
-		HlmIconModule,
-		HlmIconComponent,
-		NgIf,
-		NgFor,
-		NgTemplateOutlet,
-		NgClass,
-	],
-	template: `
+    selector: 'oeb-collapsible',
+    providers: [provideIcons({ lucideChevronRight })],
+    imports: [
+    BrnCollapsibleComponent,
+    BrnCollapsibleTriggerDirective,
+    HlmButtonDirective,
+    BrnCollapsibleContentComponent,
+    HlmIconModule,
+    HlmIconComponent,
+    NgIf,
+    NgTemplateOutlet,
+    NgClass
+],
+    template: `
 		<brn-collapsible class="tw-flex tw-flex-col" #collapsible [disabled]="disabled()">
 			<button
 				[attr.id]="id"
@@ -62,7 +60,7 @@ import { NgIf, NgFor, NgTemplateOutlet, NgClass } from '@angular/common';
 				<ng-content></ng-content>
 			</brn-collapsible-content>
 		</brn-collapsible>
-	`,
+	`
 })
 export class OebCollapsibleComponent implements AfterViewInit {
 	@Input() trigger: any;

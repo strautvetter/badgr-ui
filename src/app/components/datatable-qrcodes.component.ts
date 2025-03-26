@@ -232,13 +232,13 @@
 
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { DecimalPipe, TitleCasePipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, TrackByFunction, computed, effect, signal, inject, Input, Output, EventEmitter, } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { lucideArrowUpDown, lucideChevronDown, lucideEllipsis } from '@ng-icons/lucide';
 import { HlmButtonModule } from './spartan/ui-button-helm/src';
-import { HlmCheckboxCheckIconComponent, HlmCheckboxComponent } from './spartan/ui-checkbox-helm/src';
+import { HlmCheckboxComponent } from './spartan/ui-checkbox-helm/src';
 import { HlmIconComponent, provideIcons } from './spartan/ui-icon-helm/src';
 import { HlmInputDirective } from './spartan/ui-input-helm/src';
 import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
@@ -262,7 +262,7 @@ import { Router } from '@angular/router';
 import { DangerDialogComponent } from '../common/dialogs/oeb-dialogs/danger-dialog.component';
 import { TranslateService } from "@ngx-translate/core";
 import { ApiRequestedBadge } from '../issuer/models/badgerequest-api.model';
-import { I18nPluralPipe } from '@angular/common';
+
 import { HlmCommandInputWrapperComponent } from './spartan/ui-command-helm/src/lib/hlm-command-input-wrapper.component';
 import { OebButtonComponent } from './oeb-button.component';
 import striptags from 'striptags';
@@ -287,43 +287,31 @@ export type RequestedBadge = {
 }
 
 @Component({
-  selector: 'qrcodes-datatable',
-  standalone: true,
-  imports: [
+    selector: 'qrcodes-datatable',
+    imports: [
     FormsModule,
-
     BrnMenuTriggerDirective,
     HlmMenuModule,
-
     BrnTableModule,
     HlmTableModule,
-
     HlmButtonModule,
-
-    DecimalPipe,
-    TitleCasePipe,
-	  I18nPluralPipe,
-	  DatePipe,
+    DatePipe,
     HlmIconComponent,
     HlmInputDirective,
-
-    HlmCheckboxCheckIconComponent,
     HlmCheckboxComponent,
-
     BrnSelectModule,
     HlmSelectModule,
     TranslateModule,
     HlmCommandInputWrapperComponent,
     OebButtonComponent,
-    OebSpinnerComponent,
-
-  ],
-  styleUrl: './datatable-qrcodes.component.scss',
-  providers: [provideIcons({ lucideChevronDown, lucideEllipsis, lucideArrowUpDown }), TranslateService],
-  host: {
-    class: 'tw-w-full',
-  },
-  template: ` 
+    OebSpinnerComponent
+],
+    styleUrl: './datatable-qrcodes.component.scss',
+    providers: [provideIcons({ lucideChevronDown, lucideEllipsis, lucideArrowUpDown }), TranslateService],
+    host: {
+        class: 'tw-w-full',
+    },
+    template: ` 
     <div class="tw-flex tw-flex-col tw-justify-between tw-gap-4 sm:tw-flex-row">
 		<label hlmLabel class="tw-font-semibold tw-text-[0.5rem] tw-w-full md:tw-w-80">
 			<span class="tw-px-3 tw-text-muted-foreground tw-text-sm">Nach E-Mail-Adresse suchen</span>
@@ -452,7 +440,7 @@ export type RequestedBadge = {
           ('Issuer.giveBadges' | translate)
           : ('Issuer.giveBadge' | translate)">
       </oeb-button>
-  `,
+  `
 })
 export class QrCodeDatatableComponent {
 	@Input() caption: string = '';
