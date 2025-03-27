@@ -38,7 +38,7 @@ import {
 	lucideX,
 	lucideInfo,
 	lucideCopy,
-	lucideCopyX
+	lucideCopyX,
 } from '@ng-icons/lucide';
 
 @NgModule({
@@ -81,7 +81,7 @@ import {
 			lucideX,
 			lucideInfo,
 			lucideCopy,
-			lucideCopyX
+			lucideCopyX,
 		}),
 	],
 })

@@ -154,12 +154,10 @@ export class BadgeClassManager extends BaseHttpApiService {
 	}
 
 	issuerBadgeById(id: string): Promise<BadgeClass> {
-		return this.badgeClassApi.getBadgeById(id)
-			.then((apiBadge) => {
-				return new BadgeClass(this.commonEntityManager, apiBadge)
-			})
+		return this.badgeClassApi.getBadgeById(id).then((apiBadge) => {
+			return new BadgeClass(this.commonEntityManager, apiBadge);
+		});
 	}
-
 
 	private throwError(message: string): never {
 		throw new Error(message);
