@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, TemplateRef, ChangeDetectorRef } from '@angular/core';
-import { BrnProgressComponent, BrnProgressIndicatorComponent } from '@spartan-ng/ui-progress-brain';
+import { BrnProgressComponent, BrnProgressIndicatorComponent } from '@spartan-ng/brain/progress';
 import { HlmProgressIndicatorDirective } from './spartan/ui-progress-helm/src';
 import { NgTemplateOutlet, NgIf } from '@angular/common';
 

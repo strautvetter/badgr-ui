@@ -1,3 +1,4 @@
+import { NgIcon } from '@ng-icons/core';
 // import { CommonModule } from '@angular/common';
 // import { TranslateModule } from '@ngx-translate/core';
 // import { HlmIconModule } from './spartan/ui-icon-helm/src';
@@ -68,7 +69,7 @@
 // 				><p class="u-text tw-text-purple">{{ badge.requestedOn | date: 'dd.MM.yyyy' }}</p></hlm-th
 // 			>
 // 			<hlm-th class="tw-justify-center sm:tw-justify-end tw-w-full lg:tw-w-48 !tw-text-oebblack">
-// 				<hlm-icon name="lucideTrash2" class="mr-2" size="sm" />
+// 				<ng-icon hlm name="lucideTrash2" class="mr-2" size="sm" />
 // 				<hlm-checkbox [checked]="_isPaymentSelected(element)" (changed)="togglePayment(element)" />
 // 			</hlm-th>
 // 		</hlm-trow>
@@ -248,13 +249,13 @@ import { FormsModule } from '@angular/forms';
 import { lucideArrowUpDown, lucideChevronDown, lucideEllipsis } from '@ng-icons/lucide';
 import { HlmButtonModule } from './spartan/ui-button-helm/src';
 import { HlmCheckboxComponent } from './spartan/ui-checkbox-helm/src';
-import { HlmIconComponent, provideIcons } from './spartan/ui-icon-helm/src';
+import { HlmIconDirective } from './spartan/ui-icon-helm/src';
 import { HlmInputDirective } from './spartan/ui-input-helm/src';
-import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
+import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
 import { HlmMenuModule } from './spartan/ui-menu-helm/src';
-import { BrnTableModule, PaginatorState, useBrnColumnManager } from '@spartan-ng/ui-table-brain';
+import { BrnTableModule, PaginatorState, useBrnColumnManager } from '@spartan-ng/brain/table';
 import { HlmTableModule } from './spartan/ui-table-helm/src';
-import { BrnSelectModule } from '@spartan-ng/ui-select-brain';
+import { BrnSelectModule } from '@spartan-ng/brain/select';
 import { HlmSelectModule } from './spartan/ui-select-helm/src';
 import { hlmMuted } from './spartan/ui-typography-helm/src';
 import { debounceTime, map } from 'rxjs';
@@ -277,6 +278,7 @@ import { OebButtonComponent } from './oeb-button.component';
 import striptags from 'striptags';
 import { OebSpinnerComponent } from './oeb-spinner.component';
 import { BadgeInstanceBatchAssertion } from '../issuer/models/badgeinstance-api.model';
+import { provideIcons } from '@ng-icons/core';
 
 export type Payment = {
 	id: string;
@@ -304,7 +306,8 @@ export type RequestedBadge = {
 		HlmTableModule,
 		HlmButtonModule,
 		DatePipe,
-		HlmIconComponent,
+		NgIcon,
+		HlmIconDirective,
 		HlmInputDirective,
 		HlmCheckboxComponent,
 		BrnSelectModule,
@@ -330,7 +333,7 @@ export type RequestedBadge = {
 						[ngModel]="_emailFilter()"
 						(ngModelChange)="_rawFilterInput.set($event)"
 					/>
-					<hlm-icon size="lg" class="tw-absolute  tw-right-6 tw-text-purple" name="lucideSearch" />
+					<ng-icon hlm size="lg" class="tw-absolute  tw-right-6 tw-text-purple" name="lucideSearch" />
 				</hlm-cmd-input-wrapper>
 			</label>
 			<!--
@@ -346,7 +349,7 @@ export type RequestedBadge = {
 			<!-- 
 	  <button hlmBtn variant="outline" align="end" [brnMenuTriggerFor]="menu">
         Columns
-        <hlm-icon name="lucideChevronDown" class="tw-ml-2" size="sm" />
+        <ng-icon hlm name="lucideChevronDown" class="tw-ml-2" size="sm" />
       </button>
       <ng-template #menu>
         <hlm-menu class="tw-w-32">
@@ -397,7 +400,7 @@ export type RequestedBadge = {
 					<hlm-th *brnHeaderDef>
 						<button hlmBtn size="sm" variant="ghost" (click)="handleEmailSortChange()">
 							<span class="tw-text-white tw-text-sm">{{ 'Badge.requestedOn' | translate }}</span>
-							<hlm-icon class="tw-ml-3 tw-text-white" size="sm" name="lucideArrowUpDown" />
+							<ng-icon hlm class="tw-ml-3 tw-text-white" size="sm" name="lucideArrowUpDown" />
 						</button>
 					</hlm-th>
 					<hlm-td class="!tw-flex-1 tw-justify-center" *brnCellDef="let element">
@@ -408,7 +411,7 @@ export type RequestedBadge = {
 					<hlm-th class="tw-text-white" *brnHeaderDef></hlm-th>
 					<hlm-td class="tw-font-medium tw-tabular-nums" *brnCellDef="let element">
 						<button (click)="openDangerDialog(element)">
-							<hlm-icon class="tw-ml-3 tw-text-oebblack" size="sm" name="lucideTrash2" />
+							<ng-icon hlm class="tw-ml-3 tw-text-oebblack" size="sm" name="lucideTrash2" />
 						</button>
 					</hlm-td>
 				</brn-column-def>
@@ -422,7 +425,7 @@ export type RequestedBadge = {
 							align="end"
 							[brnMenuTriggerFor]="menu"
 						>
-							<hlm-icon class="tw-w-4 tw-h-4" name="lucideEllipsis" />
+							<ng-icon hlm class="tw-w-4 tw-h-4" name="lucideEllipsis" />
 						</button>
 
 						<ng-template #menu>
@@ -657,7 +660,9 @@ export class QrCodeDatatableComponent {
 			context: {
 				caption: this.translate.instant('Badge.deleteRequest'),
 				variant: 'danger',
-				text: `${this.translate.instant('Badge.confirmDeleteRequest1')} <span class="tw-font-bold">${request.email}</span>  ${this.translate.instant('Badge.confirmDeleteRequest2')}`,
+				text: `${this.translate.instant('Badge.confirmDeleteRequest1')} <span class="tw-font-bold">${
+					request.email
+				}</span>  ${this.translate.instant('Badge.confirmDeleteRequest2')}`,
 				delete: () => {
 					this.badgeRequestApiService
 						.deleteRequest(request.entity_id)

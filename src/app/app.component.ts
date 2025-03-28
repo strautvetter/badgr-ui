@@ -339,7 +339,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 			this.nounprojectDialog,
 			this.copyBadgeDialog,
 			this.forkBadgeDialog,
-			this.selectIssuerDialog
+			this.selectIssuerDialog,
 		);
 	}
 

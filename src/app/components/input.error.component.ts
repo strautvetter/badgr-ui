@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { HlmInputErrorDirective } from '../components/spartan/ui-input-helm/src';
 
 @Component({
 	selector: 'oeb-input-error',

@@ -1,10 +1,11 @@
 import { Component, HostBinding, inject } from '@angular/core';
-import { BrnDialogRef, injectBrnDialogContext } from '@spartan-ng/ui-dialog-brain';
+import { BrnDialogRef, injectBrnDialogContext } from '@spartan-ng/brain/dialog';
 import { OebDialogComponent } from '../../../components/oeb-dialog.component';
 import { HlmPDirective } from '../../../components/spartan/ui-typography-helm/src';
-import { HlmIconModule, provideIcons } from '../../../components/spartan/ui-icon-helm/src';
+
 import { lucideCheck } from '@ng-icons/lucide';
 import { NgIf } from '@angular/common';
+import { provideIcons } from '@ng-icons/core';
 
 @Component({
 	selector: 'oeb-success-dialog',
