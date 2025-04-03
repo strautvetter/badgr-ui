@@ -24,6 +24,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { CmsPageComponent } from './common/components/cms/cms-page.component';
+import { CmsPostListComponent } from './common/components/cms/cms-post-list.component';
 registerLocaleData(localeDe);
 // Force AuthModule and ProfileModule to get included in the main module. We don't want them lazy loaded because
 // they basically always need to be present. We have have functions that return them, but use strings in the Routes
@@ -88,6 +90,21 @@ const ROUTE_CONFIG: Routes = [
 				},
 			]
 		: []),
+
+	{
+		path: 'page/:slug',
+		component: CmsPageComponent,
+		data: { cmsContentType: 'page' }
+	},
+	{
+		path: 'post/:slug',
+		component: CmsPageComponent,
+		data: { cmsContentType: 'post' }
+	},
+	{
+		path: 'news',
+		component: CmsPostListComponent,
+	},
 
 	// Legacy Auth Redirects
 	{
