@@ -1128,6 +1128,8 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	async onSubmit() {
+		console.log(this.badgeClassForm.valid)
+		console.log(this.badgeClassForm.errors)
 		try {
 			if (this.badgeClassForm.rawControl.controls.badge_category.value === 'competency') {
 				this.badgeClassForm.controls.competencies.rawControls.forEach((control, i) => {
