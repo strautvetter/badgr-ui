@@ -1068,6 +1068,10 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 			...this.badgeClassForm.value.aiCompetencies.filter((comp) => comp.selected),
 		];
 
+		if (allCompetencies.length == 0) {
+			return { emptyCompetencies: true };
+		}
+
 		// Suche nach dem ersten fehlerhaften Kompetenzfeld
 		const invalidCompetencyIndex = allCompetencies.findIndex(
 			(competence) => Number(competence.hours) === 0 && Number(competence.minutes) === 0,
@@ -1565,7 +1569,6 @@ export class BadgeClassEditFormComponent extends BaseAuthenticatedRoutableCompon
 	}
 
 	validateFields(fields: string[]) {
-		// console.log(this.badgeClassForm.dirty);
 		return fields.every((c) => {
 			return this.badgeClassForm.controls[c].valid;
 		});
