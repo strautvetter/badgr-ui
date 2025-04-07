@@ -68,6 +68,8 @@
 		"title": "Title",
 		"noResults": "No results",
 		"reset": "Reset",
+		"create": "create",
+		"copy": "copy"
 		"place": "place",
 		"forwarded": "forwarded",
 		"revoke": "revoke",

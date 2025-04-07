@@ -75,6 +75,8 @@
 		"title": "Titel",
 		"noResults": "Keine Ergebnisse",
 		"reset": "Zurücksetzen",
+		"create": "erstellen",
+		"copy": "kopieren"
 		"place": "stellen",
 		"forwarded": "weitergeleitet",
 		"revoke": "zurücknehmen",
