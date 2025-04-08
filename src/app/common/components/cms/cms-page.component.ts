@@ -10,12 +10,15 @@ import { AppConfigService } from '../../app-config.service';
 	selector: 'cms-page',
 	template: `
 		<cms-content [headline]="headline" [content]="content" />
-	`
+	`,
+	standalone: false,
 })
 export class CmsPageComponent implements OnInit {
 
 	headline: SafeHtml;
 	content: SafeHtml;
+
+	@Input() slug: string;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -25,7 +28,10 @@ export class CmsPageComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		const slug = this.route.snapshot.params['slug'];
+		let slug = this.slug;
+		if (!slug) {
+			slug = this.route.snapshot.params['slug'];
+		}
 		this.route.data.subscribe(async (data) => {
 			let type = 'page';
 			if (data.cmsContentType) {

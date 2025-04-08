@@ -7,14 +7,13 @@ import { CmsManager } from '../../services/cms-manager.service';
 	selector: 'cms-content',
 	template: `
 	<div class="oeb">
-		<div class="page-padding">
-			<div class="tw-overflow-hidden">
-				<h1 class="tw-font-black tw-text-purple md:tw-leading-[55.2px] md:tw-text-[46px] tw-leading-[36px] tw-text-[30px] tw-mb-6">{{headline}}</h1>
-				<shadow-dom [content]="_content" [styleUrls]="styleUrls" [styles]="styles" />
-			</div>
+		<div class="tw-overflow-hidden tw-pt-24">
+			<!--<h1 class="tw-font-black tw-text-purple md:tw-leading-[55.2px] md:tw-text-[46px] tw-leading-[36px] tw-text-[30px] tw-mb-6">{{headline}}</h1>-->
+			<shadow-dom [content]="_content" [styleUrls]="styleUrls" [styles]="styles" />
 		</div>
 	</div>
-	`
+	`,
+	standalone: false,
 })
 export class CmsContentComponent {
 

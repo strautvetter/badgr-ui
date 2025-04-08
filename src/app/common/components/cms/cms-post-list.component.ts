@@ -2,10 +2,11 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { CmsApiService } from '../../services/cms-api.service';
 
 @Component({
-	selector: 'cms-page',
+	selector: 'cms-post-list',
 	template: `
 		<cms-content [headline]="headline" [content]="content" />
-	`
+	`,
+	standalone: false,
 })
 export class CmsPostListComponent implements OnInit {
 

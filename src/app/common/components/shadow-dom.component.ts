@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 		<div #styleWrap></div>
 		<div #contentWrap *ngIf="!styleUrls || stylesLoaded >= styleUrls.length" [innerHTML]="_content"></div>
 	`,
-	encapsulation: ViewEncapsulation.ShadowDom
+	encapsulation: ViewEncapsulation.ShadowDom,
+	standalone: false,
 })
 export class ShadowDomComponent {
 
