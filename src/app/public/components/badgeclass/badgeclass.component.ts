@@ -124,8 +124,11 @@ export class PublicBadgeClassComponent {
 				this.userProfileManager.userProfilePromise.then((profile) => {
 					profile.emails.loadedPromise.then(() => {
 						this.issuerManager.allIssuers$.subscribe((issuers) => {
-							this.userIssuers = issuers;
+							this.userIssuers = issuers.filter((issuer) => issuer.canCreateBadge);
 							const canCopy = issuers.some((issuer) => issuer.canCreateBadge);
+							const canCopyInOwnInstitution = issuers.some((issuer) => {
+								return issuer.slug === badge.issuer['slug'] && issuer.canCreateBadge;
+							});
 							if (canCopy) {
 								// fetch real badge information to check if badge may be copied
 								const slug = badge.id.substring(badge.id.lastIndexOf('/') + 1);
@@ -136,6 +139,7 @@ export class PublicBadgeClassComponent {
 										if (
 											issuerBadge.canCopy('others') ||
 											(issuerBadge.canCopy('issuer') &&
+												canCopyInOwnInstitution &&
 												issuerBadge.extension['extensions:CategoryExtension'].Category !=
 													'learningpath' &&
 												issuers.some((issuer) => issuer.url == issuerBadge.issuer))
