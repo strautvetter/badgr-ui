@@ -125,6 +125,7 @@ import { FormControl } from '@angular/forms';
 						[(ngModel)]="checked"
 						(ngModelChange)="changeCheckbox($event)"
 					></oeb-checkbox>
+					<ng-icon *ngIf="showXIcon" hlm name="lucideX" class="tw-w-8 tw-h-8" (click)="closeFn()"></ng-icon>
 					<div
 						*ngIf="competencies && competencies.length > 0 && !imported"
 						class="tw-absolute tw-bottom-0 tw-cursor-pointer"
@@ -199,12 +200,18 @@ export class BgBadgecard {
 	@Output() shareClicked = new EventEmitter<MouseEvent>();
 	@Input() completed: Boolean = false;
 	@Output() checkboxChange = new EventEmitter<boolean>();
+	@Output() closeEmit = new EventEmitter<any>();
 	@Input() checked: boolean = false;
 	@Input() tags: string[] = [];
+	@Input() showXIcon = false;
 	@Input() imported: boolean = false;
 
 	changeCheckbox(event: boolean) {
 		this.checkboxChange.emit(event);
+	}
+
+	closeFn() {
+		this.closeEmit.emit(this.badgeSlug);
 	}
 
 	@HostBinding('class') get hostClasses(): string {
