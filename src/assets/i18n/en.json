@@ -68,6 +68,7 @@
 		"title": "Title",
 		"noResults": "No results",
 		"reset": "Reset",
+		"exam": "Exam",
 		"create": "create",
 		"copy": "copy",
 		"place": "place",
@@ -76,7 +77,14 @@
 		"confirm": "Confirm",
 		"noRequests": "No request",
 		"oneRequest": "1 request",
-		"multiRequests": "# requests"
+		"multiRequests": "# requests",
+		"public": "Public",
+		"sendUsYourBadge": "Send your badge to <a class='tw-text-link tw-underline' href='mailto:support@openbadges.education'>support@openbadges.education</a> and we will be glad to take a look. ",
+		"thisDidNotWork": "Unfortunately this did not work.",
+		"toMyProfile": "To my profile",
+		"imported": "imported",
+		"new": "new",
+		"expired": "expired"
 	},
 	"NavItems": {
 		"register": "Register",
@@ -307,10 +315,7 @@
 		"copyBadgeDescription": "Badges can always be copied within your own institution.<br>You can update the copy status for other institutions at any time via the menu on the badge details page.",
 		"copyLabelOthers": "<strong>Other</strong> institutions are allowed to copy this badge.",
 		"copy": "Copy Badge to own institution",
-		"copyBadge": "Copy Badge",
-		"copyableFor": "Copyable for",
-		"copyForWhatInstitution": "For which of your institutions do you want to copy the badge?",
-		"copyPermissionInfo": "The copy status of this badge only allows copying inside this institution."
+		"copyBadge": "Copy Badge"
 	},
 	"CreateBadge": {
 		"chooseBadgeCategory": "Choose Badge-Category",
@@ -369,7 +374,8 @@
 		"alignEducationalFramework": "link to educational standards",
 		"frame": "Frame",
 		"expiration": "Expiration",
-		"expirationInfo": "Describe the duration for which this badge is generally valid. This information can also be changed during the award process. Badges will be marked as expired after the validity period expires.",
+		"expirationInfo": "This information can also be changed during the award process. Badges will be marked as expired after the validity period expires.",
+		"validUntil": "The badge is valid until ",
 		"chooseDuration": "Choose duration",
 		"optionalBadgeDetails": "Optional Badge-Details",
 		"newTag": "New Tag...",
@@ -381,7 +387,7 @@
 		"addAnotherCompetency": "Add another competency",
 		"giveBadgeTitle": "Please give the badge a title",
 		"changeBadgeTitle": "Please change the title",
-		"maxValue1000": "Maximum value is 1000",
+		"maxValue1000": "Must be less than 1000",
 		"imageTooLarge": "The image is too large. Please select an image with a size of up to 2 MB.",
 		"licenseInfo": "Badges are created under the license <a class='tw-underline tw-text-[#1400FF]' target='_blank' href='https://creativecommons.org/publicdomain/zero/1.0/legalcode.de'>CC BY 4.0'</a>.",
 		"requiredError": "Required",
@@ -501,6 +507,7 @@
 	},
 	"RecBadge": {
 		"addBadge": "Add badge",
+		"uploadBadge": "Upload Badge",
 		"fromMozilla": "Coming from Mozilla?",
 		"closeNotification": "Close Notification",
 		"noBadgesYet": "You don't have any badges yet",
@@ -529,7 +536,11 @@
 		"uploadOwnVisual": "Upload complete badge image",
 		"importedSuccessfully": "Badge successfully imported.",
 		"uploadFailed": "Failed to upload badge:",
-		"unknownError": "Badge upload failed due to an unknown error"
+		"unknownError": "Badge upload failed due to an unknown error",
+		"badgeUploadVersionError": "Unfortunately uploading this badge version is not possible.",
+		"uploadEmailDoesNotMatchError": "The email address in the badge does not match the email in your OEB profile.",
+		"addEmailToUpload": "Add the email address to your profile to upload the badge.",
+		"versionUploadInfo": "Unfortunately at the moment only badges of version 2.0 can be uploaded"
 	},
 	"EditBadge": {
 		"editBadge": "Edit badge",
@@ -574,10 +585,23 @@
 		"share": "Share",
 		"orginzeBadges": "Organize your badges into collections.",
 		"collectionName": "Name of the collections",
+		"collectionNamePlaceholder": "Tech & Code – My digital skills for the future",
 		"enterCollectioName": "Please enter a name for the collection",
 		"remainingChar": "remaining characters",
-		"description": "Description",
-		"provideDescription": "Please provide a description"
+		"description": "Description of the collection",
+		"provideDescription": "Please provide a description",
+		"myCollections": "My collections",
+		"useCollectionsForApplication": "Use collections for applications",
+		"collectionInfoText": "Organize your badges into collections and download the respective PDF or create a direct-link for sharing.",
+		"addLink": "",
+		"createCollectionNow": "Create collection now",
+		"addBadges": "Add badges to collection",
+		"skipStep": "You can skip this step and add badges later.",
+		"badgesInCollection": "badges in the collection",
+		"removeBadge": "Remove Badge from collection?",
+		"removeBadgeConfirm1": "Möchtest du den Badge ",
+		"removeBadgeConfirm2": " wirklich aus dieser Sammlung entfernen?",
+		"removeBadgeConfirmation": "Yes, remove"
 	},
 	"Profile": {
 		"more": "More",
@@ -661,7 +685,8 @@
 	"QrCode": {
 		"savedSuccessfully": "<span class='tw-font-bold'> The QR code assignment was successfully saved on the badge detail page.</span>",
 		"downloadedSuccessfully": "<span class='tw-font-bold'>You have successfully downloaded the QR-Code.</span><br> Check your download folder.",
-		"receiveEmails": "Notify me via Email when there are new requests coming in via this QR code"
+		"receiveEmails": "Notify me via Email when there are new requests coming in via this QR code",
+		"downloadPoster": "Download QR-Code-Poster"
 	},
 	"OEBComponents": {
 		"fieldIsRequired": "This field is required"
